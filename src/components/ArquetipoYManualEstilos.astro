@@ -1,0 +1,594 @@
+---
+const paletaColores = [
+  {
+    nombre: "Naranja · ¿Quiénes somos?",
+    hex: "#FF8F00",
+    rgb: "rgb(255, 143, 0)",
+    uso: "Sección 1, tarjetas destacadas, pestañas activas, iconos ecológicos y lomita inferior.",
+  },
+  {
+    nombre: "Amarillo · Patrimonio natural",
+    hex: "#EAC00F",
+    rgb: "rgb(234, 192, 15)",
+    uso: "Sección 2, pestañas de Clima, Geología, Hidrografía, Flora y Fauna, y selectores activos.",
+  },
+  {
+    nombre: "Verde · Guía del visitante",
+    hex: "#4BAE50",
+    rgb: "rgb(75, 174, 80)",
+    uso: "Botón de la Sección 3 en el cabezal superior.",
+  },
+  {
+    nombre: "Turquesa · Emergencias y protocolos",
+    hex: "#25A69A",
+    rgb: "rgb(37, 166, 154)",
+    uso: "Botón de la Sección 4 en el cabezal superior.",
+  },
+  {
+    nombre: "Morado · Conoce su normativa",
+    hex: "#6856A0",
+    rgb: "rgb(104, 86, 160)",
+    uso: "Botón de la Sección 5 en el cabezal superior.",
+  },
+  {
+    nombre: "Verde Bosque · Lectura principal",
+    hex: "#254226",
+    rgb: "rgb(37, 66, 38)",
+    uso: "Color tipográfico principal sobre tarjetas blancas traslúcidas y pies de foto.",
+  },
+  {
+    nombre: "Madera Señalética · Letrero lateral",
+    hex: "#AD711F",
+    rgb: "rgb(173, 113, 31)",
+    uso: "Tablas de navegación vertical y cartel tallado WARAIRA REPANO.",
+  },
+];
+
+const escalaTipografica = [
+  { puntaje: "50 pt", peso: "Nunito SemiBold (600)", uso: "Cifras estadísticas de INPARQUES (44, 65, 37)" },
+  { puntaje: "24 pt", peso: "Nunito Bold (700)", uso: "Cifras de biodiversidad en Valor Ecológico (1.800, 120, 500, 30)" },
+  { puntaje: "22 pt", peso: "Nunito Bold (700)", uso: "Encabezado principal «El Corazón Verde de Caracas»" },
+  { puntaje: "20 pt", peso: "Nunito Regular (400)", uso: "Botones de las 5 secciones del cabezal y títulos de pestañas superiores" },
+  { puntaje: "19 pt", peso: "Nunito Regular (400)", uso: "Párrafos de contenido en tarjetas, botones selectores y subtítulos de vertientes" },
+  { puntaje: "17 pt", peso: "Nunito Regular (400)", uso: "Etiquetas de especies en las tarjetas de Valor Ecológico" },
+  { puntaje: "16 pt", peso: "Nunito Regular (400)", uso: "Tablas de madera del menú lateral izquierdo" },
+  { puntaje: "15 pt", peso: "Nunito Regular (400)", uso: "Listas con viñetas de Vertiente Norte y Vertiente Sur en Hidrografía" },
+  { puntaje: "13 pt", peso: "Nunito Regular / Medium Italic", uso: "Pies de foto descriptivos y nombres científicos en cursiva" },
+];
+---
+
+<div class="pagina-manual-estilos">
+  <!-- Encabezado y ficha de la creadora -->
+  <header class="hero-creadora">
+    <div class="insignia-instituto">INSTITUTO DE DISEÑO DARIAS · TESIS II</div>
+    <h1>Manual de Estilos Gráficos, Arquetipo y Arquitectura Web</h1>
+    <p class="subtitulo-hero">
+      Proyecto Web Interactivo: <strong>Parque Nacional Waraira Repano</strong>
+    </p>
+
+    <div class="tarjetas-ficha-creadora">
+      <div class="ficha-item">
+        <span class="ficha-label">Creadora y Diseñadora Gráfica</span>
+        <strong class="ficha-valor">Dalianyela Torres</strong>
+      </div>
+      <div class="ficha-item">
+        <span class="ficha-label">Institución Académica</span>
+        <strong class="ficha-valor">Instituto de Diseño Darias</strong>
+      </div>
+      <div class="ficha-item">
+        <span class="ficha-label">Formato Base del Diseño</span>
+        <strong class="ficha-valor">1400 × 650 px (Retícula Modular)</strong>
+      </div>
+      <div class="ficha-item">
+        <span class="ficha-label">Arquitectura de Desarrollo</span>
+        <strong class="ficha-valor">Astro 5 + VS Code (Web Propia y Módulo)</strong>
+      </div>
+    </div>
+
+    <div class="botones-acceso-pantallas">
+      <a href="/QuienesSomos" class="btn-ir-pantalla naranja">
+        Ver Sección 1: ¿Quiénes somos? (Págs. 1–5)
+      </a>
+      <a href="/PatrimonioNatural" class="btn-ir-pantalla amarillo">
+        Ver Sección 2: Patrimonio natural (Págs. 6–40)
+      </a>
+    </div>
+  </header>
+
+  <!-- SECCIÓN 1: Arquetipo Estructural y Retícula de Cuadrados (1400 x 650) -->
+  <section class="bloque-manual">
+    <h2>1. Arquetipo Estructural y Sistema de Retícula de Cuadrados (1400 × 650 px)</h2>
+    <p class="descripcion-bloque">
+      Todas las pantallas del proyecto se construyen sobre una estructura base de módulos cuadrados de
+      <strong>31.7 × 33.0 px</strong> con calles de <strong>11.0 px</strong> (paso de 42.72 × 44.0 px, conformando
+      33 columnas por 15 filas). Sobre esta retícula se disponen las capas de fotografía de fondo, degradado de color,
+      cabezal poligonal, señalética de madera y tarjetas informativas.
+    </p>
+
+    <!-- Diagrama interactivo a escala del Arquetipo 1400x650 -->
+    <div class="contenedor-arquetipo-visual">
+      <div class="arquetipo-diagrama">
+        <!-- Fondo de cuadrados del arquetipo -->
+        <div class="grid-patron-demo"></div>
+
+        <!-- Zonas del arquetipo -->
+        <div class="zona-arq arq-barra-izq" style="left: 0%; top: 0%; width: 23.5%; height: 11.8%;">
+          <span>Barra Sup. Izq.<br />(0–329 × 77 px)</span>
+        </div>
+
+        <div class="zona-arq arq-cabezal-botones" style="left: 23.5%; top: 0%; width: 76.5%; height: 11.8%;">
+          <span>Cabezal: 5 Botones de Secciones (5 × 215 × 77 px) + Silueta Low-Poly Waraira Repano</span>
+        </div>
+
+        <div class="zona-arq arq-letrero" style="left: 1.1%; top: 4.5%; width: 15.9%; height: 90%;">
+          <span>Señalética de Madera<br />«WARAIRA REPANO»<br />+ Tablas Submenú<br />(x=15..238 px)</span>
+        </div>
+
+        <div class="zona-arq arq-pestana" style="left: 23.6%; top: 20.3%; width: 15.3%; height: 6.9%;">
+          <span>Pestaña (20 pt)</span>
+        </div>
+
+        <div class="zona-arq arq-card-principal" style="left: 23.6%; top: 27.1%; width: 45.8%; height: 45.7%;">
+          <strong>Módulo de Contenido Principal</strong>
+          <span>(x=330..972 / 1015 px, y=176..473 px)</span>
+          <small>Ocupa exactamente 15 × 7 módulos cuadrados de la retícula</small>
+        </div>
+
+        <div class="zona-arq arq-card-foto" style="left: 70.2%; top: 27.1%; width: 18.6%; height: 45.7%;">
+          <strong>Módulo Fotográfico / Galería</strong>
+          <span>(x=983..1244 px)</span>
+        </div>
+
+        <div class="zona-arq arq-recorte-der" style="left: 82%; top: 13%; width: 17.5%; height: 74%;">
+          <span>Primer Plano Natural<br />Botánico / Fauna<br />(Recorte PNG Alpha)</span>
+        </div>
+
+        <div class="zona-arq arq-esquina-izq" style="left: 0%; top: 66%; width: 28%; height: 34%;">
+          <span>Rocas / Hojas Esquina Izq.</span>
+        </div>
+
+        <div class="zona-arq arq-lomita" style="left: 0%; top: 84%; width: 100%; height: 16%;">
+          <span>Lomita Ondulada Inferior de Color Institucional (y=528..650 px)</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 2: Paleta Cromática -->
+  <section class="bloque-manual">
+    <h2>2. Paleta Cromática Oficial</h2>
+    <div class="grid-colores">
+      {
+        paletaColores.map((c) => (
+          <div class="tarjeta-color">
+            <div class="muestra-color" style={`background-color: ${c.hex};`} />
+            <div class="info-color">
+              <h3>{c.nombre}</h3>
+              <code>{c.hex}</code> · <small>{c.rgb}</small>
+              <p>{c.uso}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- SECCIÓN 3: Tipografía y Puntajes -->
+  <section class="bloque-manual">
+    <h2>3. Tipografía Oficial («Nunito») y Jerarquía de Puntajes</h2>
+    <p class="descripcion-bloque">
+      El diseño emplea exclusivamente la familia tipográfica <strong>Nunito</strong> en sus variantes
+      <em>ExtraLight, Regular, Medium Italic, SemiBold y Bold</em>, respetando de forma estricta los puntajes del
+      documento original:
+    </p>
+
+    <div class="tabla-contenedor">
+      <table class="tabla-tipografia">
+        <thead>
+          <tr>
+            <th>Puntaje Exacto</th>
+            <th>Variante / Peso</th>
+            <th>Muestra Visual</th>
+            <th>Aplicación en el Diseño</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            escalaTipografica.map((t) => (
+              <tr>
+                <td>
+                  <strong class="badge-pt">{t.puntaje}</strong>
+                </td>
+                <td>{t.peso}</td>
+                <td>
+                  <span style="font-family: 'Nunito', sans-serif; font-weight: 700; color: #254226;">
+                    Waraira Repano
+                  </span>
+                </td>
+                <td>{t.uso}</td>
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 4: Organización de Carpetas y Uso como Módulo -->
+  <section class="bloque-manual">
+    <h2>4. Estructura del Proyecto en Visual Studio Code y Uso como Módulo</h2>
+    <div class="grid-dos-columnas">
+      <div class="caja-codigo">
+        <h3>Organización de Carpetas (Astro 5)</h3>
+        <pre><code>COMIENZO DE LA WEB DEL WARAIRA REPANO/
+├── .vscode/                  # Configuración para Visual Studio Code
+├── public/                   # Recursos multimedia organizados
+│   ├── elementos/            # Silueta, letreros, rocas, hongos, aves (PNG)
+│   ├── fondos/               # Fotografías de fondo 1400x650
+│   ├── fotos/                # Galerías (quienes-somos, geologia, flora, fauna)
+│   └── iconos/               # Iconos vectoriales e INPARQUES
+├── src/
+│   ├── components/
+│   │   ├── Techo.astro                   # Cabezal de 5 secciones + silueta
+│   │   ├── CabezalVertical.astro         # Letrero de madera lateral
+│   │   ├── EstructuraCuadrados.astro     # Retícula 1400x650 + degradado
+│   │   ├── ModuloQuienesSomos.astro      # Pantallas 1 a 5 (Naranja)
+│   │   ├── ModuloPatrimonioNatural.astro # Pantallas 6 a 40 (Amarillo)
+│   │   ├── WarairaWebModulo.astro        # Componente único embebible
+│   │   └── ArquetipoYManualEstilos.astro # Manual de estilos y arquetipo
+│   ├── layouts/
+│   │   └── LayoutPrincipal.astro         # Escalado proporcional 1400x650
+│   └── pages/
+│       ├── index.astro                   # Página principal integrada
+│       ├── QuienesSomos.astro            # Ruta directa Sección 1
+│       ├── PatrimonioNatural.astro       # Ruta directa Sección 2
+│       ├── ManualEstilos.astro           # Ruta Manual de Estilos y Autora
+│       └── ModuloEmbebible.astro         # Vista limpia para iframe externo
+└── Manual_Programacion_y_Multimedia_Waraira_Repano_Dalianyela_Torres.docx</code></pre>
+      </div>
+
+      <div class="caja-codigo">
+        <h3>Implementación como Página Propia o Módulo de otra Web</h3>
+        <p style="margin-bottom: 12px; font-size: 15px; line-height: 1.5;">
+          El proyecto fue programado con arquitectura dual:
+        </p>
+        <p style="margin-bottom: 10px; font-size: 14px;">
+          <strong>Opción A · Como componente nativo en otro proyecto Astro:</strong>
+        </p>
+        <pre><code>---
+import WarairaWebModulo from '../components/WarairaWebModulo.astro';
+---
+&lt;WarairaWebModulo seccionInicial="quienes-somos" /&gt;</code></pre>
+
+        <p style="margin: 14px 0 10px; font-size: 14px;">
+          <strong>Opción B · Embebido dentro de cualquier otra web (React, WordPress, HTML):</strong>
+        </p>
+        <pre><code>&lt;iframe
+  src="/ModuloEmbebible"
+  width="1400"
+  height="650"
+  style="width: 100%; aspect-ratio: 1400 / 650; border: none;"
+  title="Parque Nacional Waraira Repano - Dalianyela Torres"
+&gt;&lt;/iframe&gt;</code></pre>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+  .pagina-manual-estilos {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 36px 28px 80px;
+    color: #1e293b;
+    background: #f8fafc;
+  }
+
+  .hero-creadora {
+    background: linear-gradient(135deg, #254226 0%, #1a301b 100%);
+    color: #ffffff;
+    border-radius: 24px;
+    padding: 36px 40px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  }
+
+  .insignia-instituto {
+    display: inline-block;
+    background: #ff8f00;
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    padding: 5px 14px;
+    border-radius: 999px;
+    margin-bottom: 12px;
+  }
+
+  .hero-creadora h1 {
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1.2;
+  }
+
+  .subtitulo-hero {
+    font-size: 18px;
+    color: #e2e8f0;
+    margin-top: 6px;
+  }
+
+  .tarjetas-ficha-creadora {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .ficha-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ficha-label {
+    font-size: 12px;
+    color: #cbd5e1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .ficha-valor {
+    font-size: 16px;
+    color: #ffffff;
+  }
+
+  .botones-acceso-pantallas {
+    display: flex;
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .btn-ir-pantalla {
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 15px;
+    text-decoration: none;
+    color: #ffffff;
+    transition: transform 0.15s ease;
+  }
+
+  .btn-ir-pantalla:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn-ir-pantalla.naranja {
+    background: #ff8f00;
+  }
+
+  .btn-ir-pantalla.amarillo {
+    background: #eac00f;
+    color: #1e293b;
+  }
+
+  .bloque-manual {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 32px;
+    margin-top: 28px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+  }
+
+  .bloque-manual h2 {
+    font-size: 22px;
+    color: #254226;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #f1f5f9;
+    padding-bottom: 10px;
+  }
+
+  .descripcion-bloque {
+    font-size: 16px;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  /* Diagrama del Arquetipo */
+  .contenedor-arquetipo-visual {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .arquetipo-diagrama {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1400 / 650;
+    background: #fefefe;
+    border: 2px solid #94a3b8;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .grid-patron-demo {
+    position: absolute;
+    inset: 0;
+    background-size: 3.05% 6.76%;
+    background-image:
+      linear-gradient(to right, rgba(255, 143, 0, 0.22) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 143, 0, 0.22) 1px, transparent 1px);
+  }
+
+  .zona-arq {
+    position: absolute;
+    border: 2px dashed #334155;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #1e293b;
+  }
+
+  .arq-barra-izq {
+    background: rgba(203, 213, 225, 0.65);
+  }
+
+  .arq-cabezal-botones {
+    background: linear-gradient(90deg, #ff8f00, #eac00f, #4bae50, #25a69a, #6856a0);
+    color: #ffffff;
+    border-style: solid;
+  }
+
+  .arq-letrero {
+    background: rgba(173, 113, 31, 0.22);
+    border-color: #ad711f;
+    z-index: 3;
+  }
+
+  .arq-pestana {
+    background: rgba(255, 143, 0, 0.25);
+    border-color: #ff8f00;
+  }
+
+  .arq-card-principal {
+    background: rgba(255, 143, 0, 0.14);
+    border-color: #ff8f00;
+    border-style: solid;
+  }
+
+  .arq-card-foto {
+    background: rgba(234, 192, 15, 0.18);
+    border-color: #ca8a04;
+  }
+
+  .arq-recorte-der {
+    background: rgba(75, 174, 80, 0.18);
+    border-color: #254226;
+    z-index: 4;
+  }
+
+  .arq-esquina-izq {
+    background: rgba(100, 116, 139, 0.2);
+    z-index: 4;
+  }
+
+  .arq-lomita {
+    background: rgba(255, 143, 0, 0.35);
+    border-color: #ff8f00;
+  }
+
+  /* Paleta de colores */
+  .grid-colores {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+  }
+
+  .tarjeta-color {
+    display: flex;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    overflow: hidden;
+  }
+
+  .muestra-color {
+    width: 88px;
+    flex-shrink: 0;
+  }
+
+  .info-color {
+    padding: 12px 14px;
+  }
+
+  .info-color h3 {
+    font-size: 15px;
+    color: #0f172a;
+    margin-bottom: 4px;
+  }
+
+  .info-color code {
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+  }
+
+  .info-color p {
+    font-size: 13px;
+    color: #475569;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+
+  /* Tabla tipográfica */
+  .tabla-contenedor {
+    overflow-x: auto;
+  }
+
+  .tabla-tipografia {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .tabla-tipografia th,
+  .tabla-tipografia td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .tabla-tipografia th {
+    background: #f8fafc;
+    color: #334155;
+    font-weight: 700;
+  }
+
+  .badge-pt {
+    background: #254226;
+    color: #ffffff;
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+
+  /* Bloques de código */
+  .grid-dos-columnas {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .caja-codigo {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 18px;
+  }
+
+  .caja-codigo h3 {
+    font-size: 16px;
+    color: #254226;
+    margin-bottom: 12px;
+  }
+
+  .caja-codigo pre {
+    background: #0f172a;
+    color: #f8fafc;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+</style>

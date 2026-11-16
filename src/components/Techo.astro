@@ -1,0 +1,233 @@
+---
+export interface Props {
+  seccionActiva?: "quienes-somos" | "patrimonio-natural" | "guia-visitante" | "emergencias" | "normativa";
+  modoSPA?: boolean;
+}
+
+const { seccionActiva = "quienes-somos", modoSPA = false } = Astro.props;
+---
+
+<header class="cabezal-techo" role="banner" aria-label="Navegación principal de secciones">
+  <!-- Barra izquierda clara detrás del poste de madera -->
+  <div class="barra-izquierda-cabezal"></div>
+
+  <!-- Contenedor de navegación de secciones -->
+  <nav class="botones-secciones" aria-label="Secciones del Parque Nacional Waraira Repano">
+    <!-- Síntesis poligonal del Waraira Repano colocada EN EL FONDO (z-index: 1) -->
+    <img
+      src="/elementos/silueta-waraira-cabezal.webp"
+      alt="Síntesis del Parque Nacional Waraira Repano"
+      class="silueta-montana-cabezal"
+      draggable="false"
+    />
+
+    <!-- Botón 1: ¿Quiénes somos? (#ff8f00) -->
+    <a
+      href="/QuienesSomos"
+      data-seccion-target="quienes-somos"
+      class:list={["btn-seccion", "btn-quienes-somos", { activo: seccionActiva === "quienes-somos" }]}
+    >
+      <span class="fondo-color-boton"></span>
+      <span class="indicador-superior"></span>
+      <span class="texto-boton">¿Quiénes<br />somos?</span>
+    </a>
+
+    <!-- Botón 2: Patrimonio natural (#eac00f) -->
+    <a
+      href="/PatrimonioNatural"
+      data-seccion-target="patrimonio-natural"
+      class:list={["btn-seccion", "btn-patrimonio", { activo: seccionActiva === "patrimonio-natural" }]}
+    >
+      <span class="fondo-color-boton"></span>
+      <span class="indicador-superior"></span>
+      <span class="texto-boton">Patrimonio<br />natural</span>
+    </a>
+
+    <!-- Botón 3: Guía del visitante (#4bae50) -->
+    <a
+      href="#guia-visitante"
+      data-seccion-target="guia-visitante"
+      class:list={["btn-seccion", "btn-guia", { activo: seccionActiva === "guia-visitante" }]}
+      title="Próxima entrega: Guía del visitante"
+    >
+      <span class="fondo-color-boton"></span>
+      <span class="indicador-superior"></span>
+      <span class="texto-boton">Guía del<br />visitante</span>
+    </a>
+
+    <!-- Botón 4: Emergencias y protocolos (#25a69a) -->
+    <a
+      href="/EmergenciasYProtocolos"
+      data-seccion-target="emergencias"
+      class:list={["btn-seccion", "btn-emergencias", { activo: seccionActiva === "emergencias" }]}
+      title="Emergencias y protocolos"
+    >
+      <span class="fondo-color-boton"></span>
+      <span class="indicador-superior"></span>
+      <span class="texto-boton">Emergencias y<br />protocolos</span>
+    </a>
+
+    <!-- Botón 5: Conoce su normativa (#6856a0) -->
+    <a
+      href="/ConoceSuNormativa"
+      data-seccion-target="normativa"
+      class:list={["btn-seccion", "btn-normativa", { activo: seccionActiva === "normativa" }]}
+      title="Conoce su normativa"
+    >
+      <span class="fondo-color-boton"></span>
+      <span class="indicador-superior"></span>
+      <span class="texto-boton">Conoce su<br />normativa</span>
+    </a>
+  </nav>
+</header>
+
+<style>
+  .cabezal-techo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 1400px;
+    height: 77px;
+    z-index: 40;
+    user-select: none;
+  }
+
+  /* Barra izquierda (x=0..373.5, y=0..77) */
+  .barra-izquierda-cabezal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 374px;
+    height: 77px;
+    background: rgba(215, 215, 217, 0.85);
+    backdrop-filter: blur(2px);
+    z-index: 1;
+  }
+
+  .botones-secciones {
+    position: absolute;
+    top: 0;
+    left: 329px;
+    width: 1071px;
+    height: 77px;
+    display: flex;
+    z-index: 2;
+    overflow: hidden;              /* Recorta la síntesis dentro del área de botones */
+    border-bottom-left-radius: 42px; /* Respeta el radio del primer botón */
+  }
+
+  /* SÍNTESIS POLIGONAL DEL WARAIRA REPANO: Capa 1 de fondo (debajo de cuadros de color y textos) */
+  .silueta-montana-cabezal {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 1071px;
+    height: 70px;
+    object-fit: fill;
+    pointer-events: none;
+    z-index: 1; /* Debajo de los cuadros de color */
+  }
+
+  /* Estructura base de los botones de navegación */
+  .btn-seccion {
+    position: relative;
+    height: 77px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    color: var(--color-blanco);
+    font-family: var(--fuente-principal);
+    font-size: var(--pt-cabezal);
+    font-weight: 400;
+    line-height: 22.8px;
+    cursor: pointer;
+    overflow: hidden;
+  }
+
+  /* CUADROS DE COLOR: Capa 2 (arriba de la síntesis, con 85% de opacidad) */
+  .fondo-color-boton {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    opacity: 0.85; /* Cuadros de color al 85% de opacidad */
+    transition: opacity 0.2s ease, filter 0.2s ease;
+  }
+
+  .btn-seccion:hover .fondo-color-boton {
+    opacity: 0.95;
+    filter: brightness(1.08);
+  }
+
+  .btn-seccion.activo .fondo-color-boton {
+    opacity: 0.90;
+  }
+
+  /* Dimensiones y colores exactos de cada cuadro institucional */
+  .btn-quienes-somos {
+    width: 215px;
+    border-bottom-left-radius: 42px;
+  }
+  .btn-quienes-somos .fondo-color-boton {
+    background-color: var(--color-quienes-somos); /* #ff8f00 */
+    border-bottom-left-radius: 42px;
+  }
+
+  .btn-patrimonio {
+    width: 215px;
+  }
+  .btn-patrimonio .fondo-color-boton {
+    background-color: var(--color-patrimonio); /* #eac00f */
+  }
+
+  .btn-guia {
+    width: 213px;
+  }
+  .btn-guia .fondo-color-boton {
+    background-color: var(--color-guia-visitante); /* #4bae50 */
+  }
+
+  .btn-emergencias {
+    width: 214px;
+  }
+  .btn-emergencias .fondo-color-boton {
+    background-color: var(--color-emergencias); /* #25a69a */
+  }
+
+  .btn-normativa {
+    width: 214px;
+  }
+  .btn-normativa .fondo-color-boton {
+    background-color: var(--color-normativa); /* #6856a0 */
+  }
+
+  /* PALABRAS DE LOS BOTONES: Capa 3 (arriba de los cuadros de color y de la síntesis) */
+  .texto-boton {
+    position: relative;
+    z-index: 3;
+    padding-top: 4px;
+    color: #ffffff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  /* INDICADOR BLANCO SUPERIOR: Capa 4 (arriba de todo para la sección activa) */
+  .indicador-superior {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 171.4px;
+    height: 11.7px;
+    background-color: #ebebf7;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+    z-index: 4;
+  }
+
+  .btn-seccion.activo .indicador-superior {
+    opacity: 1;
+  }
+</style>

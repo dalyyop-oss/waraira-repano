@@ -1,0 +1,233 @@
+---
+export interface ItemLetrero {
+  id: string;
+  etiqueta: string;
+  /** Imagen original de la madera en reposo (ya trae el texto) */
+  inactivo: string;
+  /** Imagen original de la madera activa (opcional; si falta se usa madera amarilla vacía + texto) */
+  activo?: string;
+  /** Renderiza el texto HTML (Nunito) sobre la madera en reposo y activa */
+  mostrarTexto?: boolean;
+  /** Madera alta de dos líneas (ej: Contactos de emergencia) */
+  dosLineas?: boolean;
+  /** Líneas explícitas cuando el botón tiene dos renglones */
+  lineasTexto?: [string, string];
+}
+
+export interface Props {
+  tema: "naranja" | "amarillo" | "verde" | "turquesa" | "morado";
+  items: ItemLetrero[];
+  itemActivo?: string;
+}
+
+const { tema = "naranja", items = [], itemActivo = "intro" } = Astro.props;
+---
+
+<aside
+  class:list={["letrero-madera-vertical", `tema-${tema}`]}
+  aria-label="Submenú del letrero de madera Waraira Repano"
+>
+  <!-- Poste de madera con cartel WARAIRA REPANO arriba y palo vertical limpio abajo (SIN tablas dibujadas) -->
+  <img
+    src="/elementos/poste-madera-limpio.webp"
+    alt="Parque Nacional Waraira Repano"
+    class="img-poste"
+    draggable="false"
+  />
+
+  <!-- Zona clicable del cartel principal: vuelve a la portada de la sección -->
+  <button
+    type="button"
+    class:list={["cartel-principal-waraira", { activo: itemActivo === "intro" }]}
+    data-vista-target="intro"
+    title="Ver portada principal de la sección"
+    aria-label="WARAIRA REPANO - portada de la sección"></button>
+
+  <!-- Tablas interactivas: imagen original inactiva / activa (renderizadas a su tamaño nativo para no perder resolución) -->
+  <nav class="tablas-subsecciones" aria-label="Subsecciones">
+    {
+      items.map((item, idx) => (
+        <button
+          type="button"
+          class:list={[
+            "tabla-madera-btn",
+            {
+              activo: itemActivo === item.id,
+              "con-texto": item.mostrarTexto,
+              "dos-lineas": item.dosLineas,
+            },
+          ]}
+          data-vista-target={item.id}
+          aria-label={item.etiqueta}
+          style={`top: ${176 + idx * 36}px;`}
+        >
+          <img class="img-reposo" src={item.inactivo} alt={item.mostrarTexto ? "" : item.etiqueta} draggable="false" />
+          <img
+            class="img-activa"
+            src={item.activo ?? "/elementos/botones/amarillo-vacio.webp"}
+            alt=""
+            draggable="false"
+          />
+          {(!item.activo || item.mostrarTexto) && (
+            <span class="texto-tabla">
+              {item.lineasTexto ? (
+                <>
+                  {item.lineasTexto[0]}
+                  <br />
+                  {item.lineasTexto[1]}
+                </>
+              ) : (
+                item.etiqueta
+              )}
+            </span>
+          )}
+        </button>
+      ))
+    }
+  </nav>
+</aside>
+
+<style>
+  .letrero-madera-vertical {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 245px;
+    height: 650px;
+    z-index: 45;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Poste limpio: solo palo vertical + cartel de madera grande (223 x 621 px nativo) */
+  .img-poste {
+    position: absolute;
+    left: 15px;
+    top: 16px;
+    width: 223px;
+    height: 621px;
+    pointer-events: none;
+    image-rendering: auto;
+  }
+
+
+  .cartel-principal-waraira {
+    position: absolute;
+    left: 15px;
+    top: 16px;
+    width: 224px;
+    height: 87px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 3;
+  }
+
+  .tablas-subsecciones {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+  }
+
+  /* Cada tabla = imagen original entregada (~172 x 31 px nativo).
+     Se renderiza a su tamaño real (sin escalar) para mantener resolución nítida. */
+  .tabla-madera-btn {
+    position: absolute;
+    left: 17px;
+    width: 172px;
+    height: 31px;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: filter 0.18s ease;
+  }
+
+  .tabla-madera-btn:not(.activo):hover .img-reposo {
+    filter: brightness(0.86) contrast(1.04);
+  }
+
+  .tabla-madera-btn.activo:hover .img-activa {
+    filter: brightness(1.05);
+  }
+
+  /* Imágenes a su tamaño nativo exacto para que no pierdan resolución ni se vean borrosas */
+  .tabla-madera-btn img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 172px;
+    height: 31px;
+    display: block;
+    image-rendering: auto; /* No interpolar: crisp */
+  }
+
+  /* Alternancia limpia: en reposo muestra inactivo (oscurecido), en activo muestra activo */
+  .tabla-madera-btn .img-activa {
+    display: none !important;
+  }
+
+  .tabla-madera-btn .img-reposo {
+    display: block !important;
+    filter: brightness(0.74) contrast(1.22) saturate(1.15);
+    transition: filter 0.18s ease;
+  }
+
+  .tabla-madera-btn.con-texto .img-reposo {
+    filter: brightness(0.68) contrast(1.08) saturate(1.12);
+  }
+
+  .tabla-madera-btn.activo .img-reposo {
+    display: none !important;
+  }
+
+  .tabla-madera-btn.activo .img-activa {
+    display: block !important;
+  }
+
+  /* Respaldo textual por si falta imagen activa o la madera usa tipografía HTML Nunito */
+  .texto-tabla {
+    position: absolute;
+    left: 24px;
+    top: 6px;
+    color: var(--color-blanco);
+    font-family: var(--fuente-principal);
+    font-size: var(--pt-letrero-lateral);
+    font-weight: 700;
+    line-height: 18px;
+    white-space: nowrap;
+    display: none;
+  }
+
+  .tabla-madera-btn.activo .texto-tabla {
+    display: block;
+  }
+
+  .tabla-madera-btn.con-texto .texto-tabla {
+    display: block;
+    left: 7px;
+    top: 6px;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 18px;
+    letter-spacing: 0.01em;
+    text-align: left;
+    z-index: 2;
+  }
+
+  .tabla-madera-btn.dos-lineas {
+    height: 45px;
+  }
+
+  .tabla-madera-btn.dos-lineas img {
+    height: 45px;
+  }
+
+  .tabla-madera-btn.dos-lineas .texto-tabla {
+    top: 5px;
+    line-height: 18px;
+    white-space: normal;
+  }
+</style>

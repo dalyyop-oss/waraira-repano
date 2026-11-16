@@ -1,0 +1,1891 @@
+---
+import Techo from "./Techo.astro";
+import CabezalVertical from "./CabezalVertical.astro";
+import EstructuraCuadrados from "./EstructuraCuadrados.astro";
+
+const B = "/elementos/botones/";
+const itemsLetrero = [
+  { id: "clima", etiqueta: "Clima", inactivo: B + "clima-inactivo.webp", activo: B + "clima-activo.webp" },
+  { id: "geologia", etiqueta: "Geología", inactivo: B + "geologia-inactivo.webp", activo: B + "geologia-activo.webp" },
+  { id: "hidrografia", etiqueta: "Hidrografía", inactivo: B + "hidrografia-inactivo.webp", activo: B + "hidrografia-activo.webp" },
+  { id: "flora-fauna", etiqueta: "Flora y Fauna", inactivo: B + "flora-fauna-inactivo.webp", activo: B + "flora-fauna-activo.webp" },
+];
+
+export interface Props {
+  vistaInicial?: "intro" | "clima" | "geologia" | "hidrografia" | "flora-fauna";
+}
+
+const { vistaInicial = "intro" } = Astro.props;
+
+const cumbresGeologia = [
+  {
+    id: "pico-el-avila",
+    nombre: "Pico El Ávila",
+    foto: "/fotos/geologia/pico-el-avila.webp",
+    svgContenedor: "/elementos/svg/contenedor-pico-el-avila.svg",
+    desc: "Es la cima de mayor infraestructura turística.",
+    altura: "Altura: (2.459 m.s.n)",
+  },
+  {
+    id: "pico-oriental",
+    nombre: "Pico Oriental",
+    foto: "/fotos/geologia/pico-oriental.webp",
+    svgContenedor: "/elementos/svg/contenedor-pico-oriental.svg",
+    desc: "Es la segunda cumbre más alta del parque.",
+    altura: "Altura: (2.459 m.s.n)",
+  },
+  {
+    id: "pico-occidental",
+    nombre: "Pico Occidental",
+    foto: "/fotos/geologia/pico-occidental.webp",
+    svgContenedor: "/elementos/svg/contenedor-pico-occidental.svg",
+    desc: "Es una de las cumbres principales del Parque nacional Waraira Repano.",
+    altura: "Altura: (2.478 m.s.n)",
+  },
+  {
+    id: "pico-naiguata",
+    nombre: "Pico Naiguatá",
+    foto: "/fotos/geologia/pico-naiguata.webp",
+    svgContenedor: "/elementos/svg/contenedor-pico-naiguata.svg",
+    desc: "Es la cumbre más alta de la Cordillera de la Costa y del parque.",
+    altura: "Altura: (2.765 m.s.n)",
+  },
+  {
+    id: "silla-de-caracas",
+    nombre: "Silla de Caracas",
+    foto: "/fotos/geologia/silla-de-caracas.webp",
+    svgContenedor: "/elementos/svg/contenedor-silla-de-caracas.svg",
+    desc: "Está compuesta por el Pico Occidental y el Pico Oriental",
+    altura: "",
+  },
+];
+---
+
+<section class="modulo-patrimonio-natural" aria-label="Sección Patrimonio natural">
+  <EstructuraCuadrados tema="amarillo" fondoInicial={vistaInicial === "geologia" ? "/fondos/bg-geologia.webp" : (vistaInicial === "flora-fauna" ? "/fondos/bg-flora-fauna.webp" : "/fondos/bg-patrimonio-intro.webp")}>
+    <!-- Cabezal superior de 5 secciones -->
+    <Techo seccionActiva="patrimonio-natural" />
+
+    <!-- Letrero de madera lateral izquierdo -->
+    <CabezalVertical tema="amarillo" items={itemsLetrero} itemActivo={vistaInicial} />
+
+    <!-- =====================================================================
+         PANTALLA 6 (Página 6 del PDF): Intro - Patrimonio Natural (SVG 642×351.23)
+         ===================================================================== -->
+    <article
+      class:list={["pantalla-vista", { activa: vistaInicial === "intro" }]}
+      data-vista="intro"
+      data-bg="/fondos/bg-patrimonio-intro.webp"
+    >
+      <!-- Contenedor gráfico SVG preciso de Intro Patrimonio Natural -->
+      <div
+        class="contenedor-svg-card"
+        style="left: 330px; top: 122px; width: 642px; height: 351px;"
+      >
+        <img src="/elementos/svg/contenedor-patrimonio-intro.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+        <span class="titulo-pestana texto-amarillo" style="position: absolute; left: 50px; top: 15px;">Patrimonio Natural</span>
+        <div class="contenido-sobre-svg" style="top: 80px; padding: 24px 48px;">
+          <p class="cuerpo-19pt texto-blanco">
+            Decretado como Parque Nacional el 12 de diciembre de 1958<br />
+            (Decreto N° 473). El parque abarca una superficie de más de<br />
+            85.000 hectáreas que se extienden a lo largo de la serranía.
+          </p>
+          <p class="cuerpo-19pt texto-blanco" style="margin-top: 14px;">
+            En 2010, mediante la Ley de Protección del Parque Nacional, se<br />
+            ratificó de forma oficial la denominación indígena Waraira<br />
+            Repano, término derivado de la lengua de las etnias originarias<br />
+            Caribes que significa «Sierra Grande» o «Lugar de dantas».
+          </p>
+        </div>
+      </div>
+
+      <!-- Rama derecha Página 6 -->
+      <img
+        src="/elementos/rama-patrimonio-derecha.webp"
+        alt=""
+        aria-hidden="true"
+        class="recorte-derecho"
+        style="left: 1083px; top: 280px; width: 317px; height: 370px; object-position: right bottom;"
+        draggable="false"
+      />
+    </article>
+
+    <!-- =====================================================================
+         PANTALLA 7 (Página 7 del PDF): Clima (SVG 642×349.81)
+         ===================================================================== -->
+    <article
+      class:list={["pantalla-vista", { activa: vistaInicial === "clima" }]}
+      data-vista="clima"
+      data-bg="/fondos/bg-clima.webp"
+    >
+      <!-- Contenedor gráfico SVG preciso de Clima -->
+      <div
+        class="contenedor-svg-card"
+        style="left: 330px; top: 122px; width: 642px; height: 350px;"
+      >
+        <img src="/elementos/svg/contenedor-clima.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+        <span class="titulo-pestana texto-blanco" style="position: absolute; left: 50px; top: 15px;">Clima</span>
+        <div class="contenido-sobre-svg" style="top: 55px; padding: 48px 50px;">
+          <p class="cuerpo-19pt texto-verde">
+            El clima del Parque es de montaña, con diferencias notables de<br />
+            acuerdo con la altitud y los pisos térmicos correspondientes<br />
+            y también de acuerdo a la exposición de sus laderas con<br />
+            respecto a la insolación y a la procedencia de los vientos.
+          </p>
+
+          <div class="insignia-clima">
+            <img
+              src="/iconos/icono-clima-frio.webp"
+              alt="Icono Clima frío de montaña"
+              class="icono-clima-img"
+            />
+            <span class="subtitulo-20pt-amarillo">Clima frío de montaña</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjeta fotográfica derecha (SVG 261×296): Pico Naiguatá en Clima: x=984..1245, y=176..473 -->
+      <div
+        class="tarjeta-derecha-foto"
+        style="left: 984px; top: 176px; width: 261px; height: 296px;"
+      >
+        <img src="/elementos/svg/contenedor-pico-naiguata-clima.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+        <div class="marco-foto-derecha" style="position: relative; z-index: 2;">
+          <img
+            src="/fotos/patrimonio/pico-naiguata-clima.webp"
+            alt="Pico Naiguatá"
+          />
+        </div>
+        <p class="pie-foto-13pt" style="position: relative; z-index: 2; margin-top: 14px;">Pico Naiguatá</p>
+      </div>
+
+      <!-- Nubes primer plano derecho Página 7 -->
+      <img
+        src="/elementos/nube-clima-1.webp"
+        alt=""
+        aria-hidden="true"
+        class="recorte-derecho"
+        style="left: 1141px; top: 120px; width: 259px; height: 280px;"
+        draggable="false"
+      />
+      <img
+        src="/elementos/nube-clima-2.webp"
+        alt=""
+        aria-hidden="true"
+        class="recorte-derecho"
+        style="left: 740px; top: 380px; width: 650px; height: 260px;"
+        draggable="false"
+      />
+    </article>
+
+    <!-- =====================================================================
+         PANTALLAS 8 a 13 (Páginas 8 a 13 del PDF): Geología (SVGs de Geología)
+         ===================================================================== -->
+    <article
+      class:list={["pantalla-vista", { activa: vistaInicial === "geologia" }]}
+      data-vista="geologia"
+      data-bg="/fondos/bg-geologia.webp"
+      id="vista-geologia"
+    >
+      <!-- GEOLOGÍA PUNTO 1 (Página 8 del PDF): Contenedor gráfico SVG Geología (649.12×350.16) -->
+      <div class="subpagina-geologia activa" data-geo-content="1">
+        <div
+          class="contenedor-svg-card"
+          style="left: 330px; top: 122px; width: 649px; height: 350px;"
+        >
+          <img src="/elementos/svg/contenedor-geologia.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+          <span class="titulo-pestana texto-blanco" style="position: absolute; left: 50px; top: 15px;">Geología</span>
+          <div class="muesca-paginador muesca-geologia" role="tablist" aria-label="Páginas de Geología">
+            <button
+              type="button"
+              class="cuadro-paginador activo"
+              data-geo-page="1"
+              title="Página 1: Origen geológico"
+              aria-label="Origen geológico"
+            ></button>
+            <button
+              type="button"
+              class="cuadro-paginador"
+              data-geo-page="2"
+              title="Página 2: Principales cumbres y picos"
+              aria-label="Principales cumbres"
+            ></button>
+          </div>
+          <div class="contenido-sobre-svg" style="top: 55px; padding: 44px 54px;">
+            <p class="cuerpo-19pt texto-verde">
+              Corresponde a una abrupta región montañosa con laderas muy<br />
+              pendientes, originada a partir del hundimiento de la placa del<br />
+              Caribe y el levantamiento de la placa continental sudamericana<br />
+              durante el período Eoceno.
+            </p>
+            <p class="cuerpo-19pt texto-verde" style="margin-top: 12px;">
+              También está constituido por rocas deformadas y meteorizadas<br />
+              del período Cretácico.
+            </p>
+          </div>
+        </div>
+
+        <img
+          src="/elementos/rocas-geologia-1.webp"
+          alt=""
+          aria-hidden="true"
+          class="recorte-derecho"
+          style="left: 1080px; top: 320px; width: 320px; height: 330px; object-position: right bottom;"
+          draggable="false"
+        />
+      </div>
+
+      <!-- GEOLOGÍA PUNTO 2 (Páginas 9 a 13 del PDF): Selector interactivo de 5 Picos -->
+      <div class="subpagina-geologia" data-geo-content="2">
+        <!-- Tarjeta superior SVG corta con arco recortado (709.3×236.97) -->
+        <div
+          class="contenedor-svg-card"
+          style="left: 330px; top: 122px; width: 709px; height: 237px;"
+        >
+          <img src="/elementos/svg/contenedor-geologia-corto.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+          <span class="titulo-pestana texto-blanco" style="position: absolute; left: 50px; top: 15px;">Geología</span>
+          <div class="muesca-paginador muesca-geologia" role="tablist" aria-label="Páginas de Geología">
+            <button
+              type="button"
+              class="cuadro-paginador"
+              data-geo-page="1"
+              title="Página 1: Origen geológico"
+              aria-label="Origen geológico"
+            ></button>
+            <button
+              type="button"
+              class="cuadro-paginador activo"
+              data-geo-page="2"
+              title="Página 2: Principales cumbres y picos"
+              aria-label="Principales cumbres"
+            ></button>
+          </div>
+          <div class="contenido-sobre-svg" style="top: 55px; padding: 40px 52px;">
+            <p class="cuerpo-19pt texto-verde">
+              Al recorrer la cordillera, destacan de forma natural sus puntos<br />
+              más elevados:
+            </p>
+          </div>
+        </div>
+
+        <!-- Contenedor L-shaped SVG interactivo de la cumbre activa -->
+        <div class="area-interactiva-cumbres" style="position: absolute; left: 366px; top: 312px; width: 642px; height: 260px; z-index: 25;">
+          <img id="img-svg-cumbre-fondo" src="/elementos/svg/contenedor-pico-el-avila.svg" alt="" aria-hidden="true" class="svg-fondo-cumbre" draggable="false" />
+
+          <!-- 5 botones de picos a la izquierda -->
+          <div class="columna-botones-picos" style="position: absolute; left: 0; top: 0;">
+            {
+              cumbresGeologia.map((cumbre, idx) => (
+                <button
+                  type="button"
+                  class:list={["btn-pico-geologia", { activo: idx === 0 }]}
+                  data-cumbre-foto={cumbre.foto}
+                  data-cumbre-desc={cumbre.desc}
+                  data-cumbre-altura={cumbre.altura}
+                  data-cumbre-svg={cumbre.svgContenedor}
+                >
+                  {cumbre.nombre}
+                </button>
+              ))
+            }
+          </div>
+
+          <!-- Tarjeta fotográfica derecha de cumbres -->
+          <div
+            class="tarjeta-foto-cumbre"
+            style="position: absolute; left: 310px; top: 0; width: 332px; height: 260px;"
+          >
+            <div class="marco-foto-cumbre">
+              <img
+                id="img-cumbre-activa"
+                src="/fotos/geologia/pico-el-avila.webp"
+                alt="Pico El Ávila"
+              />
+            </div>
+            <div class="texto-pie-cumbre">
+              <p id="desc-cumbre-activa" class="pie-13pt-cumbre">
+                Es la cima de mayor infraestructura turística.
+              </p>
+              <p id="altura-cumbre-activa" class="pie-13pt-cumbre" style="margin-top: 10px;">
+                Altura: (2.459 m.s.n)
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <img
+          src="/elementos/rocas-geologia-2.webp"
+          alt=""
+          aria-hidden="true"
+          class="recorte-derecho"
+          style="left: 1120px; top: 370px; width: 280px; height: 280px; object-position: right bottom;"
+          draggable="false"
+        />
+      </div>
+    </article>
+
+    <!-- =====================================================================
+         PANTALLA 14 (Página 14 del PDF): Hidrografía (SVGs precisos 639×237 y 576×168)
+         ===================================================================== -->
+    <article
+      class:list={["pantalla-vista", { activa: vistaInicial === "hidrografia" }]}
+      data-vista="hidrografia"
+      data-bg="/fondos/bg-hidrografia.webp"
+    >
+      <!-- Contenedor superior gráfico SVG Hidrografía -->
+      <div
+        class="contenedor-svg-card"
+        style="left: 330px; top: 122px; width: 639px; height: 237px;"
+      >
+        <img src="/elementos/svg/contenedor-hidrografia.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+        <span class="titulo-pestana texto-blanco" style="position: absolute; left: 50px; top: 15px;">Hidrografía</span>
+        <div class="contenido-sobre-svg" style="top: 55px; padding: 42px 46px;">
+          <p class="cuerpo-19pt texto-verde">
+            El abundante volumen de agua del parque drena al <strong>mar Caribe</strong><br />
+            mediante una densa red hidrográfica <strong class="texto-amarillo-intenso">dividida en dos vertientes:</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- 2 Tarjetas de Vertientes alojadas bajo el arco en SVG dual preciso -->
+      <div class="fila-vertientes-svg" style="position: absolute; left: 364px; top: 315px; width: 576px; height: 168px; z-index: 26;">
+        <img src="/elementos/svg/contenedores-duales-hidrografia.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+        <div style="display: flex; gap: 18px; width: 100%; height: 100%; position: relative; z-index: 2;">
+          <!-- Vertiente Norte -->
+          <div class="caja-vertiente-contenido" style="width: 279px; padding: 18px 22px;">
+            <h2 class="titulo-vertiente-20pt">Vertiente Norte</h2>
+            <ul class="lista-15pt">
+              <li>
+                Desemboca directamente en<br />el Litoral Central.
+              </li>
+              <li style="margin-top: 8px;">
+                Alimenta la cuenca del río<br />Guaire, principal colector de<br />la capital.
+              </li>
+            </ul>
+          </div>
+
+          <!-- Vertiente Sur -->
+          <div class="caja-vertiente-contenido" style="width: 279px; padding: 18px 22px;">
+            <h2 class="titulo-vertiente-20pt">Vertiente Sur</h2>
+            <ul class="lista-15pt">
+              <li>
+                Desemboca de forma indirecta,<br />principalmente a través del<br />río Tuy.
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cascada y rocas primer plano derecho Página 14 -->
+      <img
+        src="/elementos/cascada-hidrografia-derecha.webp"
+        alt=""
+        aria-hidden="true"
+        class="recorte-derecho"
+        style="left: 1080px; top: 365px; width: 320px; height: 285px; object-position: right bottom;"
+        draggable="false"
+      />
+    </article>
+
+    <!-- =====================================================================
+         PANTALLAS 15 a 40 (Páginas 15 a 40 del PDF): Flora y Fauna (SVGs vectoriales precisos)
+         ===================================================================== -->
+    <article
+      class:list={["pantalla-vista", { activa: vistaInicial === "flora-fauna" }]}
+      data-vista="flora-fauna"
+      data-bg="/fondos/bg-flora-fauna.webp"
+      id="vista-flora-fauna"
+    >
+      <!-- ===============================================================
+           CONTENIDO FLORA (Páginas 15 a 27)
+           =============================================================== -->
+      <div class="bloque-ff activo" data-ff-content="flora">
+        <!-- FLORA PUNTO 1 (Página 15): Introducción con SVG Flora (639.18×266.14) -->
+        <div class="subpagina-flora activa" data-flora-content="1">
+          <div
+            class="contenedor-svg-card"
+            style="left: 330px; top: 122px; width: 639px; height: 266px;"
+          >
+            <img src="/elementos/svg/contenedor-flora.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+            <!-- Botones interactivos transparentes para alternar pestañas Flora / Fauna -->
+            <button type="button" class="btn-pestana-svg activa" data-ff-select="flora" style="left: 0; top: 0; width: 213px; height: 55px;">
+              <span class="titulo-pestana texto-blanco" style="position: absolute; left: 50px; top: 17px;">Flora</span>
+            </button>
+            <button type="button" class="btn-pestana-svg" data-ff-select="fauna" style="left: 213px; top: 0; width: 213px; height: 55px;">
+              <span class="titulo-pestana texto-blanco" style="position: absolute; left: 70px; top: 17px;">Fauna</span>
+            </button>
+            <!-- Manejadores activo / inactivo en la muesca de Flora (x=158px, y=34px) -->
+            <div class="muesca-paginador muesca-flora" role="tablist" aria-label="Páginas de Flora">
+              <button
+                type="button"
+                class="cuadro-paginador activo"
+                data-flora-page="1"
+                title="Introducción a la Flora (Página 15)"
+                aria-label="Página 1: Introducción a la Flora"
+              ></button>
+              <button
+                type="button"
+                class="cuadro-paginador"
+                data-flora-page="2"
+                title="Catálogo de especies de Flora (Páginas 16 a 27)"
+                aria-label="Página 2: Catálogo de especies de Flora"
+              ></button>
+            </div>
+            <div class="contenido-sobre-svg" style="top: 55px; padding: 40px 50px;">
+              <p class="cuerpo-19pt texto-verde">
+                El parque alberga una extraordinaria diversidad vegetal que<br />
+                varía con la altitud. Desde los bosques secos de la base<br />
+                hasta los subpáramos de las cumbres, cada piso altitudinal<br />
+                presenta comunidades vegetales únicas y adaptadas a sus<br />
+                condiciones específicas.
+              </p>
+            </div>
+          </div>
+
+          <img
+            src="/elementos/orquidea-flora-intro.webp"
+            alt=""
+            aria-hidden="true"
+            class="recorte-derecho"
+            style="left: 1050px; top: 270px; width: 350px; height: 380px; object-position: right bottom;"
+            draggable="false"
+          />
+        </div>
+
+        <!-- FLORA PUNTO 2 (Páginas 16 a 27): 4 Categorías x 3 Especies (SVG 709.9×238.06) -->
+        <div class="subpagina-flora" data-flora-content="2">
+          <!-- Tarjeta superior SVG corta con arco recortado -->
+          <div
+            class="contenedor-svg-card"
+            style="left: 330px; top: 122px; width: 710px; height: 238px;"
+          >
+            <img src="/elementos/svg/contenedor-flora-corto.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+            <!-- Botones de pestañas Flora / Fauna -->
+            <button type="button" class="btn-pestana-svg activa" data-ff-select="flora" style="left: 0; top: 0; width: 213px; height: 55px;">
+              <span class="titulo-pestana texto-blanco" style="position: absolute; left: 50px; top: 17px;">Flora</span>
+            </button>
+            <button type="button" class="btn-pestana-svg" data-ff-select="fauna" style="left: 213px; top: 0; width: 213px; height: 55px;">
+              <span class="titulo-pestana texto-blanco" style="position: absolute; left: 70px; top: 17px;">Fauna</span>
+            </button>
+            <!-- Manejadores activo / inactivo en la muesca de Flora (Punto 2 activo) -->
+            <div class="muesca-paginador muesca-flora" role="tablist" aria-label="Páginas de Flora">
+              <button
+                type="button"
+                class="cuadro-paginador"
+                data-flora-page="1"
+                title="Introducción a la Flora (Página 15)"
+                aria-label="Página 1: Introducción a la Flora"
+              ></button>
+              <button
+                type="button"
+                class="cuadro-paginador activo"
+                data-flora-page="2"
+                title="Catálogo de especies de Flora (Páginas 16 a 27)"
+                aria-label="Página 2: Catálogo de especies de Flora"
+              ></button>
+            </div>
+            <div class="contenido-sobre-svg" style="top: 55px; padding: 42px 52px;">
+              <p class="cuerpo-19pt texto-verde">
+                Dentro de esta vasta riqueza botánica destacan:
+              </p>
+            </div>
+          </div>
+
+          <!-- Contenedor unificado de catálogo Flora (SVG 640×220 en x=366, y=312) -->
+          <div class="contenedor-catalogo-ff" style="left: 366px; top: 312px; width: 640px; height: 220px;">
+            <img
+              id="svg-fondo-flora-catalogo"
+              src="/elementos/svg/contenedor-fauna-flora-1.svg"
+              alt=""
+              aria-hidden="true"
+              class="svg-fondo-catalogo"
+              draggable="false"
+            />
+
+            <!-- 4 Botones de categorías de Flora con rectángulo SVG badge-nombre-flora-fauna inactivo -->
+            <div class="columna-botones-ff">
+              <button
+                type="button"
+                class="btn-categoria-ff activo"
+                data-flora-cat="emblematicas"
+              >
+                <img src="/elementos/svg/badge-nombre-flora-fauna.svg" alt="" aria-hidden="true" class="badge-inactivo" draggable="false" />
+                <span class="btn-ff-texto">Plantas emblemáticas</span>
+              </button>
+              <button
+                type="button"
+                class="btn-categoria-ff"
+                data-flora-cat="orquideas"
+              >
+                <img src="/elementos/svg/badge-nombre-flora-fauna.svg" alt="" aria-hidden="true" class="badge-inactivo" draggable="false" />
+                <span class="btn-ff-texto">Orquídeas</span>
+              </button>
+              <button
+                type="button"
+                class="btn-categoria-ff"
+                data-flora-cat="helechos"
+              >
+                <img src="/elementos/svg/badge-nombre-flora-fauna.svg" alt="" aria-hidden="true" class="badge-inactivo" draggable="false" />
+                <span class="btn-ff-texto">Helechos</span>
+              </button>
+              <button
+                type="button"
+                class="btn-categoria-ff"
+                data-flora-cat="endemicas"
+              >
+                <img src="/elementos/svg/badge-nombre-flora-fauna.svg" alt="" aria-hidden="true" class="badge-inactivo" draggable="false" />
+                <span class="btn-ff-texto">Especies endémicas</span>
+              </button>
+            </div>
+
+            <!-- Marco foto especie + nombre centrado abajo -->
+            <div class="tarjeta-especie-ff">
+              <div class="marco-foto-especie">
+                <img
+                  id="img-flora-especie"
+                  src="/fotos/flora/arbol-nino.webp"
+                  alt="Árbol niño"
+                />
+              </div>
+
+              <!-- Nombre común y científico centrado debajo de la foto sobre el fondo blanco -->
+              <div class="pie-especie-nombre">
+                <strong id="nombre-flora-comun">Árbol niño</strong> - <em id="nombre-flora-cientifico">Gyranthera caribensis</em>
+              </div>
+
+              <!-- Pestaña lateral derecha amarilla con los 3 cuadros blancos -->
+              <div class="pestana-vertical-especie" role="tablist" aria-label="Especies de Flora">
+                <button
+                  type="button"
+                  class="cuadro-especie activo"
+                  data-flora-idx="0"
+                  aria-label="Especie 1"
+                ></button>
+                <button
+                  type="button"
+                  class="cuadro-especie"
+                  data-flora-idx="1"
+                  aria-label="Especie 2"
+                ></button>
+                <button
+                  type="button"
+                  class="cuadro-especie"
+                  data-flora-idx="2"
+                  aria-label="Especie 3"
+                ></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Elemento natural derecho dinámico según la categoría/especie de Flora -->
+          <img
+            id="recorte-flora-derecho"
+            src="/elementos/flor-emblematica-3.webp"
+            alt=""
+            aria-hidden="true"
+            class="recorte-derecho"
+            style="left: auto; right: 0; bottom: 0; top: auto; width: 355px; height: 372px; object-fit: contain; object-position: right bottom;"
+            draggable="false"
+          />
+        </div>
+      </div>
+
+      <!-- ===============================================================
+           CONTENIDO FAUNA (Páginas 28 a 40)
+           =============================================================== -->
+      <div class="bloque-ff" data-ff-content="fauna">
+        <!-- FAUNA PUNTO 1 (Página 28): Introducción con SVG Fauna (639.18×266.14) -->
+        <div class="subpagina-fauna activa" data-fauna-content="1">
+          <div
+            class="contenedor-svg-card"
+            style="left: 330px; top: 122px; width: 639px; height: 266px;"
+          >
+            <img src="/elementos/svg/contenedor-fauna.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+            <!-- Botones interactivos transparentes para alternar pestañas Flora / Fauna -->
+            <button type="button" class="btn-pestana-svg" data-ff-select="flora" style="left: 0; top: 0; width: 213px; height: 55px;">
+              <span class="titulo-pestana texto-blanco" style="position: absolute; left: 50px; top: 17px;">Flora</span>
+            </button>
+            <button type="button" class="btn-pestana-svg activa" data-ff-select="fauna" style="left: 213px; top: 0; width: 213px; height: 55px;">
+              <span class="titulo-pestana texto-blanco" style="position: absolute; left: 70px; top: 17px;">Fauna</span>
+            </button>
+            <!-- Manejadores activo / inactivo en la muesca de Fauna (x=371px, y=34px) -->
+            <div class="muesca-paginador muesca-fauna" role="tablist" aria-label="Páginas de Fauna">
+              <button
+                type="button"
+                class="cuadro-paginador activo"
+                data-fauna-page="1"
+                title="Introducción a la Fauna (Página 28)"
+                aria-label="Página 1: Introducción a la Fauna"
+              ></button>
+              <button
+                type="button"
+                class="cuadro-paginador"
+                data-fauna-page="2"
+                title="Catálogo de especies de Fauna (Páginas 29 a 40)"
+                aria-label="Página 2: Catálogo de especies de Fauna"
+              ></button>
+            </div>
+            <div class="contenido-sobre-svg" style="top: 55px; padding: 38px 34px 38px 52px;">
+              <p class="cuerpo-19pt texto-verde">
+                El Warairarepano constituye un refugio biológico estratégico en<br />
+                la región central de Venezuela.
+              </p>
+              <p class="cuerpo-19pt texto-verde" style="margin-top: 12px; max-width: 550px;">
+                A nivel de especies, su geografía alberga desde mamíferos de<br />
+                gran porte y una amplia variedad de aves nativas y migratorias,<br />
+                hasta anfibios y reptiles adaptados a los microclimas específicos<br />
+                de la montaña.
+              </p>
+            </div>
+          </div>
+
+          <img
+            src="/elementos/colibri-fauna-intro.webp"
+            alt=""
+            aria-hidden="true"
+            class="recorte-derecho"
+            style="left: 990px; top: 245px; width: 410px; height: 390px; object-position: right bottom;"
+            draggable="false"
+          />
+        </div>
+
+        <!-- FAUNA PUNTO 2 (Páginas 29 a 40): 4 Categorías x 3 Especies (SVG 709.9×238.06) -->
+        <div class="subpagina-fauna" data-fauna-content="2">
+          <!-- Tarjeta superior SVG corta con arco recortado -->
+          <div
+            class="contenedor-svg-card"
+            style="left: 330px; top: 122px; width: 710px; height: 238px;"
+          >
+            <img src="/elementos/svg/contenedor-fauna-corto.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+            <!-- Botones de pestañas Flora / Fauna -->
+            <button type="button" class="btn-pestana-svg" data-ff-select="flora" style="left: 0; top: 0; width: 213px; height: 55px;">
+              <span class="titulo-pestana texto-blanco" style="position: absolute; left: 50px; top: 17px;">Flora</span>
+            </button>
+            <button type="button" class="btn-pestana-svg activa" data-ff-select="fauna" style="left: 213px; top: 0; width: 213px; height: 55px;">
+              <span class="titulo-pestana texto-blanco" style="position: absolute; left: 70px; top: 17px;">Fauna</span>
+            </button>
+            <!-- Manejadores activo / inactivo en la muesca de Fauna (Punto 2 activo) -->
+            <div class="muesca-paginador muesca-fauna" role="tablist" aria-label="Páginas de Fauna">
+              <button
+                type="button"
+                class="cuadro-paginador"
+                data-fauna-page="1"
+                title="Introducción a la Fauna (Página 28)"
+                aria-label="Página 1: Introducción a la Fauna"
+              ></button>
+              <button
+                type="button"
+                class="cuadro-paginador activo"
+                data-fauna-page="2"
+                title="Catálogo de especies de Fauna (Páginas 29 a 40)"
+                aria-label="Página 2: Catálogo de especies de Fauna"
+              ></button>
+            </div>
+            <div class="contenido-sobre-svg" style="top: 55px; padding: 40px 52px;">
+              <p class="cuerpo-19pt texto-verde">
+                La montaña alberga distintas comunidades de fauna, cada una<br />
+                moldeada por su nivel de altitud:
+              </p>
+            </div>
+          </div>
+
+          <!-- Contenedor unificado de catálogo Fauna (SVG 640×220 en x=366, y=312) -->
+          <div class="contenedor-catalogo-ff" style="left: 366px; top: 312px; width: 640px; height: 220px;">
+            <img
+              id="svg-fondo-fauna-catalogo"
+              src="/elementos/svg/contenedor-fauna-flora-1.svg"
+              alt=""
+              aria-hidden="true"
+              class="svg-fondo-catalogo"
+              draggable="false"
+            />
+
+            <!-- 4 Botones de categorías de Fauna -->
+            <div class="columna-botones-ff">
+              <button
+                type="button"
+                class="btn-categoria-ff activo"
+                data-fauna-cat="mamiferos"
+              >
+                <img src="/elementos/svg/badge-nombre-flora-fauna.svg" alt="" aria-hidden="true" class="badge-inactivo" draggable="false" />
+                <span class="btn-ff-texto">Mamíferos</span>
+              </button>
+              <button
+                type="button"
+                class="btn-categoria-ff"
+                data-fauna-cat="aves"
+              >
+                <img src="/elementos/svg/badge-nombre-flora-fauna.svg" alt="" aria-hidden="true" class="badge-inactivo" draggable="false" />
+                <span class="btn-ff-texto">Aves</span>
+              </button>
+              <button
+                type="button"
+                class="btn-categoria-ff"
+                data-fauna-cat="reptiles"
+              >
+                <img src="/elementos/svg/badge-nombre-flora-fauna.svg" alt="" aria-hidden="true" class="badge-inactivo" draggable="false" />
+                <span class="btn-ff-texto">Reptiles</span>
+              </button>
+              <button
+                type="button"
+                class="btn-categoria-ff"
+                data-fauna-cat="anfibios"
+              >
+                <img src="/elementos/svg/badge-nombre-flora-fauna.svg" alt="" aria-hidden="true" class="badge-inactivo" draggable="false" />
+                <span class="btn-ff-texto">Anfibios</span>
+              </button>
+            </div>
+
+            <!-- Marco foto especie + nombre centrado abajo -->
+            <div class="tarjeta-especie-ff">
+              <div class="marco-foto-especie">
+                <img
+                  id="img-fauna-especie"
+                  src="/fotos/fauna/cunaguaro.webp"
+                  alt="Cunaguaro"
+                />
+              </div>
+
+              <!-- Nombre común y científico centrado debajo de la foto sobre el fondo blanco -->
+              <div class="pie-especie-nombre">
+                <strong id="nombre-fauna-comun">Cunaguaro</strong> - <em id="nombre-fauna-cientifico">Leopardus pardalis</em>
+              </div>
+
+              <!-- Pestaña lateral derecha amarilla con los 3 cuadros blancos -->
+              <div class="pestana-vertical-especie" role="tablist" aria-label="Especies de Fauna">
+                <button
+                  type="button"
+                  class="cuadro-especie activo"
+                  data-fauna-idx="0"
+                  aria-label="Especie 1"
+                ></button>
+                <button
+                  type="button"
+                  class="cuadro-especie"
+                  data-fauna-idx="1"
+                  aria-label="Especie 2"
+                ></button>
+                <button
+                  type="button"
+                  class="cuadro-especie"
+                  data-fauna-idx="2"
+                  aria-label="Especie 3"
+                ></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Elemento animal derecho dinámico según categoría de Fauna -->
+          <img
+            id="recorte-fauna-derecho"
+            src="/elementos/venado-mamiferos-derecha.webp"
+            alt=""
+            aria-hidden="true"
+            class="recorte-derecho"
+            style="left: 1110px; top: 320px; width: 290px; height: 330px; object-position: right bottom;"
+            draggable="false"
+          />
+        </div>
+      </div>
+    </article>
+  </EstructuraCuadrados>
+</section>
+
+<script>
+  // Base de datos exacta de las 12 pantallas de Flora (Páginas 16 a 27 del PDF)
+  const CATALOGO_FLORA: Record<
+    string,
+    Array<{ comun: string; cientifico: string; foto: string; recorte: string }>
+  > = {
+    emblematicas: [
+      {
+        comun: "Árbol niño",
+        cientifico: "Gyranthera caribensis",
+        foto: "/fotos/flora/arbol-nino.webp",
+        recorte: "/elementos/flor-emblematica-3.webp",
+      },
+      {
+        comun: "Arrayán",
+        cientifico: "Myrcianthes karsteniana",
+        foto: "/fotos/flora/arrayan.webp",
+        recorte: "/elementos/flor-emblematica-3.webp",
+      },
+      {
+        comun: "Frailejón arbolito",
+        cientifico: "Espeletia neriifolia",
+        foto: "/fotos/flora/frailejon-arbolito.webp",
+        recorte: "/elementos/flor-emblematica-3.webp",
+      },
+    ],
+    orquideas: [
+      {
+        comun: "Orquídea Cattleya",
+        cientifico: "Cattleya mossiae",
+        foto: "/fotos/flora/orquidea-cattleya.webp",
+        recorte: "/elementos/flor-orquidea-derecha.webp",
+      },
+      {
+        comun: "Coronas de Cristo",
+        cientifico: "Epidendrum leucochilum",
+        foto: "/fotos/flora/coronas-de-cristo.webp",
+        recorte: "/elementos/flor-orquidea-derecha.webp",
+      },
+      {
+        comun: "Varita de San José",
+        cientifico: "Epidendrum secundum",
+        foto: "/fotos/flora/varita-de-san-jose.webp",
+        recorte: "/elementos/flor-orquidea-derecha.webp",
+      },
+    ],
+    helechos: [
+      {
+        comun: "Helecho Pincel",
+        cientifico: "Blechnum occidentale",
+        foto: "/fotos/flora/helecho-pincel.webp",
+        recorte: "/elementos/rama-helecho-derecha.webp",
+      },
+      {
+        comun: "Palma boba",
+        cientifico: "Cyathea caracasana",
+        foto: "/fotos/flora/palma-boba.webp",
+        recorte: "/elementos/rama-helecho-derecha.webp",
+      },
+      {
+        comun: "Helecho Corocillo",
+        cientifico: "Pteridium aquilinum",
+        foto: "/fotos/flora/helecho-corocillo.webp",
+        recorte: "/elementos/rama-helecho-derecha.webp",
+      },
+    ],
+    endemicas: [
+      {
+        comun: "Vira Vira Avileña",
+        cientifico: "Achyrocline flaccida",
+        foto: "/fotos/flora/vira-vira-avilena.webp",
+        recorte: "/elementos/flor-endemica-3.webp",
+      },
+      {
+        comun: "El Nogal de Caracas",
+        cientifico: "Juglans venezuelensis",
+        foto: "/fotos/flora/nogal-de-caracas.webp",
+        recorte: "/elementos/flor-endemica-3.webp",
+      },
+      {
+        comun: "Rosa del Ávila",
+        cientifico: "Befaria glauca",
+        foto: "/fotos/flora/rosa-del-avila.webp",
+        recorte: "/elementos/flor-endemica-3.webp",
+      },
+    ],
+  };
+
+  // Base de datos exacta de las 12 pantallas de Fauna (Páginas 29 a 40 del PDF)
+  const CATALOGO_FAUNA: Record<
+    string,
+    Array<{ comun: string; cientifico: string; foto: string; recorte: string }>
+  > = {
+    mamiferos: [
+      {
+        comun: "Cunaguaro",
+        cientifico: "Leopardus pardalis",
+        foto: "/fotos/fauna/cunaguaro.webp",
+        recorte: "/elementos/venado-mamiferos-derecha.webp",
+      },
+      {
+        comun: "Zorro común",
+        cientifico: "Cerdocyon thous",
+        foto: "/fotos/fauna/zorro-comun.webp",
+        recorte: "/elementos/venado-mamiferos-derecha.webp",
+      },
+      {
+        comun: "Perezoso",
+        cientifico: "Bradypus variegatus",
+        foto: "/fotos/fauna/perezoso.webp",
+        recorte: "/elementos/venado-mamiferos-derecha.webp",
+      },
+    ],
+    aves: [
+      {
+        comun: "Tangara coroniazul",
+        cientifico: "Thraupis cyanocephala",
+        foto: "/fotos/fauna/tangara-coroniazul.webp",
+        recorte: "/elementos/ave-amarilla-derecha.webp",
+      },
+      {
+        comun: "Guacharaca",
+        cientifico: "Ortalis ruficauda",
+        foto: "/fotos/fauna/guacharaca.webp",
+        recorte: "/elementos/ave-amarilla-derecha.webp",
+      },
+      {
+        comun: "Guacamaya azul y amarilla",
+        cientifico: "Ara ararauna",
+        foto: "/fotos/fauna/guacamaya-azul-amarilla.webp",
+        recorte: "/elementos/ave-amarilla-derecha.webp",
+      },
+    ],
+    reptiles: [
+      {
+        comun: "Iguana",
+        cientifico: "Iguana iguana",
+        foto: "/fotos/fauna/iguana.webp",
+        recorte: "/elementos/camaleon-reptiles-derecha.webp",
+      },
+      {
+        comun: "Cascabel",
+        cientifico: "Crotalus durissus",
+        foto: "/fotos/fauna/cascabel.webp",
+        recorte: "/elementos/camaleon-reptiles-derecha.webp",
+      },
+      {
+        comun: "Tragavenado",
+        cientifico: "Boa constrictor",
+        foto: "/fotos/fauna/tragavenado.webp",
+        recorte: "/elementos/camaleon-reptiles-derecha.webp",
+      },
+    ],
+    anfibios: [
+      {
+        comun: "Ranita de cristal del Ávila",
+        cientifico: "Hyalinobatrachium guairarepanensis",
+        foto: "/fotos/fauna/ranita-de-cristal.webp",
+        recorte: "/elementos/rana-anfibios-derecha.webp",
+      },
+      {
+        comun: "Sapo común",
+        cientifico: "Rhaebo guttatus",
+        foto: "/fotos/fauna/sapo-comun.webp",
+        recorte: "/elementos/rana-anfibios-derecha.webp",
+      },
+      {
+        comun: "Ranita de las bromelias",
+        cientifico: "Dendropsophus microcephalus",
+        foto: "/fotos/fauna/ranita-de-las-bromelias.webp",
+        recorte: "/elementos/rana-anfibios-derecha.webp",
+      },
+    ],
+  };
+
+  function inicializarPatrimonioNatural() {
+    const contenedor = document.querySelector(".modulo-patrimonio-natural");
+    if (!contenedor) return;
+
+    const imgFondo = contenedor.querySelector("#img-fondo-activo") as HTMLImageElement | null;
+    const cambiarFondo = (src: string) => {
+      if (imgFondo && imgFondo.getAttribute("src") !== src) {
+        imgFondo.src = src;
+      }
+    };
+
+    // 1. Navegación desde el letrero de madera lateral
+    const botonesVista = contenedor.querySelectorAll("[data-vista-target]");
+    const pantallas = contenedor.querySelectorAll(".pantalla-vista");
+
+    botonesVista.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-vista-target");
+        if (!target) return;
+
+        botonesVista.forEach((b) => b.classList.remove("activo"));
+        btn.classList.add("activo");
+
+        pantallas.forEach((p) => {
+          const esTarget = p.getAttribute("data-vista") === target;
+          p.classList.toggle("activa", esTarget);
+          if (esTarget) {
+            const bg = p.getAttribute("data-bg");
+            if (bg) cambiarFondo(bg);
+          }
+        });
+      });
+    });
+
+    // 2. Geología: Paginación de 2 cuadros (Página 8 vs Páginas 9-13)
+    const geoDots = contenedor.querySelectorAll("[data-geo-page]");
+    const geoPages = contenedor.querySelectorAll("[data-geo-content]");
+
+    const activarPaginaGeologia = (numPag: string) => {
+      geoDots.forEach((d) =>
+        d.classList.toggle("activo", d.getAttribute("data-geo-page") === numPag)
+      );
+      geoPages.forEach((p) =>
+        p.classList.toggle("activa", p.getAttribute("data-geo-content") === numPag)
+      );
+      cambiarFondo(
+        numPag === "1" ? "/fondos/bg-geologia.webp" : "/fondos/bg-geologia.webp"
+      );
+    };
+
+    geoDots.forEach((d) => {
+      d.addEventListener("click", () => {
+        const p = d.getAttribute("data-geo-page");
+        if (p) activarPaginaGeologia(p);
+      });
+    });
+
+    // Selector de los 5 Picos en Geología (Páginas 9 a 13)
+    const btnsCumbres = contenedor.querySelectorAll("[data-cumbre-foto]");
+    const imgCumbre = contenedor.querySelector("#img-cumbre-activa") as HTMLImageElement | null;
+    const descCumbre = contenedor.querySelector("#desc-cumbre-activa");
+    const alturaCumbre = contenedor.querySelector("#altura-cumbre-activa");
+
+    btnsCumbres.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        btnsCumbres.forEach((b) => b.classList.remove("activo"));
+        btn.classList.add("activo");
+        const foto = btn.getAttribute("data-cumbre-foto");
+        const desc = btn.getAttribute("data-cumbre-desc");
+        const altura = btn.getAttribute("data-cumbre-altura");
+        if (imgCumbre && foto) imgCumbre.src = foto;
+        if (descCumbre && desc !== null) descCumbre.textContent = desc;
+        if (alturaCumbre && altura !== null) alturaCumbre.textContent = altura;
+        const svgCumbreFondo = contenedor.querySelector('#img-svg-cumbre-fondo') as HTMLImageElement | null;
+        const svg = btn.getAttribute('data-cumbre-svg');
+        if (svgCumbreFondo && svg) svgCumbreFondo.src = svg;
+      });
+    });
+
+    // 3. Flora y Fauna: Pestañas principales (Flora vs Fauna)
+    let tabFFActual = "flora";
+    let pagFloraActual = "1";
+    let pagFaunaActual = "1";
+    let catFloraActual = "emblematicas";
+    let idxFloraActual = 0;
+    let catFaunaActual = "mamiferos";
+    let idxFaunaActual = 0;
+
+    const pestanasFF = contenedor.querySelectorAll(".pestana-ff-item");
+    const bloquesFF = contenedor.querySelectorAll(".bloque-ff");
+
+    const actualizarFondoFloraFauna = () => {
+      if (tabFFActual === "flora") {
+        cambiarFondo(
+          pagFloraActual === "1"
+            ? "/fondos/bg-flora-fauna.webp"
+            : "/fondos/bg-flora-fauna.webp"
+        );
+      } else {
+        cambiarFondo("/fondos/bg-flora-fauna.webp");
+      }
+    };
+
+    const cambiarTabFF = (nuevoTab: string) => {
+      tabFFActual = nuevoTab;
+      pestanasFF.forEach((t) =>
+        t.classList.toggle("activa", t.getAttribute("data-ff-tab") === nuevoTab)
+      );
+      bloquesFF.forEach((b) =>
+        b.classList.toggle("activo", b.getAttribute("data-ff-content") === nuevoTab)
+      );
+      actualizarFondoFloraFauna();
+    };
+
+    contenedor.querySelectorAll("[data-ff-select]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const t = btn.getAttribute("data-ff-select");
+        if (t) cambiarTabFF(t);
+      });
+    });
+
+    // Cuadros de Flora (1 vs 2)
+    const floraDots = contenedor.querySelectorAll("[data-flora-page]");
+    const floraSubpages = contenedor.querySelectorAll("[data-flora-content]");
+
+    const activarPaginaFlora = (num: string) => {
+      if (tabFFActual !== "flora") cambiarTabFF("flora");
+      pagFloraActual = num;
+      floraDots.forEach((d) =>
+        d.classList.toggle("activo", d.getAttribute("data-flora-page") === num)
+      );
+      floraSubpages.forEach((sp) =>
+        sp.classList.toggle("activa", sp.getAttribute("data-flora-content") === num)
+      );
+      actualizarFondoFloraFauna();
+    };
+
+    floraDots.forEach((d) => {
+      d.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const num = d.getAttribute("data-flora-page");
+        if (num) activarPaginaFlora(num);
+      });
+    });
+
+    // Renderizar especie de Flora activa
+    const imgFlora = contenedor.querySelector("#img-flora-especie") as HTMLImageElement | null;
+    const nomFloraComun = contenedor.querySelector("#nombre-flora-comun");
+    const nomFloraCient = contenedor.querySelector("#nombre-flora-cientifico");
+    const recorteFlora = contenedor.querySelector("#recorte-flora-derecho") as HTMLImageElement | null;
+    const btnsFloraCat = contenedor.querySelectorAll("[data-flora-cat]");
+    const btnsFloraIdx = contenedor.querySelectorAll("[data-flora-idx]");
+
+    const renderFlora = () => {
+      const lista = CATALOGO_FLORA[catFloraActual];
+      if (!lista) return;
+      const item = lista[idxFloraActual] || lista[0];
+      if (imgFlora) {
+        imgFlora.src = item.foto;
+        imgFlora.alt = item.comun;
+      }
+      if (nomFloraComun) nomFloraComun.textContent = item.comun;
+      if (nomFloraCient) nomFloraCient.textContent = item.cientifico;
+      if (recorteFlora) recorteFlora.src = item.recorte;
+
+      const mapaSvgFlora: Record<string, string> = {
+        emblematicas: "/elementos/svg/contenedor-fauna-flora-1.svg",
+        orquideas: "/elementos/svg/contenedor-fauna-flora-2.svg",
+        helechos: "/elementos/svg/contenedor-fauna-flora-3.svg",
+        endemicas: "/elementos/svg/contenedor-fauna-flora-4.svg",
+      };
+      const svgFloraCat = contenedor.querySelector("#svg-fondo-flora-catalogo") as HTMLImageElement | null;
+      if (svgFloraCat && mapaSvgFlora[catFloraActual]) {
+        svgFloraCat.src = mapaSvgFlora[catFloraActual];
+      }
+
+      btnsFloraCat.forEach((b) =>
+        b.classList.toggle("activo", b.getAttribute("data-flora-cat") === catFloraActual)
+      );
+      btnsFloraIdx.forEach((b) =>
+        b.classList.toggle("activo", Number(b.getAttribute("data-flora-idx")) === idxFloraActual)
+      );
+    };
+
+    btnsFloraCat.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const c = btn.getAttribute("data-flora-cat");
+        if (c) {
+          catFloraActual = c;
+          idxFloraActual = 0;
+          renderFlora();
+        }
+      });
+    });
+
+    btnsFloraIdx.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        idxFloraActual = Number(btn.getAttribute("data-flora-idx") || 0);
+        renderFlora();
+      });
+    });
+
+    // Cuadros de Fauna (1 vs 2)
+    const faunaDots = contenedor.querySelectorAll("[data-fauna-page]");
+    const faunaSubpages = contenedor.querySelectorAll("[data-fauna-content]");
+
+    const activarPaginaFauna = (num: string) => {
+      if (tabFFActual !== "fauna") cambiarTabFF("fauna");
+      pagFaunaActual = num;
+      faunaDots.forEach((d) =>
+        d.classList.toggle("activo", d.getAttribute("data-fauna-page") === num)
+      );
+      faunaSubpages.forEach((sp) =>
+        sp.classList.toggle("activa", sp.getAttribute("data-fauna-content") === num)
+      );
+      actualizarFondoFloraFauna();
+    };
+
+    faunaDots.forEach((d) => {
+      d.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const num = d.getAttribute("data-fauna-page");
+        if (num) activarPaginaFauna(num);
+      });
+    });
+
+    // Renderizar especie de Fauna activa
+    const imgFauna = contenedor.querySelector("#img-fauna-especie") as HTMLImageElement | null;
+    const nomFaunaComun = contenedor.querySelector("#nombre-fauna-comun");
+    const nomFaunaCient = contenedor.querySelector("#nombre-fauna-cientifico");
+    const recorteFauna = contenedor.querySelector("#recorte-fauna-derecho") as HTMLImageElement | null;
+    const btnsFaunaCat = contenedor.querySelectorAll("[data-fauna-cat]");
+    const btnsFaunaIdx = contenedor.querySelectorAll("[data-fauna-idx]");
+
+    const renderFauna = () => {
+      const lista = CATALOGO_FAUNA[catFaunaActual];
+      if (!lista) return;
+      const item = lista[idxFaunaActual] || lista[0];
+      if (imgFauna) {
+        imgFauna.src = item.foto;
+        imgFauna.alt = item.comun;
+      }
+      if (nomFaunaComun) nomFaunaComun.textContent = item.comun;
+      if (nomFaunaCient) nomFaunaCient.textContent = item.cientifico;
+      if (recorteFauna) recorteFauna.src = item.recorte;
+
+      const mapaSvgFauna: Record<string, string> = {
+        mamiferos: "/elementos/svg/contenedor-fauna-flora-1.svg",
+        aves: "/elementos/svg/contenedor-fauna-flora-2.svg",
+        reptiles: "/elementos/svg/contenedor-fauna-flora-3.svg",
+        anfibios: "/elementos/svg/contenedor-fauna-flora-4.svg",
+      };
+      const svgFaunaCat = contenedor.querySelector("#svg-fondo-fauna-catalogo") as HTMLImageElement | null;
+      if (svgFaunaCat && mapaSvgFauna[catFaunaActual]) {
+        svgFaunaCat.src = mapaSvgFauna[catFaunaActual];
+      }
+
+      btnsFaunaCat.forEach((b) =>
+        b.classList.toggle("activo", b.getAttribute("data-fauna-cat") === catFaunaActual)
+      );
+      btnsFaunaIdx.forEach((b) =>
+        b.classList.toggle("activo", Number(b.getAttribute("data-fauna-idx")) === idxFaunaActual)
+      );
+    };
+
+    btnsFaunaCat.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const c = btn.getAttribute("data-fauna-cat");
+        if (c) {
+          catFaunaActual = c;
+          idxFaunaActual = 0;
+          renderFauna();
+        }
+      });
+    });
+
+    btnsFaunaIdx.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        idxFaunaActual = Number(btn.getAttribute("data-fauna-idx") || 0);
+        renderFauna();
+      });
+    });
+
+    // Soporte para abrir directamente una subsección mediante URL (?vista=geologia o #geologia)
+    const urlParams = new URLSearchParams(window.location.search);
+    const vistaParam = urlParams.get('vista') || window.location.hash.replace('#', '');
+    if (vistaParam) {
+      const btnVista = contenedor.querySelector(`[data-vista-target="${vistaParam}"]`);
+      if (btnVista) (btnVista as HTMLElement).click();
+
+      const pagParam = urlParams.get('pag');
+      if (pagParam) {
+        if (vistaParam === 'geologia') {
+          activarPaginaGeologia(pagParam);
+        } else if (vistaParam === 'flora-fauna') {
+          const subParam = urlParams.get('sub');
+          if (subParam === 'fauna') {
+            cambiarTabFF('fauna');
+            activarPaginaFauna(pagParam);
+          } else {
+            cambiarTabFF('flora');
+            activarPaginaFlora(pagParam);
+          }
+        }
+      }
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", inicializarPatrimonioNatural);
+  inicializarPatrimonioNatural();
+</script>
+
+<style>
+
+  /* ============================================================
+     CONTENEDORES SVG: Formas vectoriales precisas del diseño
+     ============================================================ */
+  .contenedor-svg-card {
+    position: absolute;
+    z-index: 25;
+  }
+
+  .svg-fondo-card {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .contenido-sobre-svg {
+    position: relative;
+    z-index: 2;
+  }
+
+  .svg-fondo-cumbre {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .modulo-patrimonio-natural {
+    width: 1400px;
+    height: 650px;
+    position: relative;
+  }
+
+  .pantalla-vista,
+  .subpagina-geologia,
+  .bloque-ff,
+  .subpagina-flora,
+  .subpagina-fauna {
+    display: none;
+  }
+
+  .pantalla-vista.activa,
+  .subpagina-geologia.activa,
+  .bloque-ff.activo,
+  .subpagina-flora.activa,
+  .subpagina-fauna.activa {
+    display: block;
+    animation: fadeSuave 0.24s ease;
+  }
+
+  @keyframes fadeSuave {
+    from {
+      opacity: 0.45;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Pestañas superiores (x=330..630, y=122..177) */
+  .pestana-unica {
+    position: absolute;
+    height: 68px;
+    border-top-left-radius: 26px;
+    border-top-right-radius: 26px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 15px;
+    z-index: 24;
+  }
+
+  .pestana-izquierda {
+    justify-content: flex-start;
+    padding-left: 48px;
+  }
+
+  .pestana-blanca {
+    background: #ffffff;
+  }
+
+  .pestana-amarilla {
+    background: var(--color-patrimonio);
+  }
+
+  .titulo-pestana {
+    font-family: var(--fuente-principal);
+    font-size: var(--pt-pestana-titulo); /* 20pt */
+    font-weight: 700;
+    line-height: 24px;
+  }
+
+  /* Botones transparentes sobre las pestañas SVG de Flora y Fauna */
+  .btn-pestana-svg {
+    position: absolute;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 5;
+  }
+
+  /* Muesca base para los manejadores (paginadores de 2 puntos) */
+  .muesca-paginador {
+    position: absolute;
+    top: 38px;
+    height: 12px;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+  }
+
+  .muesca-geologia {
+    left: 244px;
+    width: 35px;
+  }
+
+  .muesca-flora {
+    left: 157px;
+    width: 39px;
+  }
+
+  .muesca-fauna {
+    left: 370px;
+    width: 39px;
+  }
+
+  /* Manejadores activo / inactivo usando los SVGs precisos de Dalianyela (12×12px) */
+  .cuadro-paginador {
+    width: 12px;
+    height: 12px;
+    border: none;
+    background: url("/elementos/svg/dot-inactivo.svg") no-repeat center / contain;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+  }
+
+  .cuadro-paginador:hover {
+    transform: scale(1.15);
+  }
+
+  .cuadro-paginador.activo {
+    background: url("/elementos/svg/dot-activo.svg") no-repeat center / contain;
+  }
+
+  /* Pestañas dobles Flora y Fauna (215px cada una) */
+  .grupo-pestanas-ff {
+    position: absolute;
+    display: flex;
+    height: 68px;
+    z-index: 24;
+  }
+
+  .pestana-ff-item {
+    position: relative;
+    width: 215px;
+    height: 68px;
+    border-top-left-radius: 26px;
+    border-top-right-radius: 26px;
+    background: rgba(234, 192, 15, 0.56);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 15px;
+    transition: all 0.2s ease;
+  }
+
+  .pestana-ff-item.activa {
+    background: var(--color-patrimonio);
+  }
+
+  .pestana-ff-item:not(.activa) .muesca-paginador {
+    display: none;
+  }
+
+  .btn-ff-titulo {
+    background: transparent;
+    border: none;
+    font-family: var(--fuente-principal);
+    font-size: var(--pt-pestana-titulo); /* 20pt */
+    font-weight: 700;
+    color: var(--color-blanco);
+    cursor: pointer;
+  }
+
+  /* Tarjetas principales */
+  .tarjeta-principal {
+    position: absolute;
+    border-radius: 28px;
+    z-index: 25;
+  }
+
+  .tarjeta-amarilla {
+    background: var(--color-patrimonio);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+  }
+
+  .tarjeta-blanca-traslucida {
+    background: rgba(244, 240, 232, 0.88);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+  }
+
+  /* Tarjeta con arco recortado en la base */
+  .tarjeta-con-arco {
+    position: absolute;
+    z-index: 25;
+  }
+
+  .fondo-arco-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .contenido-sobre-arco {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Puntajes tipográficos exactos del PDF */
+  .cuerpo-19pt {
+    font-family: var(--fuente-principal);
+    font-size: var(--pt-cuerpo-card); /* 19pt */
+    font-weight: 400;
+    line-height: 23.2px;
+  }
+
+  .subtitulo-20pt-amarillo {
+    font-family: var(--fuente-principal);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-patrimonio);
+  }
+
+  .pie-foto-13pt {
+    font-family: var(--fuente-principal);
+    font-size: var(--pt-pie-foto); /* 13pt */
+    font-weight: 400;
+    line-height: 16px;
+    color: var(--color-texto-verde);
+    padding-left: 16px;
+  }
+
+  .texto-blanco {
+    color: var(--color-blanco);
+  }
+
+  .texto-amarillo {
+    color: var(--color-patrimonio);
+  }
+
+  .texto-amarillo-intenso {
+    color: var(--color-patrimonio-intenso);
+  }
+
+  .texto-verde {
+    color: var(--color-texto-verde);
+  }
+
+  /* Clima (Página 7) */
+  .insignia-clima {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 28px;
+    padding-left: 18px;
+  }
+
+  .icono-clima-img {
+    width: 62px;
+    height: 46px;
+    object-fit: contain;
+  }
+
+  /* Tarjeta derecha Clima (x=984..1245) */
+  
+  /* Contenedor catálogo Flora / Fauna (SVG unificado 640×224px en x=366, y=312) */
+  .contenedor-catalogo-ff {
+    position: absolute;
+    z-index: 26;
+  }
+
+  .svg-fondo-catalogo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .columna-botones-ff {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 252.45px;
+    height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0;
+    z-index: 4;
+  }
+
+  .btn-categoria-ff {
+    position: relative;
+    width: 252.45px;
+    height: 44.3px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    font-family: var(--fuente-principal);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-patrimonio-intenso);
+    transition: all 0.15s ease;
+  }
+
+  .btn-categoria-ff:hover {
+    filter: brightness(1.06);
+  }
+
+  .btn-categoria-ff.activo {
+    color: var(--color-patrimonio-intenso);
+    pointer-events: none;
+    background: transparent !important;
+  }
+
+  .btn-categoria-ff .badge-inactivo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .btn-categoria-ff.activo .badge-inactivo {
+    display: none;
+  }
+
+  .btn-categoria-ff .btn-ff-texto {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Tarjeta fotográfica derecha */
+  .tarjeta-especie-ff {
+    position: absolute;
+    left: 290px;
+    top: 0;
+    width: 350px;
+    height: 220px;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  .marco-foto-especie {
+    position: absolute;
+    left: 16px;
+    top: 14px;
+    width: 312px;
+    height: 150px;
+    border-radius: 18px;
+    overflow: hidden;
+    pointer-events: auto;
+  }
+
+  .marco-foto-especie img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+    /* Nombre común y científico alineado al final de la esquina redondeada izquierda debajo de la foto */
+  .pie-especie-nombre {
+    position: absolute;
+    left: 34px;
+    top: 174px;
+    width: 294px;
+    text-align: left;
+    pointer-events: auto;
+    font-family: var(--fuente-principal);
+    font-size: 13px;
+    line-height: 15px;
+    color: var(--color-texto-verde);
+  }
+
+  .pie-especie-nombre strong {
+    font-weight: 700;
+    color: var(--color-texto-verde);
+  }
+
+  .pie-especie-nombre em {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .tarjeta-derecha-foto {
+    position: absolute;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 12px 12px;
+    z-index: 25;
+  }
+
+  .marco-foto-derecha {
+    width: 237px;
+    height: 214px;
+    border-radius: 22px;
+    overflow: hidden;
+  }
+
+  .marco-foto-derecha img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Geología: 5 botones de picos (Páginas 9 a 13) */
+  .columna-botones-picos {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 26;
+  }
+
+  .btn-pico-geologia {
+    width: 252px;
+    height: 44px;
+    border-radius: 14px;
+    border: none;
+    background: rgba(244, 240, 232, 0.88);
+    backdrop-filter: blur(4px);
+    color: var(--color-patrimonio-intenso);
+    font-family: var(--fuente-principal);
+    font-size: 20px;
+    font-weight: 700;
+    text-align: left;
+    padding-left: 38px;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+
+  .btn-pico-geologia.activo {
+    width: 325px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    background: rgba(244, 240, 232, 0.94);
+  }
+
+  .tarjeta-foto-cumbre {
+    position: absolute;
+    background: rgba(244, 240, 232, 0.92);
+    backdrop-filter: blur(4px);
+    border-radius: 24px;
+    padding: 14px 16px;
+    z-index: 25;
+  }
+
+  .marco-foto-cumbre {
+    width: 300px;
+    height: 164px;
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .marco-foto-cumbre img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .texto-pie-cumbre {
+    padding: 10px 8px 0 12px;
+  }
+
+  .pie-13pt-cumbre {
+    font-family: var(--fuente-principal);
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 16px;
+    color: var(--color-texto-verde);
+  }
+
+  .pie-especie-13pt em {
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  /* Pestaña vertical amarilla derecha con los 3 cuadros blancos (Páginas 16-27 y 29-40) */
+  .pestana-vertical-especie {
+    position: absolute;
+    right: -36px;
+    bottom: 0;
+    width: 57px;
+    height: 135px;
+    background: url("/elementos/pestana-vertical-amarilla.webp") no-repeat center / 100% 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding-left: 24px;
+    z-index: 10;
+    pointer-events: auto;
+  }
+
+  .cuadro-especie {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    border: 1.5px solid #ffffff;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
+    pointer-events: auto;
+    transition: all 0.15s ease;
+  }
+
+  .cuadro-especie:hover {
+    transform: scale(1.15);
+  }
+
+  .cuadro-especie.activo {
+    background: #ffffff;
+    border-color: #ffffff;
+  }
+
+  /* Hidrografía (Página 14) */
+  .fila-vertientes {
+    position: absolute;
+    display: flex;
+    gap: 18px;
+    z-index: 26;
+  }
+
+  .caja-vertiente {
+    width: 280px;
+    height: 170px;
+    background: rgba(244, 240, 232, 0.88);
+    backdrop-filter: blur(4px);
+    border-radius: 22px;
+    padding: 18px 22px;
+  }
+
+  .titulo-vertiente-20pt {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-patrimonio-intenso);
+    margin-bottom: 10px;
+    padding-left: 14px;
+  }
+
+  .lista-15pt {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .lista-15pt li {
+    position: relative;
+    padding-left: 18px;
+    font-size: var(--pt-lista-hidrografia); /* 15pt exactos según PDF */
+    line-height: 18px;
+    color: var(--color-texto-verde);
+  }
+
+  .lista-15pt li::before {
+    content: "";
+    position: absolute;
+    left: 2px;
+    top: 6px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-texto-verde);
+  }
+
+  .recorte-derecho {
+    position: absolute;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    z-index: 35;
+  }
+</style>

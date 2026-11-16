@@ -1,0 +1,1694 @@
+---
+import EstructuraCuadrados from "./EstructuraCuadrados.astro";
+import Techo from "./Techo.astro";
+import CabezalVertical, { type ItemLetrero } from "./CabezalVertical.astro";
+
+const B = "/elementos/botones/";
+
+const itemsMenuEmergencias: ItemLetrero[] = [
+  {
+    id: "prepara-ascenso",
+    etiqueta: "Prepara tu ascenso",
+    inactivo: B + "madera-inactiva-prepara-ascenso.svg",
+    activo: B + "madera-activa-prepara-ascenso.svg",
+    mostrarTexto: true,
+  },
+  {
+    id: "protocolo-extravio",
+    etiqueta: "Protocolo ante Extravío",
+    inactivo: B + "madera-inactiva-protocolo-extravio.svg",
+    activo: B + "madera-activa-protocolo-extravio.svg",
+    mostrarTexto: true,
+  },
+  {
+    id: "urgencias-medicas",
+    etiqueta: "Urgencias médicas",
+    inactivo: B + "madera-inactiva-urgencias-medicas.svg",
+    activo: B + "madera-activa-urgencias-medicas.svg",
+    mostrarTexto: true,
+  },
+  {
+    id: "golpes-heridas",
+    etiqueta: "Golpes y heridas",
+    inactivo: B + "madera-inactiva-golpes-heridas.svg",
+    activo: B + "madera-activa-golpes-heridas.svg",
+    mostrarTexto: true,
+  },
+  {
+    id: "niebla-densa",
+    etiqueta: "Niebla densa",
+    inactivo: B + "madera-inactiva-niebla-densa.svg",
+    activo: B + "madera-activa-niebla-densa.svg",
+    mostrarTexto: true,
+  },
+  {
+    id: "incendio-forestal",
+    etiqueta: "Incendio forestal",
+    inactivo: B + "madera-inactiva-incendio-forestal.svg",
+    activo: B + "madera-activa-incendio-forestal.svg",
+    mostrarTexto: true,
+  },
+  {
+    id: "contactos-emergencia",
+    etiqueta: "Contactos de emergencia",
+    inactivo: B + "madera-inactiva-contactos-emergencia.svg",
+    activo: B + "madera-activa-contactos-emergencia.svg",
+    mostrarTexto: true,
+    dosLineas: true,
+    lineasTexto: ["Contactos de", "emergencia"],
+  },
+];
+
+interface SubPaginaPrepara {
+  leadLineas: string[];
+  xLead: number;
+  cardsSvg: string;
+  tresCards?: boolean;
+  items: {
+    lineas: string[];
+    x: number;
+    y: number;
+  }[];
+}
+
+const PREPARA_PAGINAS: SubPaginaPrepara[] = [
+  {
+    leadLineas: [
+      "Anticipa cualquier riesgo siguiendo nuestras",
+      "recomendaciones de seguridad.",
+    ],
+    xLead: 456.83,
+    cardsSvg: "/elementos/svg/cards-prepara-ascenso-1.svg",
+    items: [
+      { lineas: ["Avisar sobre", "tu salida"], x: 387, y: 408.98 },
+      { lineas: ["Llevar suficiente", "agua y comida"], x: 549, y: 407.6 },
+      { lineas: ["Llevar ropa", "ligera y abrigo."], x: 708.01, y: 407.6 },
+      { lineas: ["Usar calzado", "cerrado."], x: 873.02, y: 407.6 },
+    ],
+  },
+  {
+    leadLineas: [
+      "Anticipa cualquier riesgo siguiendo nuestras",
+      "recomendaciones prácticas de seguridad.",
+    ],
+    xLead: 456.83,
+    cardsSvg: "/elementos/svg/cards-prepara-ascenso-2.svg",
+    items: [
+      { lineas: ["Llevar protector", "solar."], x: 387, y: 407.6 },
+      { lineas: ["Llevar repelente", "de insectos."], x: 549, y: 407.6 },
+      { lineas: ["Llevar silbato de", "emergencia."], x: 708.01, y: 407.6 },
+      { lineas: ["Llevar linterna."], x: 873.02, y: 407.6 },
+    ],
+  },
+  {
+    leadLineas: [
+      "Anticipa cualquier riesgo siguiendo nuestras",
+      "recomendaciones prácticas de seguridad.",
+    ],
+    xLead: 457.83,
+    cardsSvg: "/elementos/svg/cards-prepara-ascenso-3.svg",
+    tresCards: true,
+    items: [
+      { lineas: ["Lleva tu celular con", "suficiente bateria."], x: 382, y: 407.6 },
+      { lineas: ["Llevar mapa o screenshot", "de la ruta."], x: 598, y: 408.98 },
+      {
+        lineas: [
+          "Lleva un bolso",
+          "impermeable para",
+          "proteger tus pertenencias",
+          "de la lluvia.",
+        ],
+        x: 817.01,
+        y: 407.6,
+      },
+    ],
+  },
+];
+
+interface PasoEmergencia {
+  num: string;
+  xNum: number;
+  yNum: number;
+  xTexto: number;
+  yTexto: number;
+  lineas: string[];
+}
+
+interface SubPaginaProtocoloCards {
+  svgSuperior: string;
+  subtitulo: string;
+  leadLineas: string[];
+  tresCards?: boolean;
+  pasos: PasoEmergencia[];
+}
+
+const URGENCIAS_PAGINAS: SubPaginaProtocoloCards[] = [
+  {
+    svgSuperior: "/elementos/svg/contenedor-urgencias-golpe-calor.svg",
+    subtitulo: "Golpe de Calor / Deshidratación.",
+    leadLineas: [
+      "Subir senderos exigentes con sol directo puede provocar",
+      "deshidratación severa y golpe de calor.",
+    ],
+    pasos: [
+      {
+        num: "01",
+        xNum: 425.36,
+        yNum: 327.23,
+        xTexto: 387,
+        yTexto: 387.94,
+        lineas: ["Lleva a la persona", "a la sombra", "de inmediato."],
+      },
+      {
+        num: "02",
+        xNum: 585.38,
+        yNum: 327.23,
+        xTexto: 549,
+        yTexto: 387.94,
+        lineas: [
+          "Dale agua en",
+          "pequeños sorbos.",
+          "No lo intentes si",
+          "se encuentra",
+          "inconsciente.",
+        ],
+      },
+      {
+        num: "03",
+        xNum: 746.39,
+        yNum: 327.23,
+        xTexto: 711,
+        yTexto: 388.94,
+        lineas: ["Humedece su piel", "con agua", "y abanicala."],
+      },
+      {
+        num: "04",
+        xNum: 906.4,
+        yNum: 327.23,
+        xTexto: 876,
+        yTexto: 388.94,
+        lineas: [
+          "Si no mejora",
+          "o está",
+          "inconsciente,",
+          "llama al servicio",
+          "de emergencias",
+          "de inmediato.",
+        ],
+      },
+    ],
+  },
+  {
+    svgSuperior: "/elementos/svg/contenedor-urgencias-hipotermia.svg",
+    subtitulo: "Hipotermia",
+    leadLineas: [
+      "Los cambios drásticos de clima y la lluvia en las crestas del",
+      "parque pueden causar enfriamiento rápido.",
+    ],
+    pasos: [
+      {
+        num: "01",
+        xNum: 425.36,
+        yNum: 327.23,
+        xTexto: 387,
+        yTexto: 387.94,
+        lineas: ["Saca a la persona", "del viento", "y la lluvia."],
+      },
+      {
+        num: "02",
+        xNum: 585.38,
+        yNum: 327.23,
+        xTexto: 547.99,
+        yTexto: 387.94,
+        lineas: ["Quítale la ropa", "mojada y cúbrela", "con algo seco."],
+      },
+      {
+        num: "03",
+        xNum: 746.39,
+        yNum: 327.23,
+        xTexto: 709.99,
+        yTexto: 388.94,
+        lineas: ["Comparte el", "calor corporal."],
+      },
+      {
+        num: "04",
+        xNum: 906.4,
+        yNum: 327.23,
+        xTexto: 870.99,
+        yTexto: 388.94,
+        lineas: ["Dale líquidos", "tibios si está", "consciente."],
+      },
+    ],
+  },
+  {
+    svgSuperior: "/elementos/svg/contenedor-urgencias-picada-abeja.svg",
+    subtitulo: "Picadura de Avispa o Abeja (Reacción Alérgica)",
+    leadLineas: [
+      "En los senderos del Waraira Repano es común encontrar",
+      "abejas y avispas.",
+    ],
+    tresCards: true,
+    pasos: [
+      {
+        num: "01",
+        xNum: 445.36,
+        yNum: 328.23,
+        xTexto: 391,
+        yTexto: 390.94,
+        lineas: ["Mantén a la persona", "acostada con los", "pies elevados."],
+      },
+      {
+        num: "02",
+        xNum: 664.37,
+        yNum: 329.22,
+        xTexto: 610,
+        yTexto: 389.94,
+        lineas: ["Si la persona es alérgica", "llama al servicio", "de emergencias."],
+      },
+      {
+        num: "03",
+        xNum: 884.37,
+        yNum: 327.23,
+        xTexto: 827,
+        yTexto: 389.94,
+        lineas: [
+          "Si solo es una picadura",
+          "sin alergia: saca el",
+          "aguijón lava con agua",
+          "y jabón.",
+        ],
+      },
+    ],
+  },
+  {
+    svgSuperior: "/elementos/svg/contenedor-urgencias-picada-serpiente.svg",
+    subtitulo: "Picadura de serpiente",
+    leadLineas: [
+      "Hay serpientes venenosas en El Ávila. En caso de picaduras",
+      "actúa rápido.",
+    ],
+    pasos: [
+      {
+        num: "01",
+        xNum: 421.36,
+        yNum: 327.23,
+        xTexto: 381,
+        yTexto: 387.94,
+        lineas: [
+          "Mantén a la persona",
+          "sin moverse, el",
+          "movimiento acelera",
+          "la absorción",
+          "del veneno.",
+        ],
+      },
+      {
+        num: "02",
+        xNum: 585.35,
+        yNum: 327.23,
+        xTexto: 547.99,
+        yTexto: 387.94,
+        lineas: [
+          "Inmoviliza el",
+          "miembro picado",
+          "por debajo del",
+          "nivel del corazón.",
+        ],
+      },
+      {
+        num: "03",
+        xNum: 748.34,
+        yNum: 327.23,
+        xTexto: 709.99,
+        yTexto: 388.94,
+        lineas: ["Anota la hora", "exacta de", "la picadura."],
+      },
+      {
+        num: "04",
+        xNum: 906.33,
+        yNum: 327.23,
+        xTexto: 870.99,
+        yTexto: 388.94,
+        lineas: [
+          "Toma una foto",
+          "de la serpiente,",
+          "ayuda a identificar",
+          "el antídoto.",
+        ],
+      },
+    ],
+  },
+];
+
+const GOLPES_PAGINAS: SubPaginaProtocoloCards[] = [
+  {
+    svgSuperior: "/elementos/svg/contenedor-golpes-torcedura.svg",
+    subtitulo: "Torcedura o Fractura de Tobillo / Pierna",
+    leadLineas: [
+      "El terreno irregular, las piedras sueltas y los desniveles del",
+      "sendero pueden causar torceduras de tobillo o fracturas.",
+    ],
+    tresCards: true,
+    pasos: [
+      {
+        num: "01",
+        xNum: 445.36,
+        yNum: 328.23,
+        xTexto: 391,
+        yTexto: 390.94,
+        lineas: [
+          "No obligues a la",
+          "persona a caminar si",
+          "hay fractura o dolor",
+          "muy intenso.",
+        ],
+      },
+      {
+        num: "02",
+        xNum: 664.37,
+        yNum: 329.22,
+        xTexto: 610,
+        yTexto: 389.94,
+        lineas: [
+          "Inmoviliza el área: usa",
+          "ramas, tela, lo que",
+          "tengas para que no",
+          "se mueva.",
+        ],
+      },
+      {
+        num: "03",
+        xNum: 884.37,
+        yNum: 327.23,
+        xTexto: 827,
+        yTexto: 389.94,
+        lineas: [
+          "Si es torcedura leve",
+          "y puede caminar:",
+          "apóyala y baja despacio,",
+          "sin correr.",
+        ],
+      },
+    ],
+  },
+  {
+    svgSuperior: "/elementos/svg/contenedor-golpes-cabeza.svg",
+    subtitulo: "Caída con Golpe en la Cabeza",
+    leadLineas: [
+      "Un resbalón o tropezón en senderos empinados puede",
+      "derivar en un impacto en la cabeza.",
+    ],
+    pasos: [
+      {
+        num: "01",
+        xNum: 421.36,
+        yNum: 327.23,
+        xTexto: 383,
+        yTexto: 387.94,
+        lineas: [
+          "No muevas a la",
+          "persona si",
+          "sospechas lesión",
+          "en la columna.",
+        ],
+      },
+      {
+        num: "02",
+        xNum: 585.35,
+        yNum: 327.23,
+        xTexto: 548,
+        yTexto: 387.94,
+        lineas: [
+          "Mantén su cabeza",
+          "y cuello alineados",
+          "y sin moverse.",
+        ],
+      },
+      {
+        num: "03",
+        xNum: 748.34,
+        yNum: 327.23,
+        xTexto: 710,
+        yTexto: 388.94,
+        lineas: [
+          "Si la persona está",
+          "inconsciente pero",
+          "respira: ponla de",
+          "lado para que no",
+          "se ahogue.",
+        ],
+      },
+      {
+        num: "04",
+        xNum: 906.33,
+        yNum: 327.23,
+        xTexto: 870.99,
+        yTexto: 388.94,
+        lineas: [
+          "Llama al servicio",
+          "de emergencias",
+          "inmediatamente.",
+        ],
+      },
+    ],
+  },
+  {
+    svgSuperior: "/elementos/svg/contenedor-golpes-cortes.svg",
+    subtitulo: "Cortes y Heridas",
+    leadLineas: [
+      "Las rocas filosas o las caídas accidentales en el sendero",
+      "pueden provocar heridas abiertas o cortes.",
+    ],
+    pasos: [
+      {
+        num: "01",
+        xNum: 421.36,
+        yNum: 327.23,
+        xTexto: 383,
+        yTexto: 387.94,
+        lineas: [
+          "Lava la herida con",
+          "agua limpia",
+          "abundante y aplica",
+          "antiséptico.",
+        ],
+      },
+      {
+        num: "02",
+        xNum: 585.35,
+        yNum: 327.23,
+        xTexto: 548,
+        yTexto: 387.94,
+        lineas: [
+          "Presiona con",
+          "una tela limpia,",
+          "para detener",
+          "el sangrado.",
+        ],
+      },
+      {
+        num: "03",
+        xNum: 748.34,
+        yNum: 327.23,
+        xTexto: 710,
+        yTexto: 388.94,
+        lineas: ["Cubre con una", "venda o curita."],
+      },
+      {
+        num: "04",
+        xNum: 906.33,
+        yNum: 327.23,
+        xTexto: 870.99,
+        yTexto: 388.94,
+        lineas: [
+          "Si el sangrado no",
+          "para o la herida",
+          "es profunda ve",
+          "a urgencias.",
+        ],
+      },
+    ],
+  },
+];
+
+interface ItemIncendio {
+  num?: string;
+  x1Offset?: number;
+  linea1: string;
+  linea2?: string;
+  x2Offset?: number;
+}
+
+interface PaginaIncendio {
+  x: number;
+  y: number;
+  items: ItemIncendio[];
+}
+
+const INCENDIO_PAGINAS: PaginaIncendio[] = [
+  {
+    x: 394.47,
+    y: 338.81,
+    items: [
+      { linea1: "1. Mantener la Calma" },
+      { linea1: "2.\u00A0 Llama a los servicios de emergencia de la zona" },
+      {
+        linea1: "3. Desciende, no subas\u00A0 busca rutas de descenso por senderos consolidados hacia",
+        linea2: "la base o zonas bajas.",
+        x2Offset: 18,
+      },
+      {
+        linea1: "4. Llama a un servicio de emergencias. Si no hay señal, muévete lentamente hacia",
+        linea2: "una zona más alta para intentar capturar señal.",
+        x2Offset: 18,
+      },
+    ],
+  },
+  {
+    x: 392.47,
+    y: 338.81,
+    items: [
+      {
+        linea1: "5.\u00A0 No camines en la misma dirección hacia donde el viento empuja el humo",
+        linea2: "o las llamas.",
+        x2Offset: 18,
+      },
+      {
+        linea1: "6.\u00A0 Nunca te refugies en cañadas, quebradas secas, valles estrechos o zanjas, el",
+        linea2: "fuego y el humo se concentran y ascienden a gran velocidad.",
+        x2Offset: 18,
+      },
+      {
+        linea1: "7. Aléjate de áreas de vegetación densa y seca, busca senderos anchos,",
+        linea2: "afloramientos rocosos, cauces de agua con caudal o áreas ya quemadas",
+        x2Offset: 18,
+      },
+      {
+        linea1: "8. Cubre tu nariz y boca con una prenda o pañuelo preferiblemente húmedo.",
+      },
+    ],
+  },
+  {
+    x: 394.47,
+    y: 339.24,
+    items: [
+      {
+        num: "9.",
+        x1Offset: 24,
+        linea1: "Protege tu piel. Cubre la piel expuesta abrochándote la chaqueta, subiéndote",
+        linea2: "el cuello y bajándote las manga.",
+        x2Offset: 18,
+      },
+      {
+        num: "10.",
+        x1Offset: 28,
+        linea1: "Utiliza ropa preferiblemente de algodón o lana; evita tejidos sintéticos que",
+        linea2: "puedan derretirse sobre la piel con el calor radiante.",
+        x2Offset: 28,
+      },
+      {
+        num: "11.",
+        x1Offset: 28,
+        linea1: "Si el equipaje pesa demasiado y dificulta tu movilidad, descarta lo",
+        linea2: "innecesario, pero conserva siempre el agua, teléfono/radio y linterna.",
+        x2Offset: 18,
+      },
+      {
+        num: "12.",
+        x1Offset: 28,
+        linea1: "Si la evacuación es imposible y el fuego te corta el paso: busca\u00A0 la zona que",
+        linea2: "ya se quemó (donde ya no hay combustible).",
+        x2Offset: 18,
+      },
+    ],
+  },
+  {
+    x: 394.79,
+    y: 339.81,
+    items: [
+      {
+        num: "13.",
+        x1Offset: 36,
+        linea1: "Adopta la posición de protección. Tírate al suelo boca abajo, sobre tierra",
+        linea2: "limpia de vegetación.",
+        x2Offset: 18,
+      },
+      {
+        num: "14.",
+        x1Offset: 36,
+        linea1: "Protégete la cabeza y cubre tus vías respiratorias pegando la cara al suelo.",
+      },
+      {
+        num: "15.",
+        x1Offset: 36,
+        linea1: "Cubre tu cuerpo totalmente con una manta, chaqueta o mochila.",
+      },
+      {
+        num: "16.",
+        x1Offset: 36,
+        linea1: "No corras a ciegas a través del humo denso: La falta de visibilidad pueden",
+        linea2: "llevarte a despeñaderos o directamente al centro de las llamas.",
+        x2Offset: 18,
+      },
+    ],
+  },
+];
+---
+
+<section class="modulo-emergencias" aria-label="Módulo Emergencias y protocolos">
+  <EstructuraCuadrados tema="turquesa" fondoInicial="/fondos/bg-emergencias.webp">
+    <!-- Techo superior -->
+    <Techo seccionActiva="emergencias" />
+
+    <!-- Letrero lateral vertical de madera -->
+    <CabezalVertical tema="turquesa" itemActivo="intro" items={itemsMenuEmergencias} />
+
+    <!-- Hierba decorativa esquina inferior derecha -->
+    <img
+      src="/elementos/hojas-decorativas-derecha-emergencias.webp"
+      alt=""
+      aria-hidden="true"
+      class="decorativo-derecha-emergencias"
+      draggable="false"
+    />
+
+    <!-- ============================================================
+         VISTA 0: PORTADA INTRODUCTORIA (PDF Pág. 50)
+         ============================================================ -->
+    <div class="vista-panel activa" data-vista="intro">
+      <div class="tarjeta-svg-intro" style="left: 332px; top: 119px; width: 642.26px; height: 351.84px;">
+        <img src="/elementos/svg/contenedor-emergencias-intro.svg" alt="" class="fondo-svg-tarjeta" draggable="false" />
+        <div class="contenido-sobre-svg">
+          <h1 class="titulo-pestana-intro-turquesa" style="left: 38.26px; top: 17px;">
+            Emergencias y protocolos
+          </h1>
+          <div class="cuerpo-19pt texto-blanco texto-intro-emergencias">
+            <p>
+              Recorrer el Waraira Repano es una experiencia enriquecedora,<br />
+              pero la montaña exige respeto y cautela. Ante variaciones del<br />
+              clima, extravíos o emergencias médicas, la prevención es tu<br />
+              mejor herramienta.
+            </p>
+            <p class="mt-23">
+              Revisa nuestros protocolos paso a paso, conoce las<br />
+              recomendaciones de los cuerpos de rescate y asegúrate de<br />
+              contar con la información necesaria para reaccionar de manera<br />
+              rápida y coordinada.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         VISTA 1: PREPARA TU ASCENSO (PDF Págs. 51–53)
+         ============================================================ -->
+    <div class="vista-panel" data-vista="prepara-ascenso">
+      <img
+        src="/elementos/svg/contenedor-prepara-ascenso.svg"
+        alt=""
+        class="svg-superior-709"
+        draggable="false"
+      />
+      <h2 class="titulo-pestana-superior">Prepara tu ascenso</h2>
+
+      <!-- Paginador de 3 puntos dentro de la cápsula blanca -->
+      <div class="paginador-pill pag-3" data-pag-grupo="prepara" role="tablist" aria-label="Páginas de Prepara tu ascenso">
+        {[0, 1, 2].map((i) => (
+          <button
+            type="button"
+            class:list={["btn-dot-emergencias", { activo: i === 0 }]}
+            data-pag-grupo="prepara"
+            data-pag-idx={String(i)}
+            aria-label={`Prepara tu ascenso página ${i + 1}`}
+            aria-selected={i === 0 ? "true" : "false"}
+          >
+            <img
+              class="dot-img-activo"
+              src="/elementos/svg/dot-emergencias-activo.svg"
+              alt=""
+              draggable="false"
+            />
+            <img
+              class="dot-img-inactivo"
+              src="/elementos/svg/dot-emergencias-inactivo.svg"
+              alt=""
+              draggable="false"
+            />
+          </button>
+        ))}
+      </div>
+
+      {PREPARA_PAGINAS.map((pag, idx) => (
+        <div
+          class:list={["subpagina-grupo", { activa: idx === 0 }]}
+          data-pag-contenido="prepara"
+          data-pag-idx={String(idx)}
+        >
+          <p class="lead-superior" style={`left: ${pag.xLead}px; top: 213.43px; white-space: nowrap;`}>
+            {pag.leadLineas.map((linea, lIdx) => (
+              <>
+                {linea}
+                {lIdx < pag.leadLineas.length - 1 && <br />}
+              </>
+            ))}
+          </p>
+          <img
+            src={pag.cardsSvg}
+            alt=""
+            class:list={[pag.tresCards ? "svg-cards-3" : "svg-cards-4"]}
+            draggable="false"
+          />
+          {pag.items.map((item) => (
+            <p
+              class="texto-card-prepara"
+              style={`left: ${item.x}px; top: ${item.y}px;`}
+            >
+              {item.lineas.map((linea, lIdx) => (
+                <>
+                  {linea}
+                  {lIdx < item.lineas.length - 1 && <br />}
+                </>
+              ))}
+            </p>
+          ))}
+        </div>
+      ))}
+    </div>
+
+    <!-- ============================================================
+         VISTA 2: PROTOCOLO ANTE EXTRAVÍO (PDF Pág. 54)
+         ============================================================ -->
+    <div class="vista-panel" data-vista="protocolo-extravio">
+      <img
+        src="/elementos/svg/contenedor-protocolo-extravio.svg"
+        alt=""
+        class="svg-superior-709"
+        draggable="false"
+      />
+      <img
+        src="/elementos/svg/contenedor-textos-inferior.svg"
+        alt=""
+        class="svg-inferior-638"
+        draggable="false"
+      />
+      <h2 class="titulo-pestana-superior">Protocolo ante extravío</h2>
+
+      <!-- Punto único decorativo igual al diseño del PDF -->
+      <div class="paginador-pill pag-1" aria-hidden="true">
+        <span class="btn-dot-emergencias activo solo-indicador">
+          <img class="dot-img-activo" src="/elementos/svg/dot-emergencias-activo.svg" alt="" draggable="false" />
+        </span>
+      </div>
+
+      <p class="lead-superior" style="left: 456.83px; top: 213.43px; white-space: nowrap;">
+        El parque tiene muchos senderos y es fácil desorientarse.
+      </p>
+
+      <ol class="lista-numerada-inferior">
+        <li><strong>1. Detente,</strong> no sigas caminando sin saber hacia dónde vas.</li>
+        <li>
+          <strong>2. Piensa</strong> ¿por dónde viniste? revisa si tienes señal de celular y si hay algún
+          <span class="linea-indentada">sonido de agua, carretera o gente.</span>
+        </li>
+        <li>
+          <strong>3. Mira a tu alrededor.</strong> ¿Ves señales, huellas, una quebrada? Las quebradas
+          <span class="linea-indentada">generalmente bajan hacia la ciudad.</span>
+        </li>
+        <li>
+          <strong>4. Llama a un servicio de emergencias.</strong> Si no hay señal, muévete lentamente
+          <span class="linea-indentada">hacia una zona más alta para intentar capturar señal.</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- ============================================================
+         VISTA 3: URGENCIAS MÉDICAS (PDF Págs. 55–58)
+         ============================================================ -->
+    <div class="vista-panel" data-vista="urgencias-medicas">
+      <h2 class="titulo-pestana-superior">Urgencias médicas</h2>
+
+      <!-- Paginador de 4 puntos -->
+      <div class="paginador-pill pag-4" data-pag-grupo="urgencias" role="tablist" aria-label="Páginas de Urgencias médicas">
+        {[0, 1, 2, 3].map((i) => (
+          <button
+            type="button"
+            class:list={["btn-dot-emergencias", { activo: i === 0 }]}
+            data-pag-grupo="urgencias"
+            data-pag-idx={String(i)}
+            aria-label={`Urgencias médicas página ${i + 1}`}
+            aria-selected={i === 0 ? "true" : "false"}
+          >
+            <img class="dot-img-activo" src="/elementos/svg/dot-emergencias-activo.svg" alt="" draggable="false" />
+            <img class="dot-img-inactivo" src="/elementos/svg/dot-emergencias-inactivo.svg" alt="" draggable="false" />
+          </button>
+        ))}
+      </div>
+
+      {URGENCIAS_PAGINAS.map((pag, idx) => (
+        <div
+          class:list={["subpagina-grupo", { activa: idx === 0 }]}
+          data-pag-contenido="urgencias"
+          data-pag-idx={String(idx)}
+        >
+          <img src={pag.svgSuperior} alt="" class="svg-superior-709" draggable="false" />
+          <div class="bloque-lead-con-subtitulo">
+            <h3 class="subtitulo-turquesa-19pt">{pag.subtitulo}</h3>
+            <p class="texto-lead-debajo">
+              {pag.leadLineas.map((linea, lIdx) => (
+                <>
+                  {linea}
+                  {lIdx < pag.leadLineas.length - 1 && <br />}
+                </>
+              ))}
+            </p>
+          </div>
+          <img
+            src={pag.tresCards ? "/elementos/svg/cards-emergencias-3.svg" : "/elementos/svg/cards-emergencias-4.svg"}
+            alt=""
+            class:list={[pag.tresCards ? "svg-cards-3" : "svg-cards-4"]}
+            draggable="false"
+          />
+          {pag.pasos.map((paso) => (
+            <>
+              <span class="numero-paso-41pt" style={`left: ${paso.xNum}px; top: ${paso.yNum - 2}px;`}>{paso.num}</span>
+              <p class="texto-paso-card" style={`left: ${paso.xTexto}px; top: ${paso.yTexto}px;`}>
+                {paso.lineas.map((linea, lIdx) => (
+                  <>
+                    {linea}
+                    {lIdx < paso.lineas.length - 1 && <br />}
+                  </>
+                ))}
+              </p>
+            </>
+          ))}
+        </div>
+      ))}
+    </div>
+
+    <!-- ============================================================
+         VISTA 4: GOLPES Y HERIDAS (PDF Págs. 59–61)
+         ============================================================ -->
+    <div class="vista-panel" data-vista="golpes-heridas">
+      <h2 class="titulo-pestana-superior">Golpes y heridas</h2>
+
+      <div class="paginador-pill pag-3" data-pag-grupo="golpes" role="tablist" aria-label="Páginas de Golpes y heridas">
+        {[0, 1, 2].map((i) => (
+          <button
+            type="button"
+            class:list={["btn-dot-emergencias", { activo: i === 0 }]}
+            data-pag-grupo="golpes"
+            data-pag-idx={String(i)}
+            aria-label={`Golpes y heridas página ${i + 1}`}
+            aria-selected={i === 0 ? "true" : "false"}
+          >
+            <img class="dot-img-activo" src="/elementos/svg/dot-emergencias-activo.svg" alt="" draggable="false" />
+            <img class="dot-img-inactivo" src="/elementos/svg/dot-emergencias-inactivo.svg" alt="" draggable="false" />
+          </button>
+        ))}
+      </div>
+
+      {GOLPES_PAGINAS.map((pag, idx) => (
+        <div
+          class:list={["subpagina-grupo", { activa: idx === 0 }]}
+          data-pag-contenido="golpes"
+          data-pag-idx={String(idx)}
+        >
+          <img src={pag.svgSuperior} alt="" class="svg-superior-709" draggable="false" />
+          <div class="bloque-lead-con-subtitulo">
+            <h3 class="subtitulo-turquesa-19pt">{pag.subtitulo}</h3>
+            <p class="texto-lead-debajo">
+              {pag.leadLineas.map((linea, lIdx) => (
+                <>
+                  {linea}
+                  {lIdx < pag.leadLineas.length - 1 && <br />}
+                </>
+              ))}
+            </p>
+          </div>
+          <img
+            src={pag.tresCards ? "/elementos/svg/cards-emergencias-3.svg" : "/elementos/svg/cards-emergencias-4.svg"}
+            alt=""
+            class:list={[pag.tresCards ? "svg-cards-3" : "svg-cards-4"]}
+            draggable="false"
+          />
+          {pag.pasos.map((paso) => (
+            <>
+              <span class="numero-paso-41pt" style={`left: ${paso.xNum}px; top: ${paso.yNum - 2}px;`}>{paso.num}</span>
+              <p class="texto-paso-card" style={`left: ${paso.xTexto}px; top: ${paso.yTexto}px;`}>
+                {paso.lineas.map((linea, lIdx) => (
+                  <>
+                    {linea}
+                    {lIdx < paso.lineas.length - 1 && <br />}
+                  </>
+                ))}
+              </p>
+            </>
+          ))}
+        </div>
+      ))}
+    </div>
+
+    <!-- ============================================================
+         VISTA 5: NIEBLA DENSA (PDF Pág. 62)
+         ============================================================ -->
+    <div class="vista-panel" data-vista="niebla-densa">
+      <img src="/elementos/svg/contenedor-niebla-densa.svg" alt="" class="svg-superior-709" draggable="false" />
+      <h2 class="titulo-pestana-superior">Niebla densa</h2>
+
+      <div class="paginador-pill pag-1" aria-hidden="true">
+        <span class="btn-dot-emergencias activo solo-indicador">
+          <img class="dot-img-activo" src="/elementos/svg/dot-emergencias-activo.svg" alt="" draggable="false" />
+        </span>
+      </div>
+
+      <p class="lead-superior" style="left: 456.83px; top: 208.43px; width: 520px; white-space: nowrap;">
+        En las zonas altas del parque, la neblina puede cubrir la<br />
+        ruta en cuestión de minutos, ocultando las marcas del<br />
+        camino y aumentando el riesgo de desorientación o caídas.
+      </p>
+
+      <img src="/elementos/svg/cards-emergencias-4.svg" alt="" class="svg-cards-4" draggable="false" />
+
+      <span class="numero-paso-41pt" style="left: 421.36px; top: 325.23px;">01</span>
+      <p class="texto-paso-card" style="left: 383px; top: 387.94px;">
+        Si la niebla es tan<br />densa que no ves<br />el sendero, detente<br />y espera.
+      </p>
+
+      <span class="numero-paso-41pt" style="left: 585.35px; top: 325.23px;">02</span>
+      <p class="texto-paso-card" style="left: 548px; top: 387.94px;">
+        Usa la linterna<br />con luz blanca<br />(no roja) para ver<br />el suelo.
+      </p>
+
+      <span class="numero-paso-41pt" style="left: 748.34px; top: 325.23px;">03</span>
+      <p class="texto-paso-card" style="left: 710px; top: 388.94px;">
+        Sigue el sonido<br />de una quebrada<br />para orientarte<br />(siempre bajan<br />hacia la ciudad).
+      </p>
+
+      <span class="numero-paso-41pt" style="left: 906.33px; top: 325.23px;">04</span>
+      <p class="texto-paso-card" style="left: 870.99px; top: 388.94px;">
+        No corras, el<br />riesgo de caer es<br />muy alto con poca<br />visibilidad.
+      </p>
+    </div>
+
+    <!-- ============================================================
+         VISTA 6: INCENDIO FORESTAL (PDF Págs. 63–66)
+         ============================================================ -->
+    <div class="vista-panel" data-vista="incendio-forestal">
+      <img src="/elementos/svg/contenedor-incendio-forestal.svg" alt="" class="svg-superior-709" draggable="false" />
+      <img src="/elementos/svg/contenedor-textos-inferior.svg" alt="" class="svg-inferior-638" draggable="false" />
+      <h2 class="titulo-pestana-superior" style="left: 389.28px; top: 132.62px;">Incendio Forestal</h2>
+
+      <div class="paginador-pill pag-4" data-pag-grupo="incendio" role="tablist" aria-label="Páginas de Incendio forestal">
+        {[0, 1, 2, 3].map((i) => (
+          <button
+            type="button"
+            class:list={["btn-dot-emergencias", { activo: i === 0 }]}
+            data-pag-grupo="incendio"
+            data-pag-idx={String(i)}
+            aria-label={`Incendio forestal página ${i + 1}`}
+            aria-selected={i === 0 ? "true" : "false"}
+          >
+            <img class="dot-img-activo" src="/elementos/svg/dot-emergencias-activo.svg" alt="" draggable="false" />
+            <img class="dot-img-inactivo" src="/elementos/svg/dot-emergencias-inactivo.svg" alt="" draggable="false" />
+          </button>
+        ))}
+      </div>
+
+      <p class="lead-superior" style="left: 457.83px; top: 211.43px; width: 520px; white-space: nowrap;">
+        Protocolo de Emergencia: Incendio Forestal en Montaña
+      </p>
+
+      {INCENDIO_PAGINAS.map((pag, idx) => (
+        <div
+          class:list={["subpagina-grupo", { activa: idx === 0 }]}
+          data-pag-contenido="incendio"
+          data-pag-idx={String(idx)}
+        >
+          <ol class="lista-incendio-inferior" style={`left: ${pag.x}px; top: ${pag.y}px;`}>
+            {pag.items.map((item) => (
+              <li>
+                <div class="linea1-incendio">
+                  {item.num ? (
+                    <>
+                      <span class="num-incendio-abs">{item.num}</span>
+                      <span style={`padding-left: ${item.x1Offset || 0}px;`}>{item.linea1}</span>
+                    </>
+                  ) : (
+                    <span>{item.linea1}</span>
+                  )}
+                </div>
+                {item.linea2 && (
+                  <div class="linea2-incendio" style={`padding-left: ${item.x2Offset || 0}px;`}>
+                    {item.linea2}
+                  </div>
+                )}
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))}
+    </div>
+
+    <!-- ============================================================
+         VISTA 7: CONTACTOS DE EMERGENCIA (PDF Págs. 80–82)
+         ============================================================ -->
+    <div class="vista-panel" data-vista="contactos-emergencia">
+      <img
+        src="/elementos/svg/contenedor-contactos-emergencia.svg"
+        alt=""
+        class="svg-superior-709"
+        draggable="false"
+      />
+      <h2 class="titulo-pestana-superior">Contactos de emergencia</h2>
+      <p class="lead-superior" style="left: 456.6px; top: 193.16px; width: 510px; white-space: nowrap;">
+        Ante cualquier accidente, extravío o eventualidad en la<br />
+        montaña, comunícate de inmediato con los organismos de<br />
+        rescate y protección.
+      </p>
+
+      <!-- Contenedor inferior interactivo de los 3 organismos (638.27 × 247 en x=368.6, y=312) -->
+      <div class="caja-contactos-emergencia">
+        <!-- Pane 0: Protección civil (PDF Pág. 80) -->
+        <div class="pane-contacto activa" data-contacto-pane="proteccion-civil">
+          <img
+            src="/elementos/svg/contenedor-numeros-proteccion-civil.svg"
+            alt=""
+            class="svg-numeros-fondo"
+            draggable="false"
+          />
+          <div class="grid-numeros-proteccion">
+            <span class="operadora-label" style="left: 300px; top: 31px;">Cantv</span>
+            <span class="num-gigante" style="left: 310px; top: 53px;">171</span>
+
+            <span class="operadora-label" style="left: 460px; top: 31px;">Movilnet:</span>
+            <span class="num-gigante" style="left: 468px; top: 53px;">*1</span>
+
+            <span class="operadora-label" style="left: 300px; top: 133px;">Digitel</span>
+            <span class="num-gigante" style="left: 308px; top: 155px;">112</span>
+
+            <span class="operadora-label" style="left: 460px; top: 131px;">Movistar</span>
+            <span class="num-gigante" style="left: 468px; top: 153px;">911</span>
+          </div>
+        </div>
+
+        <!-- Pane 1: Bomberos Metropolitanos (PDF Pág. 81) -->
+        <div class="pane-contacto" data-contacto-pane="bomberos">
+          <img
+            src="/elementos/svg/contenedor-numeros-bomberos.svg"
+            alt=""
+            class="svg-numeros-fondo"
+            draggable="false"
+          />
+          <div class="bloque-numero-fijo" style="left: 326px; top: 52px;">
+            <span class="num-gigante-linea">(0212)</span>
+            <span class="num-gigante-linea">263-1234</span>
+          </div>
+        </div>
+
+        <!-- Pane 2: INPARQUES El Ávila (PDF Pág. 82) -->
+        <div class="pane-contacto" data-contacto-pane="inparques">
+          <img
+            src="/elementos/svg/contenedor-numeros-inparques.svg"
+            alt=""
+            class="svg-numeros-fondo"
+            draggable="false"
+          />
+          <div class="bloque-numero-fijo" style="left: 334px; top: 62px;">
+            <span class="num-gigante-linea">(0212)</span>
+            <span class="num-gigante-linea">285-4106</span>
+          </div>
+        </div>
+
+        <!-- Tres pestañas clicables a la izquierda -->
+        <button
+          type="button"
+          class="tab-contacto activa"
+          data-contacto-target="proteccion-civil"
+          style="top: 17.7px;"
+        >
+          <span class="label-tab-contacto label-pc-activo">Protección civil:<br />Bomberos - Policía</span>
+          <span class="label-tab-contacto label-pc-inactivo">Bomberos/Policía/<br />Protección civil:</span>
+        </button>
+
+        <button
+          type="button"
+          class="tab-contacto"
+          data-contacto-target="bomberos"
+          style="top: 93.7px;"
+        >
+          <span class="label-tab-contacto">Bomberos Metropolitanos<br />Caracas:</span>
+        </button>
+
+        <button
+          type="button"
+          class="tab-contacto"
+          data-contacto-target="inparques"
+          style="top: 170.7px;"
+        >
+          <span class="label-tab-contacto">INPARQUES<br />El Ávila:</span>
+        </button>
+      </div>
+    </div>
+  </EstructuraCuadrados>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const modulos = document.querySelectorAll<HTMLElement>(".modulo-emergencias");
+
+    modulos.forEach((root) => {
+      const botonesLetrero = root.querySelectorAll<HTMLButtonElement>("[data-vista-target]");
+      const vistas = root.querySelectorAll<HTMLElement>(".vista-panel[data-vista]");
+
+      function activarVista(id: string) {
+        vistas.forEach((v) => v.classList.toggle("activa", v.dataset.vista === id));
+        botonesLetrero.forEach((btn) => {
+          btn.classList.toggle("activo", btn.dataset.vistaTarget === id);
+        });
+      }
+
+      botonesLetrero.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const destino = btn.dataset.vistaTarget || "intro";
+          activarVista(destino);
+        });
+      });
+
+      function activarPag(grupo: string, idx: string) {
+        root.querySelectorAll<HTMLButtonElement>(`.btn-dot-emergencias[data-pag-grupo="${grupo}"]`).forEach((b) => {
+          const esActiva = b.dataset.pagIdx === idx;
+          b.classList.toggle("activo", esActiva);
+          b.setAttribute("aria-selected", esActiva ? "true" : "false");
+        });
+
+        root.querySelectorAll<HTMLElement>(`[data-pag-contenido="${grupo}"]`).forEach((panel) => {
+          panel.classList.toggle("activa", panel.dataset.pagIdx === idx);
+        });
+      }
+
+      // Paginadores internos de puntos
+      const dotButtons = root.querySelectorAll<HTMLButtonElement>(".btn-dot-emergencias[data-pag-grupo]");
+      dotButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const grupo = btn.dataset.pagGrupo;
+          const idx = btn.dataset.pagIdx;
+          if (!grupo || idx === undefined) return;
+          activarPag(grupo, idx);
+        });
+      });
+
+      // Selector de Contactos de emergencia (Protección civil / Bomberos / INPARQUES)
+      const tabsContacto = root.querySelectorAll<HTMLButtonElement>("[data-contacto-target]");
+      const panesContacto = root.querySelectorAll<HTMLElement>("[data-contacto-pane]");
+
+      function activarContacto(target: string) {
+        tabsContacto.forEach((t) => t.classList.toggle("activa", t.dataset.contactoTarget === target));
+        panesContacto.forEach((p) => p.classList.toggle("activa", p.dataset.contactoPane === target));
+      }
+
+      tabsContacto.forEach((tab) => {
+        tab.addEventListener("click", () => {
+          const target = tab.dataset.contactoTarget;
+          if (!target) return;
+          activarContacto(target);
+        });
+      });
+
+      // Soporte opcional de URL params (?vista=...&pag=...&contacto=...)
+      const params = new URLSearchParams(window.location.search);
+      const vistaParam = params.get("vista");
+      if (vistaParam) {
+        activarVista(vistaParam);
+        const pagParam = params.get("pag");
+        const mapaGrupo: Record<string, string> = {
+          "prepara-ascenso": "prepara",
+          "urgencias-medicas": "urgencias",
+          "golpes-heridas": "golpes",
+          "incendio-forestal": "incendio",
+        };
+        if (pagParam !== null && mapaGrupo[vistaParam]) {
+          activarPag(mapaGrupo[vistaParam], pagParam);
+        }
+        const contactoParam = params.get("contacto");
+        if (contactoParam && vistaParam === "contactos-emergencia") {
+          activarContacto(contactoParam);
+        }
+      }
+    });
+  });
+</script>
+
+<style>
+  .modulo-emergencias {
+    position: relative;
+    width: 1400px;
+    height: 650px;
+  }
+
+  .decorativo-derecha-emergencias {
+    position: absolute;
+    left: 910px;
+    top: 156px;
+    width: 494px;
+    height: 494px;
+    object-fit: contain;
+    z-index: 44;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .vista-panel {
+    display: none;
+    position: absolute;
+    inset: 0;
+  }
+
+  .vista-panel.activa {
+    display: block;
+  }
+
+  .subpagina-grupo {
+    display: none;
+  }
+
+  .subpagina-grupo.activa {
+    display: block;
+  }
+
+  /* Contenedor Intro */
+  .tarjeta-svg-intro {
+    position: absolute;
+    z-index: 24;
+  }
+
+  .fondo-svg-tarjeta {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .contenido-sobre-svg {
+    position: relative;
+    z-index: 2;
+  }
+
+  .titulo-pestana-intro-turquesa {
+    position: absolute;
+    font-family: var(--fuente-principal);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    color: #26a69a;
+    margin: 0;
+  }
+
+  .cuerpo-19pt {
+    font-family: var(--fuente-principal);
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 23px;
+  }
+
+  .texto-blanco {
+    color: #ffffff;
+  }
+
+  .texto-intro-emergencias {
+    position: absolute;
+    left: 50.95px;
+    top: 96.33px;
+    width: 560px;
+    white-space: nowrap;
+  }
+
+  .mt-23 {
+    margin-top: 23px;
+  }
+
+  /* Subsecciones con SVG superior de 709.3 x 238.97 */
+  .svg-superior-709 {
+    position: absolute;
+    left: 334px;
+    top: 119px;
+    width: 709.3px;
+    height: 238.97px;
+    z-index: 23;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .titulo-pestana-superior {
+    position: absolute;
+    left: 388px;
+    top: 135px;
+    font-family: var(--fuente-principal);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    color: #ffffff;
+    z-index: 26;
+    margin: 0;
+  }
+
+  /* Cápsula paginadora en y=152..175, x=633.3..733.3 */
+  .paginador-pill {
+    position: absolute;
+    left: 639px;
+    top: 152px;
+    width: 86px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    z-index: 28;
+  }
+
+  .paginador-pill.pag-4 {
+    left: 647.8px;
+    top: 159px;
+    width: auto;
+    height: auto;
+    gap: 7px;
+  }
+
+  .paginador-pill.pag-3 {
+    left: 647.8px;
+    top: 159px;
+    width: auto;
+    height: auto;
+    gap: 16.4px;
+  }
+
+  .paginador-pill.pag-1 {
+    left: 647.8px;
+    top: 159px;
+    width: auto;
+    height: auto;
+  }
+
+  .btn-dot-emergencias {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .btn-dot-emergencias.solo-indicador {
+    cursor: default;
+  }
+
+  .btn-dot-emergencias img {
+    width: 12px;
+    height: 12px;
+    display: block;
+  }
+
+  .btn-dot-emergencias .dot-img-activo {
+    display: none;
+  }
+
+  .btn-dot-emergencias.activo .dot-img-activo {
+    display: block;
+  }
+
+  .btn-dot-emergencias.activo .dot-img-inactivo {
+    display: none;
+  }
+
+  /* Lead texto junto al icono 57x57 */
+  .lead-superior {
+    position: absolute;
+    left: 457px;
+    top: 213px;
+    width: 495px;
+    font-family: var(--fuente-principal);
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #254226;
+    z-index: 25;
+  }
+
+  .bloque-lead-con-subtitulo {
+    position: absolute;
+    left: 456.83px;
+    top: 213.45px;
+    width: 540px;
+    z-index: 25;
+    white-space: nowrap;
+  }
+
+  .subtitulo-turquesa-19pt {
+    font-family: var(--fuente-principal);
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 23px;
+    color: #26a69a;
+    margin: 0;
+  }
+
+  .texto-lead-debajo {
+    font-family: var(--fuente-principal);
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #254226;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  /* Contenedores de cards inferiores */
+  .svg-cards-4 {
+    position: absolute;
+    left: 371.5px;
+    top: 313.3px;
+    width: 636.54px;
+    height: 203.75px;
+    z-index: 24;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .svg-cards-3 {
+    position: absolute;
+    left: 370.5px;
+    top: 310.5px;
+    width: 642.54px;
+    height: 206.51px;
+    z-index: 24;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .texto-card-prepara {
+    position: absolute;
+    font-family: var(--fuente-principal);
+    font-size: 16.08px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #254226;
+    z-index: 26;
+    white-space: nowrap;
+  }
+
+  .numero-paso-41pt {
+    position: absolute;
+    top: 325px;
+    font-family: var(--fuente-principal);
+    font-size: 41.37px;
+    font-weight: 800;
+    line-height: 48px;
+    color: #26a69a;
+    z-index: 26;
+    user-select: none;
+  }
+
+  .texto-paso-card {
+    position: absolute;
+    top: 388px;
+    font-family: var(--fuente-principal);
+    font-size: 15.07px;
+    font-weight: 400;
+    line-height: 19px;
+    color: #254226;
+    z-index: 26;
+    white-space: nowrap;
+  }
+
+  /* Contenedor inferior de textos (638 x 247 en x=369, y=312) */
+  .svg-inferior-638 {
+    position: absolute;
+    left: 369px;
+    top: 312px;
+    width: 638px;
+    height: 247px;
+    z-index: 24;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .lista-numerada-inferior {
+    position: absolute;
+    left: 394.47px;
+    top: 338.82px;
+    width: 600px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 26;
+    font-family: var(--fuente-principal);
+    font-size: 16.08px;
+    font-weight: 400;
+    line-height: 19px;
+    color: #254226;
+    white-space: nowrap;
+  }
+
+  .lista-numerada-inferior li {
+    padding-left: 0;
+    text-indent: 0;
+  }
+
+  .linea-indentada {
+    display: block;
+    padding-left: 18px;
+  }
+
+  .lista-numerada-inferior li strong {
+    font-weight: 700;
+  }
+
+  .lista-incendio-inferior {
+    position: absolute;
+    width: 600px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    z-index: 26;
+    font-family: var(--fuente-principal);
+    font-size: 16.08px;
+    font-weight: 400;
+    line-height: 19px;
+    color: #254226;
+    white-space: nowrap;
+  }
+
+  .lista-incendio-inferior li {
+    display: block;
+  }
+
+  .linea1-incendio {
+    position: relative;
+  }
+
+  .num-incendio-abs {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+
+  /* Contactos de emergencia */
+  .caja-contactos-emergencia {
+    position: absolute;
+    left: 368.6px;
+    top: 312px;
+    width: 638.27px;
+    height: 247px;
+    z-index: 25;
+  }
+
+  .pane-contacto {
+    display: none;
+    position: absolute;
+    inset: 0;
+  }
+
+  .pane-contacto.activa {
+    display: block;
+  }
+
+  .svg-numeros-fondo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .grid-numeros-proteccion {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .operadora-label {
+    position: absolute;
+    font-family: var(--fuente-principal);
+    font-size: 16.1px;
+    font-weight: 400;
+    line-height: 21px;
+    color: #26a69a;
+  }
+
+  .num-gigante {
+    position: absolute;
+    font-family: var(--fuente-principal);
+    font-size: 48.2px;
+    font-weight: 600;
+    line-height: 58px;
+    color: #26a69a;
+  }
+
+  .bloque-numero-fijo {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .num-gigante-linea {
+    font-family: var(--fuente-principal);
+    font-size: 48.2px;
+    font-weight: 600;
+    line-height: 58px;
+    color: #26a69a;
+  }
+
+  .tab-contacto {
+    position: absolute;
+    left: 0;
+    width: 230px;
+    height: 55.5px;
+    background: transparent;
+    border: none;
+    padding: 0 12px 0 17px;
+    cursor: pointer;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    z-index: 3;
+  }
+
+  .tab-contacto:hover .label-tab-contacto {
+    opacity: 0.78;
+  }
+
+  .label-tab-contacto {
+    font-family: var(--fuente-principal);
+    font-size: 16.1px;
+    font-weight: 400;
+    line-height: 18px;
+    color: #26a69a;
+    transition: opacity 0.16s ease;
+  }
+
+  .tab-contacto[data-contacto-target="proteccion-civil"] .label-pc-inactivo {
+    display: inline;
+  }
+
+  .tab-contacto[data-contacto-target="proteccion-civil"] .label-pc-activo {
+    display: none;
+  }
+
+  .tab-contacto[data-contacto-target="proteccion-civil"].activa .label-pc-activo {
+    display: inline;
+  }
+
+  .tab-contacto[data-contacto-target="proteccion-civil"].activa .label-pc-inactivo {
+    display: none;
+  }
+</style>

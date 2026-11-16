@@ -1,0 +1,253 @@
+---
+export interface Props {
+  tema: "naranja" | "amarillo" | "verde" | "turquesa" | "morado";
+  fondoInicial: string;
+}
+
+const { tema = "naranja", fondoInicial } = Astro.props;
+
+const esNaranja = tema === "naranja";
+const configTema = {
+  naranja: {
+    lomita: "/elementos/svg/lomita-quienes-somos.svg",
+    lomitaClass: "lomita-naranja",
+    esquina: "/elementos/rocas-esquina-izquierda.webp",
+    esquinaClass: "esquina-rocas",
+  },
+  amarillo: {
+    lomita: "/elementos/svg/lomita-patrimonio-natural.svg",
+    lomitaClass: "lomita-amarillo",
+    esquina: "/elementos/hojas-esquina-izquierda.webp",
+    esquinaClass: "esquina-hojas",
+  },
+  verde: {
+    lomita: "/elementos/svg/lomita-patrimonio-natural.svg",
+    lomitaClass: "lomita-amarillo",
+    esquina: "/elementos/hojas-esquina-izquierda.webp",
+    esquinaClass: "esquina-hojas",
+  },
+  turquesa: {
+    lomita: "/elementos/svg/lomita-emergencias.svg",
+    lomitaClass: "lomita-turquesa",
+    esquina: "/elementos/hojas-izquierda-emergencias.webp",
+    esquinaClass: "esquina-emergencias",
+  },
+  morado: {
+    lomita: "/elementos/svg/lomita-normativa.svg",
+    lomitaClass: "lomita-morado",
+    esquina: "/elementos/hojas-izquierda-normativa.webp",
+    esquinaClass: "esquina-normativa",
+  },
+}[tema];
+---
+
+<div class:list={["estructura-base-waraira", `tema-${tema}`]}>
+  <!-- CAPA 1: Fotografía de fondo (1400 x 650) -->
+  <div class="capa-foto-fondo">
+    <img
+      id="img-fondo-activo"
+      src={fondoInicial}
+      alt="Paisaje del Parque Nacional Waraira Repano"
+      class="foto-fondo-principal"
+      draggable="false"
+    />
+  </div>
+
+  <!-- CAPA 2: Degradado de color institucional y velo blanco izquierdo -->
+  <!-- Los fondos entregados ya traen el degradado de color incorporado -->
+
+  <!-- CAPA 3: Estructura modular de cuadrados (31.7px x 33.0px cada 42.72px x 44.0px según PDF) -->
+  <div class="capa-cuadrados-patron" aria-hidden="true">
+    <svg width="1400" height="650" viewBox="0 0 1400 650" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern
+          id={`patron-cuadrados-${tema}`}
+          x="0.7"
+          y="0.6"
+          width="42.727"
+          height="44.0"
+          patternUnits="userSpaceOnUse"
+        >
+          <rect
+            x="0"
+            y="0"
+            width="31.7"
+            height="33.0"
+            fill="rgba(255, 255, 255, 0.04)"
+            stroke="rgba(35, 31, 32, 0.085)"
+            stroke-width="1"
+          />
+        </pattern>
+      </defs>
+      <rect x="0" y="0" width="1400" height="650" fill={`url(#patron-cuadrados-${tema})`} />
+    </svg>
+  </div>
+
+  <!-- CAPA 4: Lomita inferior ondulada del color de la sección (SVG preciso diseñado por Dalianyela) -->
+  <div class:list={["capa-lomita-inferior", configTema.lomitaClass]} aria-hidden="true">
+    <img
+      class="lomita-onda-svg"
+      src={configTema.lomita}
+      alt=""
+      draggable="false"
+    />
+  </div>
+
+  <!-- Elemento fotográfico recortado en esquina inferior izquierda -->
+  <img
+    src={configTema.esquina}
+    alt=""
+    aria-hidden="true"
+    class:list={["elemento-esquina-izquierda", configTema.esquinaClass]}
+    draggable="false"
+  />
+
+  <!-- CAPA 5: Contenido modular posicionado sobre la retícula de cuadrados -->
+  <div class="capa-modulos-contenido">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .estructura-base-waraira {
+    position: relative;
+    width: 1400px;
+    height: 650px;
+    overflow: hidden;
+    background-color: #ffffff;
+  }
+
+  /* Capa 1: Foto de fondo */
+  .capa-foto-fondo {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  .foto-fondo-principal {
+    width: 1400px;
+    height: 650px;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.28s ease;
+  }
+
+  /* Capa 2: Degradado blanco a la izquierda + baño de color de sección */
+  .capa-degradado-color {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .tema-naranja .capa-degradado-color {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.96) 0%,
+        rgba(255, 255, 255, 0.85) 14%,
+        rgba(255, 232, 200, 0.42) 32%,
+        rgba(255, 165, 40, 0.28) 65%,
+        rgba(255, 143, 0, 0.25) 100%
+      );
+  }
+
+  .tema-amarillo .capa-degradado-color {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.96) 0%,
+        rgba(255, 255, 255, 0.85) 14%,
+        rgba(252, 240, 195, 0.42) 32%,
+        rgba(234, 192, 15, 0.28) 65%,
+        rgba(231, 177, 24, 0.25) 100%
+      );
+  }
+
+  /* Capa 3: Patrón de cuadrados modulares — oculto */
+  .capa-cuadrados-patron {
+    display: none;
+  }
+
+  /* Capa 4: Lomita inferior ondulada (SVG original 1400×150.36) */
+  .capa-lomita-inferior {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 1400px;
+    height: 150px;
+    z-index: 15;
+    pointer-events: none;
+  }
+
+  .lomita-onda-svg {
+    width: 1400px;
+    height: 150px;
+    display: block;
+    object-fit: fill;
+  }
+
+  /* Recorte fotográfico esquina inferior izquierda (coordenadas exactas del PDF) */
+  .elemento-esquina-izquierda {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 48;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* Rocas en ¿Quiénes somos?: x=0..469, y=384..650 (469 x 266) */
+  .esquina-rocas {
+    width: 469px;
+    height: 266px;
+    object-fit: contain;
+    object-position: left bottom;
+  }
+
+  /* Hojas en Patrimonio natural: x=0..459, y=429..650 (459 x 221) */
+  .esquina-hojas {
+    width: 459px;
+    height: 221px;
+    object-fit: contain;
+    object-position: left bottom;
+  }
+
+  /* Emergencias y normativa: ondas ligeramente más altas (151.27px / 155.72px) */
+  .lomita-turquesa .lomita-onda-svg {
+    height: 151.27px;
+  }
+
+  .lomita-morado .lomita-onda-svg {
+    height: 155.72px;
+  }
+
+  /* Hojas en Emergencias: x=-3..257, y=493..648 (260 x 155) */
+  .esquina-emergencias {
+    left: -3px;
+    top: 493px;
+    bottom: auto;
+    width: 260px;
+    height: 155px;
+    object-fit: contain;
+    object-position: left bottom;
+  }
+
+  /* Hojas en Conoce su normativa: x=-3..239, y=402..651 (242 x 249) */
+  .esquina-normativa {
+    left: -3px;
+    top: 402px;
+    bottom: auto;
+    width: 242px;
+    height: 249px;
+    object-fit: contain;
+    object-position: left bottom;
+  }
+
+  /* Capa 5: Módulos de contenido */
+  .capa-modulos-contenido {
+    position: absolute;
+    inset: 0;
+    z-index: 25;
+  }
+</style>

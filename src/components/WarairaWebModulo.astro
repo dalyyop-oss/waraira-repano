@@ -1,0 +1,93 @@
+---
+import ModuloQuienesSomos from "./ModuloQuienesSomos.astro";
+import ModuloPatrimonioNatural from "./ModuloPatrimonioNatural.astro";
+import ModuloEmergenciasProtocolos from "./ModuloEmergenciasProtocolos.astro";
+import ModuloConoceNormativa from "./ModuloConoceNormativa.astro";
+
+export interface Props {
+  seccionInicial?: "quienes-somos" | "patrimonio-natural" | "emergencias" | "normativa";
+}
+
+const { seccionInicial = "quienes-somos" } = Astro.props;
+---
+
+<div class="waraira-modulo-embebible" data-seccion-inicial={seccionInicial}>
+  <div
+    class:list={["contenedor-seccion-spa", { activa: seccionInicial === "quienes-somos" }]}
+    data-spa-seccion="quienes-somos"
+  >
+    <ModuloQuienesSomos />
+  </div>
+
+  <div
+    class:list={["contenedor-seccion-spa", { activa: seccionInicial === "patrimonio-natural" }]}
+    data-spa-seccion="patrimonio-natural"
+  >
+    <ModuloPatrimonioNatural />
+  </div>
+
+  <div
+    class:list={["contenedor-seccion-spa", { activa: seccionInicial === "emergencias" }]}
+    data-spa-seccion="emergencias"
+  >
+    <ModuloEmergenciasProtocolos />
+  </div>
+
+  <div
+    class:list={["contenedor-seccion-spa", { activa: seccionInicial === "normativa" }]}
+    data-spa-seccion="normativa"
+  >
+    <ModuloConoceNormativa />
+  </div>
+</div>
+
+<script>
+  function inicializarModuloSPA() {
+    const modulos = document.querySelectorAll(".waraira-modulo-embebible");
+    modulos.forEach((mod) => {
+      const enlacesSeccion = mod.querySelectorAll("[data-seccion-target]");
+      const contenedores = mod.querySelectorAll(".contenedor-seccion-spa");
+
+      enlacesSeccion.forEach((enlace) => {
+        enlace.addEventListener("click", (e) => {
+          const target = enlace.getAttribute("data-seccion-target");
+          if (
+            target === "quienes-somos" ||
+            target === "patrimonio-natural" ||
+            target === "emergencias" ||
+            target === "normativa"
+          ) {
+            e.preventDefault();
+            contenedores.forEach((c) => {
+              c.classList.toggle("activa", c.getAttribute("data-spa-seccion") === target);
+            });
+          }
+        });
+      });
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", inicializarModuloSPA);
+  inicializarModuloSPA();
+</script>
+
+<style>
+  .waraira-modulo-embebible {
+    width: 1400px;
+    height: 650px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .contenedor-seccion-spa {
+    display: none;
+    width: 1400px;
+    height: 650px;
+    position: absolute;
+    inset: 0;
+  }
+
+  .contenedor-seccion-spa.activa {
+    display: block;
+  }
+</style>

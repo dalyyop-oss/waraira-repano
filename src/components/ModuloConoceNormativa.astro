@@ -1,0 +1,909 @@
+---
+import EstructuraCuadrados from "./EstructuraCuadrados.astro";
+import Techo from "./Techo.astro";
+import CabezalVertical, { type ItemLetrero } from "./CabezalVertical.astro";
+
+const B = "/elementos/botones/";
+
+const itemsMenuNormativa: ItemLetrero[] = [
+  {
+    id: "seguridad-ambiental",
+    etiqueta: "Seguridad ambiental",
+    inactivo: B + "madera-inactiva-seguridad-ambiental.svg",
+    activo: B + "madera-activa-seguridad-ambiental.svg",
+    mostrarTexto: true,
+  },
+  {
+    id: "acceso-horarios",
+    etiqueta: "Acceso y horarios",
+    inactivo: B + "madera-inactiva-acceso-horarios.svg",
+    activo: B + "madera-activa-acceso-horarios.svg",
+    mostrarTexto: true,
+  },
+  {
+    id: "seguridad-visitante",
+    etiqueta: "Seguridad del visitante",
+    inactivo: B + "madera-inactiva-seguridad-visitante.svg",
+    activo: B + "madera-activa-seguridad-visitante.svg",
+    mostrarTexto: true,
+  },
+  {
+    id: "manejo-desechos",
+    etiqueta: "Manejo de desechos",
+    inactivo: B + "madera-inactiva-manejo-desechos.svg",
+    activo: B + "madera-activa-manejo-desechos.svg",
+    mostrarTexto: true,
+  },
+];
+
+interface PaginaNormativa {
+  x: number;
+  y: number;
+  gap: number;
+  items: string[][];
+}
+
+const AMBIENTAL_PAGINAS: PaginaNormativa[] = [
+  {
+    x: 394.47,
+    y: 338.81,
+    gap: 15,
+    items: [
+      ["Se prohibe encender fogatas, fogones o arrojar colillas de cigarrillos."],
+      [
+        "Prohibido ingresar con mascotas para evitar la transmisión de enfermedades",
+        "a la fauna silvestre.",
+      ],
+      [
+        "Prohibido el ingreso bebidas alcohólicas, armas de cualquier tipo y equipos de",
+        "sonido que generen contaminación sónica.",
+      ],
+      ["Se prohibe extraer, cortar o alterar la flora, fauna y elementos geológicos."],
+      ["Prohibido el aprovechamiento de los recursos naturales con fines comerciales."],
+    ],
+  },
+  {
+    x: 394.47,
+    y: 338.81,
+    gap: 15,
+    items: [
+      ["Prohibido el sacrificio de animales."],
+      [
+        "Prohibida la extracción de material arqueológico, antropológico",
+        "y paleontológico.",
+      ],
+      ["Prohibida la exploración y explotación de minerales."],
+      ["Prohibida la introducción de especies exóticas de flora y fauna."],
+      ["Prohibidas la caza y la pesca en todo el territorio del parque."],
+    ],
+  },
+  {
+    x: 394.47,
+    y: 338.81,
+    gap: 15,
+    items: [
+      ["Prohibida la extensión de la frontera agrícola."],
+      ["Prohibida la circulación de bicicletas dentro del parque."],
+      ["Prohibido escribir o marcar la corteza de los árboles o las piedras."],
+      [
+        "Prohibida la producción, venta, transporte y consumo de alcohol y drogas, así",
+        "como el ingreso de personas bajo sus efectos.",
+      ],
+      [
+        "Prohibido realizar actividades o usar sustancias que puedan contaminar los",
+        "ecosistemas naturales.",
+      ],
+    ],
+  },
+  {
+    x: 394.47,
+    y: 338.81,
+    gap: 15,
+    items: [
+      ["Prohibida la instalación de vallas y avisos publicitarios con fines comerciales."],
+      ["Prohibida la introducción de materiales explosivos."],
+      [
+        "Prohibida la utilizacion de sustancias tóxicas o peligrosas tales como polvora,",
+        "amoniaco, detonantes y sustancias colorantes.",
+      ],
+    ],
+  },
+];
+
+const ACCESO_PAGINAS: PaginaNormativa[] = [
+  {
+    x: 394.47,
+    y: 338.81,
+    gap: 15,
+    items: [
+      [
+        "Respetar los horarios establecidos para el ascenso y descenso, a partir de 6:00",
+        "a.m. hasta 5:00 p.m.",
+      ],
+      ["Contar con permisos y cumplir los requisitos obligatorios para acampar"],
+      [
+        "Cumplir con las normas de uso en instalaciones específicas, como el teleférico",
+        "y las áreas recreativas.",
+      ],
+      [
+        "Se prohibe hacer recorridos en motocicletas por los caminos peatonales del",
+        "Parque Nacional.",
+      ],
+    ],
+  },
+  {
+    x: 394.47,
+    y: 338.81,
+    gap: 11,
+    items: [
+      [
+        "Los vehículos de turistas deben contar con su respectiva licencia o contrato de",
+        "concesión para operar.",
+      ],
+      [
+        "El conductor debe registrarse en el punto de acceso, obtener la autorización",
+        "y pagar la tarifa correspondiente.",
+      ],
+      [
+        "La pernocta de vehículos requiere autorización previa de la Coordinación y pago",
+        "de tarifa.",
+      ],
+      [
+        "La Coordinación del Parque regulará el número máximo de vehículos",
+        "permitidos, las vías de circulación y las zonas de estacionamiento.",
+      ],
+    ],
+  },
+];
+
+const VISITANTE_PAGINAS: PaginaNormativa[] = [
+  {
+    x: 394.47,
+    y: 338.81,
+    gap: 11,
+    items: [
+      [
+        "Registrar tus datos personales en el Puesto de Guardaparques al entrar y salir",
+        "de la montaña.",
+      ],
+      [
+        "Camina únicamente por los senderos principales y rutas señalizadas; evita",
+        "tomar atajos.",
+      ],
+      [
+        "En caso de extravío, accidentes o incendios forestales, sigue los protocolos de",
+        "emergencia establecidos.",
+      ],
+      ["Acampar únicamente en las zonas autorizadas."],
+    ],
+  },
+  {
+    x: 394.47,
+    y: 338.81,
+    gap: 15,
+    items: [
+      ["Es obligatorio seguir las señales e instrucciones\u00A0a lo largo de los senderos."],
+      ["Hacer un uso responsable de las instalaciones y servicios del Parque Nacional"],
+      ["Respeta y sigue las recomendaciones de las autoridades del parque."],
+      [
+        "Los menores de edad deben presentar autorización escrita del representante",
+        "(con copia de la cédula) y estar acompañados por un adulto responsable para",
+        "hacer montañismo.",
+      ],
+    ],
+  },
+  {
+    x: 394.47,
+    y: 338.81,
+    gap: 15,
+    items: [
+      [
+        "El número mínimo y máximo de integrantes por grupo dependerá del destino",
+        "y se indicará en la autorización.",
+      ],
+      [
+        "Las cordadas de escalada serán de máximo dos (2) personas. Es obligatorio",
+        "el uso de casco y cuerdas.",
+      ],
+      [
+        "El vuelo libre (parapente y similares) solo se permite en la Vertiente Norte.",
+        "Se autoriza un máximo de 6 personas a la vez en la zona de despegue.",
+      ],
+    ],
+  },
+  {
+    x: 394.47,
+    y: 338.81,
+    gap: 15,
+    items: [
+      [
+        "Toda persona (poblador, visitante o usuario) tiene el deber de denunciar ante",
+        "las autoridades cualquier actividad que atente contra la protección",
+        "y conservación del Parque Nacional.",
+      ],
+      [
+        "Todos los grupos voluntarios (rescate, incendios y primeros auxilios) requieren",
+        "registro previo ante la Coordinación del Parque y el Programa Especial de",
+        "Incendios Forestales.",
+      ],
+    ],
+  },
+];
+
+const DESECHOS_PAGINAS: PaginaNormativa[] = [
+  {
+    x: 394.47,
+    y: 338.81,
+    gap: 15,
+    items: [
+      [
+        "Es obligatorio regresar con la totalidad (100 %) de los desechos y basura",
+        "generados durante la visita.",
+      ],
+      ["Prohibido usar jabones o detergentes en ríos, quebradas y cascadas."],
+      ["Prohibido verter aguas servidas en cualquier fuente de agua natural del parque."],
+      [
+        "El reúso y vertido de efluentes en cursos de agua se autorizará únicamente con",
+        "carácter excepcional, siempre que no haya otra alternativa técnica y las aguas",
+        "tratadas cumplan los parámetros Tipo 1.",
+      ],
+    ],
+  },
+  {
+    x: 394.47,
+    y: 338.81,
+    gap: 15,
+    items: [
+      [
+        "Los pobladores de las zonas de Uso Especial y Uso Poblacional Autóctono",
+        "son responsables de recolectar y acopiar los residuos sólidos y desechos",
+        "que generen.",
+      ],
+      [
+        "Es obligatorio que toda concesión comercial trate adecuadamente los efluentes",
+        "líquidos que genere dentro del Parque.",
+      ],
+    ],
+  },
+];
+---
+
+<section class="modulo-normativa" aria-label="Módulo Conoce su normativa">
+  <EstructuraCuadrados tema="morado" fondoInicial="/fondos/bg-normativa.webp">
+    <!-- Techo superior -->
+    <Techo seccionActiva="normativa" />
+
+    <!-- Letrero lateral vertical de madera -->
+    <CabezalVertical tema="morado" itemActivo="intro" items={itemsMenuNormativa} />
+
+    <!-- Helechos decorativos esquina inferior derecha según vista activa -->
+    <img
+      src="/elementos/helecho-normativas-intro.webp"
+      alt=""
+      aria-hidden="true"
+      class="helecho-derecha activa"
+      data-helecho-vista="intro"
+      style="left: 1102px; top: 247px; width: 305px; height: 408px;"
+      draggable="false"
+    />
+    <img
+      src="/elementos/helecho-seguridad-ambiental.webp"
+      alt=""
+      aria-hidden="true"
+      class="helecho-derecha"
+      data-helecho-vista="seguridad-ambiental"
+      style="left: 1094px; top: 362px; width: 310px; height: 290px;"
+      draggable="false"
+    />
+    <img
+      src="/elementos/helecho-acceso-horarios.webp"
+      alt=""
+      aria-hidden="true"
+      class="helecho-derecha"
+      data-helecho-vista="acceso-horarios"
+      style="left: 1156px; top: 340px; width: 245px; height: 317px;"
+      draggable="false"
+    />
+    <img
+      src="/elementos/helecho-seguridad-visitante.webp"
+      alt=""
+      aria-hidden="true"
+      class="helecho-derecha"
+      data-helecho-vista="seguridad-visitante"
+      style="left: 1111px; top: 363px; width: 289px; height: 335px;"
+      draggable="false"
+    />
+    <img
+      src="/elementos/helecho-manejo-desechos.webp"
+      alt=""
+      aria-hidden="true"
+      class="helecho-derecha"
+      data-helecho-vista="manejo-desechos"
+      style="left: 1143px; top: 353px; width: 260px; height: 312px;"
+      draggable="false"
+    />
+
+    <!-- ============================================================
+         VISTA 0: PORTADA INTRODUCTORIA (PDF Pág. 67)
+         ============================================================ -->
+    <div class="vista-panel activa" data-vista="intro">
+      <div class="tarjeta-svg-intro" style="left: 332px; top: 119px; width: 642.26px; height: 351.84px;">
+        <img src="/elementos/svg/contenedor-normativa-intro.svg" alt="" class="fondo-svg-tarjeta" draggable="false" />
+        <div class="contenido-sobre-svg">
+          <h1 class="titulo-pestana-intro-morado" style="left: 38px; top: 17px;">
+            Normativa del parque
+          </h1>
+          <div class="cuerpo-19pt texto-blanco texto-intro-normativa">
+            <p>
+              De acuerdo con el Plan de Ordenamiento y Reglamento de Uso<br />
+              (PORU), el Instituto Nacional de Parques (INPARQUES)<br />
+              establece un conjunto de normas de cumplimiento obligatorio<br />
+              para garantizar la preservación de los ecosistemas del Parque<br />
+              Nacional Waraira Repano y la seguridad de sus visitantes.
+            </p>
+            <p class="mt-14">
+              Conocer y respetar estas directrices es fundamental para<br />
+              disfrutar de la montaña de forma responsable.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         VISTA 1: SEGURIDAD AMBIENTAL (PDF Págs. 68–71)
+         ============================================================ -->
+    <div class="vista-panel" data-vista="seguridad-ambiental">
+      <img
+        src="/elementos/svg/contenedor-seguridad-ambiental.svg"
+        alt=""
+        class="svg-superior-709"
+        draggable="false"
+      />
+      <img
+        src="/elementos/svg/contenedor-textos-inferior.svg"
+        alt=""
+        class="svg-inferior-638"
+        draggable="false"
+      />
+      <h2 class="titulo-pestana-superior">Seguridad ambiental</h2>
+
+      <div class="paginador-pill pag-4" data-pag-grupo="ambiental" role="tablist" aria-label="Páginas de Seguridad ambiental">
+        {[0, 1, 2, 3].map((i) => (
+          <button
+            type="button"
+            class:list={["btn-dot-normativa", { activo: i === 0 }]}
+            data-pag-grupo="ambiental"
+            data-pag-idx={String(i)}
+            aria-label={`Seguridad ambiental página ${i + 1}`}
+            aria-selected={i === 0 ? "true" : "false"}
+          >
+            <img class="dot-img-activo" src="/elementos/svg/dot-normativa-activo.svg" alt="" draggable="false" />
+            <img class="dot-img-inactivo" src="/elementos/svg/dot-normativa-inactivo.svg" alt="" draggable="false" />
+          </button>
+        ))}
+      </div>
+
+      <p class="lead-superior" style="left: 455px; top: 213px; white-space: nowrap;">
+        Nuestra principal prioridad es la conservación de este<br />espacio natural.
+      </p>
+
+      {AMBIENTAL_PAGINAS.map((pag, idx) => (
+        <div
+          class:list={["subpagina-grupo", { activa: idx === 0 }]}
+          data-pag-contenido="ambiental"
+          data-pag-idx={String(idx)}
+        >
+          <ul
+            class="lista-bullets-normativa"
+            style={`left: ${pag.x}px; top: ${pag.y}px; gap: ${pag.gap}px;`}
+          >
+            {pag.items.map((lineas) => (
+              <li>
+                <span class="bullet-simbolo" aria-hidden="true">•</span>
+                <span class="bullet-texto">
+                  {lineas.map((linea, lIdx) => (
+                    <>
+                      {linea}
+                      {lIdx < lineas.length - 1 && <br />}
+                    </>
+                  ))}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <!-- ============================================================
+         VISTA 2: ACCESO Y HORARIOS (PDF Págs. 72–73)
+         ============================================================ -->
+    <div class="vista-panel" data-vista="acceso-horarios">
+      <img
+        src="/elementos/svg/contenedor-acceso-horarios.svg"
+        alt=""
+        class="svg-superior-709"
+        draggable="false"
+      />
+      <img
+        src="/elementos/svg/contenedor-textos-inferior.svg"
+        alt=""
+        class="svg-inferior-638"
+        draggable="false"
+      />
+      <h2 class="titulo-pestana-superior">Acceso y Horarios</h2>
+
+      <div class="paginador-pill pag-2" data-pag-grupo="acceso" role="tablist" aria-label="Páginas de Acceso y horarios">
+        {[0, 1].map((i) => (
+          <button
+            type="button"
+            class:list={["btn-dot-normativa", { activo: i === 0 }]}
+            data-pag-grupo="acceso"
+            data-pag-idx={String(i)}
+            aria-label={`Acceso y horarios página ${i + 1}`}
+            aria-selected={i === 0 ? "true" : "false"}
+          >
+            <img class="dot-img-activo" src="/elementos/svg/dot-normativa-activo.svg" alt="" draggable="false" />
+            <img class="dot-img-inactivo" src="/elementos/svg/dot-normativa-inactivo.svg" alt="" draggable="false" />
+          </button>
+        ))}
+      </div>
+
+      <p class="lead-superior" style="left: 455px; top: 213px; white-space: nowrap;">
+        El acceso responsable comienza con la planificación.
+      </p>
+
+      {ACCESO_PAGINAS.map((pag, idx) => (
+        <div
+          class:list={["subpagina-grupo", { activa: idx === 0 }]}
+          data-pag-contenido="acceso"
+          data-pag-idx={String(idx)}
+        >
+          <ul
+            class="lista-bullets-normativa"
+            style={`left: ${pag.x}px; top: ${pag.y}px; gap: ${pag.gap}px;`}
+          >
+            {pag.items.map((lineas) => (
+              <li>
+                <span class="bullet-simbolo" aria-hidden="true">•</span>
+                <span class="bullet-texto">
+                  {lineas.map((linea, lIdx) => (
+                    <>
+                      {linea}
+                      {lIdx < lineas.length - 1 && <br />}
+                    </>
+                  ))}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <!-- ============================================================
+         VISTA 3: SEGURIDAD DEL VISITANTE (PDF Págs. 74–77)
+         ============================================================ -->
+    <div class="vista-panel" data-vista="seguridad-visitante">
+      <img
+        src="/elementos/svg/contenedor-seguridad-visitante.svg"
+        alt=""
+        class="svg-superior-709"
+        draggable="false"
+      />
+      <img
+        src="/elementos/svg/contenedor-textos-inferior.svg"
+        alt=""
+        class="svg-inferior-638"
+        draggable="false"
+      />
+      <h2 class="titulo-pestana-superior">Seguridad del visitante</h2>
+
+      <div class="paginador-pill pag-4" data-pag-grupo="visitante" role="tablist" aria-label="Páginas de Seguridad del visitante">
+        {[0, 1, 2, 3].map((i) => (
+          <button
+            type="button"
+            class:list={["btn-dot-normativa", { activo: i === 0 }]}
+            data-pag-grupo="visitante"
+            data-pag-idx={String(i)}
+            aria-label={`Seguridad del visitante página ${i + 1}`}
+            aria-selected={i === 0 ? "true" : "false"}
+          >
+            <img class="dot-img-activo" src="/elementos/svg/dot-normativa-activo.svg" alt="" draggable="false" />
+            <img class="dot-img-inactivo" src="/elementos/svg/dot-normativa-inactivo.svg" alt="" draggable="false" />
+          </button>
+        ))}
+      </div>
+
+      <p class="lead-superior" style="left: 455px; top: 213px; white-space: nowrap;">
+        Disfruta la montaña sin riesgos. Revisa nuestras normas<br />de seguridad
+      </p>
+
+      {VISITANTE_PAGINAS.map((pag, idx) => (
+        <div
+          class:list={["subpagina-grupo", { activa: idx === 0 }]}
+          data-pag-contenido="visitante"
+          data-pag-idx={String(idx)}
+        >
+          <ul
+            class="lista-bullets-normativa"
+            style={`left: ${pag.x}px; top: ${pag.y}px; gap: ${pag.gap}px;`}
+          >
+            {pag.items.map((lineas) => (
+              <li>
+                <span class="bullet-simbolo" aria-hidden="true">•</span>
+                <span class="bullet-texto">
+                  {lineas.map((linea, lIdx) => (
+                    <>
+                      {linea}
+                      {lIdx < lineas.length - 1 && <br />}
+                    </>
+                  ))}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <!-- ============================================================
+         VISTA 4: MANEJO DE DESECHOS (PDF Págs. 78–79)
+         ============================================================ -->
+    <div class="vista-panel" data-vista="manejo-desechos">
+      <img
+        src="/elementos/svg/contenedor-manejo-desechos.svg"
+        alt=""
+        class="svg-superior-709"
+        draggable="false"
+      />
+      <img
+        src="/elementos/svg/contenedor-textos-inferior.svg"
+        alt=""
+        class="svg-inferior-638"
+        draggable="false"
+      />
+      <h2 class="titulo-pestana-superior">Manejo de desechos</h2>
+
+      <div class="paginador-pill pag-2" data-pag-grupo="desechos" role="tablist" aria-label="Páginas de Manejo de desechos">
+        {[0, 1].map((i) => (
+          <button
+            type="button"
+            class:list={["btn-dot-normativa", { activo: i === 0 }]}
+            data-pag-grupo="desechos"
+            data-pag-idx={String(i)}
+            aria-label={`Manejo de desechos página ${i + 1}`}
+            aria-selected={i === 0 ? "true" : "false"}
+          >
+            <img class="dot-img-activo" src="/elementos/svg/dot-normativa-activo.svg" alt="" draggable="false" />
+            <img class="dot-img-inactivo" src="/elementos/svg/dot-normativa-inactivo.svg" alt="" draggable="false" />
+          </button>
+        ))}
+      </div>
+
+      <p class="lead-superior" style="left: 455px; top: 213px; white-space: nowrap;">
+        Mantener el parque libre de contaminación es<br />responsabilidad de todos.
+      </p>
+
+      {DESECHOS_PAGINAS.map((pag, idx) => (
+        <div
+          class:list={["subpagina-grupo", { activa: idx === 0 }]}
+          data-pag-contenido="desechos"
+          data-pag-idx={String(idx)}
+        >
+          <ul
+            class="lista-bullets-normativa"
+            style={`left: ${pag.x}px; top: ${pag.y}px; gap: ${pag.gap}px;`}
+          >
+            {pag.items.map((lineas) => (
+              <li>
+                <span class="bullet-simbolo" aria-hidden="true">•</span>
+                <span class="bullet-texto">
+                  {lineas.map((linea, lIdx) => (
+                    <>
+                      {linea}
+                      {lIdx < lineas.length - 1 && <br />}
+                    </>
+                  ))}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </EstructuraCuadrados>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const modulos = document.querySelectorAll<HTMLElement>(".modulo-normativa");
+
+    modulos.forEach((root) => {
+      const botonesLetrero = root.querySelectorAll<HTMLButtonElement>("[data-vista-target]");
+      const vistas = root.querySelectorAll<HTMLElement>(".vista-panel[data-vista]");
+      const helechos = root.querySelectorAll<HTMLImageElement>(".helecho-derecha[data-helecho-vista]");
+
+      function activarVista(id: string) {
+        vistas.forEach((v) => v.classList.toggle("activa", v.dataset.vista === id));
+        botonesLetrero.forEach((btn) => {
+          btn.classList.toggle("activo", btn.dataset.vistaTarget === id);
+        });
+        helechos.forEach((img) => {
+          img.classList.toggle("activa", img.dataset.helechoVista === id);
+        });
+      }
+
+      botonesLetrero.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const destino = btn.dataset.vistaTarget || "intro";
+          activarVista(destino);
+        });
+      });
+
+      function activarPag(grupo: string, idx: string) {
+        root.querySelectorAll<HTMLButtonElement>(`.btn-dot-normativa[data-pag-grupo="${grupo}"]`).forEach((b) => {
+          const esActiva = b.dataset.pagIdx === idx;
+          b.classList.toggle("activo", esActiva);
+          b.setAttribute("aria-selected", esActiva ? "true" : "false");
+        });
+
+        root.querySelectorAll<HTMLElement>(`[data-pag-contenido="${grupo}"]`).forEach((panel) => {
+          panel.classList.toggle("activa", panel.dataset.pagIdx === idx);
+        });
+      }
+
+      const dotButtons = root.querySelectorAll<HTMLButtonElement>(".btn-dot-normativa[data-pag-grupo]");
+      dotButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const grupo = btn.dataset.pagGrupo;
+          const idx = btn.dataset.pagIdx;
+          if (!grupo || idx === undefined) return;
+          activarPag(grupo, idx);
+        });
+      });
+
+      const params = new URLSearchParams(window.location.search);
+      const vistaParam = params.get("vista");
+      if (vistaParam) {
+        activarVista(vistaParam);
+        const pagParam = params.get("pag");
+        const mapaGrupo: Record<string, string> = {
+          "seguridad-ambiental": "ambiental",
+          "acceso-horarios": "acceso",
+          "seguridad-visitante": "visitante",
+          "manejo-desechos": "desechos",
+        };
+        if (pagParam !== null && mapaGrupo[vistaParam]) {
+          activarPag(mapaGrupo[vistaParam], pagParam);
+        }
+      }
+    });
+  });
+</script>
+
+<style>
+  .modulo-normativa {
+    position: relative;
+    width: 1400px;
+    height: 650px;
+  }
+
+  .helecho-derecha {
+    position: absolute;
+    display: none;
+    object-fit: contain;
+    z-index: 44;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .helecho-derecha.activa {
+    display: block;
+  }
+
+  .vista-panel {
+    display: none;
+    position: absolute;
+    inset: 0;
+  }
+
+  .vista-panel.activa {
+    display: block;
+  }
+
+  .subpagina-grupo {
+    display: none;
+  }
+
+  .subpagina-grupo.activa {
+    display: block;
+  }
+
+  .tarjeta-svg-intro {
+    position: absolute;
+    z-index: 24;
+  }
+
+  .fondo-svg-tarjeta {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .contenido-sobre-svg {
+    position: relative;
+    z-index: 2;
+  }
+
+  .titulo-pestana-intro-morado {
+    position: absolute;
+    font-family: var(--fuente-principal);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    color: #6857a1;
+    margin: 0;
+  }
+
+  .cuerpo-19pt {
+    font-family: var(--fuente-principal);
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 23px;
+  }
+
+  .texto-blanco {
+    color: #ffffff;
+  }
+
+  .texto-intro-normativa {
+    position: absolute;
+    left: 51.23px;
+    top: 96.32px;
+    width: 560px;
+    white-space: nowrap;
+  }
+
+  .mt-14 {
+    margin-top: 14px;
+  }
+
+  /* Contenedor superior 709.3 x 238.97 */
+  .svg-superior-709 {
+    position: absolute;
+    left: 334px;
+    top: 119px;
+    width: 709.3px;
+    height: 238.97px;
+    z-index: 23;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .titulo-pestana-superior {
+    position: absolute;
+    left: 388px;
+    top: 135px;
+    font-family: var(--fuente-principal);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    color: #ffffff;
+    z-index: 26;
+    margin: 0;
+  }
+
+  /* Paginador de puntos morados */
+  .paginador-pill {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    z-index: 28;
+  }
+
+  .paginador-pill.pag-4 {
+    left: 647.8px;
+    top: 160px;
+    gap: 7px;
+  }
+
+  .paginador-pill.pag-2 {
+    left: 647px;
+    top: 160px;
+    gap: 16px;
+  }
+
+  .btn-dot-normativa {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .btn-dot-normativa img {
+    width: 12px;
+    height: 12px;
+    display: block;
+  }
+
+  .btn-dot-normativa .dot-img-activo {
+    display: none;
+  }
+
+  .btn-dot-normativa.activo .dot-img-activo {
+    display: block;
+  }
+
+  .btn-dot-normativa.activo .dot-img-inactivo {
+    display: none;
+  }
+
+  .lead-superior {
+    position: absolute;
+    left: 455px;
+    top: 213px;
+    font-family: var(--fuente-principal);
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #254226;
+    z-index: 25;
+  }
+
+  /* Contenedor inferior de textos (638 x 247 en x=369, y=312) */
+  .svg-inferior-638 {
+    position: absolute;
+    left: 369px;
+    top: 312px;
+    width: 638px;
+    height: 247px;
+    z-index: 24;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .lista-bullets-normativa {
+    position: absolute;
+    width: 600px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    z-index: 26;
+    font-family: var(--fuente-principal);
+    font-size: 16.08px;
+    font-weight: 400;
+    line-height: 19px;
+    color: #254226;
+    white-space: nowrap;
+  }
+
+  .lista-bullets-normativa li {
+    position: relative;
+    padding-left: 18px;
+  }
+
+  .bullet-simbolo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 16.08px;
+    line-height: 19px;
+  }
+
+  .bullet-texto {
+    display: block;
+  }
+</style>

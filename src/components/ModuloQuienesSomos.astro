@@ -1,0 +1,735 @@
+---
+import Techo from "./Techo.astro";
+import CabezalVertical from "./CabezalVertical.astro";
+import EstructuraCuadrados from "./EstructuraCuadrados.astro";
+
+const B = "/elementos/botones/";
+const itemsLetrero = [
+  { id: "mision-vision", etiqueta: "Misión y Visión", inactivo: B + "mision-vision-inactivo.webp", activo: B + "mision-vision-activo.webp" },
+  { id: "valor-ecologico", etiqueta: "Valor ecológico", inactivo: B + "valor-ecologico-inactivo.webp", activo: B + "valor-ecologico-activo.webp" },
+  { id: "inparques", etiqueta: "Inparques", inactivo: B + "inparques-inactivo.webp", activo: B + "inparques-activo.webp" },
+];
+---
+
+<section class="modulo-quienes-somos" aria-label="Sección ¿Quiénes somos?">
+  <EstructuraCuadrados tema="naranja" fondoInicial="/fondos/bg-quienes-somos-intro.webp">
+    <!-- Cabezal superior de 5 secciones -->
+    <Techo seccionActiva="quienes-somos" />
+
+    <!-- Letrero de madera lateral izquierdo -->
+    <CabezalVertical tema="naranja" items={itemsLetrero} itemActivo="intro" />
+
+    <!-- =====================================================================
+         PANTALLA 1 (Página 1 del PDF): Intro - P.N. Waraira Repano
+         ===================================================================== -->
+    <article
+      class="pantalla-vista activa"
+      data-vista="intro"
+      data-bg="/fondos/bg-quienes-somos-intro.webp"
+    >
+      <!-- Contenedor gráfico SVG preciso del intro (642×352): pestaña blanca + tarjeta naranja -->
+      <div
+        class="contenedor-svg-card"
+        style="left: 330px; top: 122px; width: 642px; height: 352px;"
+      >
+        <img src="/elementos/svg/contenedor-quienes-somos-intro.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+        <!-- Título en la pestaña blanca -->
+        <span class="titulo-pestana texto-naranja" style="position: absolute; left: 50px; top: 15px;">P.N. Waraira Repano</span>
+        <!-- Contenido sobre la tarjeta naranja -->
+        <div class="contenido-sobre-svg" style="top: 80px; padding: 24px 48px;">
+          <h1 class="subtitulo-22pt">El Corazón Verde de Caracas</h1>
+          <p class="cuerpo-19pt texto-blanco" style="margin-top: 4px;">
+            Somos el pulmón vegetal que resguarda la biodiversidad, la<br />
+            historia y la esencia de nuestra región. Más que una majestuosa<br />
+            montaña, el Parque Nacional Waraira Repano es:
+          </p>
+
+          <!-- Insignias centrales con iconos vectoriales del PDF -->
+          <div class="fila-insignias-intro">
+            <div class="insignia-item">
+              <img
+                src="/iconos/icono-guardian-refugio.webp"
+                alt="Icono Guardián y refugio natural"
+                class="icono-57"
+              />
+              <span class="insignia-texto-17pt texto-blanco">Guardián y refugio natural</span>
+            </div>
+
+            <div class="insignia-item">
+              <img
+                src="/iconos/icono-espacio-paz.webp"
+                alt="Icono Espacio vivo de paz"
+                class="icono-57"
+              />
+              <span class="insignia-texto-17pt texto-blanco">Espacio vivo de paz</span>
+            </div>
+          </div>
+
+          <!-- Párrafo inferior de la tarjeta naranja (Página 1 del PDF) -->
+          <p class="cuerpo-19pt texto-blanco" style="margin-top: 10px;">
+            Protege la flora y fauna silvestre y conecta a la comunidad con<br />
+            la magia de la naturaleza en el centro mismo de la ciudad.
+          </p>
+        </div>
+      </div>
+
+      <!-- Tarjeta fotográfica derecha: x=983..1244, y=176..473 -->
+      <div
+        class="tarjeta-derecha-foto"
+        style="left: 983px; top: 176px; width: 261px; height: 297px;"
+      >
+        <img
+          src="/elementos/svg/contenedor-hotel-humboldt-lagunazo.svg"
+          alt=""
+          aria-hidden="true"
+          class="svg-fondo-card"
+          draggable="false"
+        />
+        <div class="marco-foto-derecha" style="position: relative; z-index: 2;">
+          <img
+            src="/fotos/quienes-somos/hotel-humboldt-lagunazo.webp"
+            alt="Hotel Humboldt visto desde el Lagunazo"
+          />
+        </div>
+        <p class="pie-foto-13pt" style="position: relative; z-index: 2; margin-top: 12px;">
+          Hotel Humboldt<br />visto desde el Lagunazo.
+        </p>
+      </div>
+
+      <!-- Elemento natural primer plano derecho (Tronco con musgo): x=660..1400, y=475..650 -->
+      <img
+        src="/elementos/tronco-musgo-derecha.webp"
+        alt=""
+        aria-hidden="true"
+        class="recorte-derecho"
+        style="left: 650px; top: 470px; width: 750px; height: 180px; object-position: right bottom;"
+        draggable="false"
+      />
+    </article>
+
+    <!-- =====================================================================
+         PANTALLAS 2 y 3 (Páginas 2 y 3 del PDF): Misión y Visión
+         ===================================================================== -->
+    <article
+      class="pantalla-vista"
+      data-vista="mision-vision"
+      data-bg="/fondos/bg-mision-vision.webp"
+    >
+      <!-- Pestañas dobles Misión / Visión como botones encima del SVG -->
+      <div class="grupo-pestanas" style="left: 330px; top: 122px;">
+        <button
+          type="button"
+          class="btn-pestana-doble activa"
+          data-subtab-target="mision"
+        >
+          Misión
+        </button>
+        <button
+          type="button"
+          class="btn-pestana-doble"
+          data-subtab-target="vision"
+        >
+          Visión
+        </button>
+      </div>
+
+      <!-- Sub-vista Página 2: Misión -->
+      <div class="subvista-tab activa" data-subtab="mision">
+        <!-- SVG preciso del contenedor Misión (639.47×266.46): tabs + cuerpo blanco traslúcido -->
+        <div
+          class="contenedor-svg-card"
+          style="left: 330px; top: 122px; width: 639px; height: 266px;"
+        >
+          <img src="/elementos/svg/contenedor-mision.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+          <div class="contenido-sobre-svg" style="top: 56px; padding: 44px 50px;">
+            <p class="cuerpo-19pt texto-verde">
+              <strong>Conservar y proteger</strong> la biodiversidad del Parque Nacional<br />
+              Waraira Repano, promoviendo el uso sustentable de sus<br />
+              recursos naturales y la educación ambiental para las<br />
+              generaciones presentes y futuras.
+            </p>
+          </div>
+        </div>
+
+        <!-- Hongo primer plano derecho Página 2 -->
+        <img
+          src="/elementos/hongo-mision-derecha.webp"
+          alt=""
+          aria-hidden="true"
+          class="recorte-derecho"
+          style="left: 870px; top: 345px; width: 525px; height: 305px; object-position: right bottom;"
+          draggable="false"
+        />
+      </div>
+
+      <!-- Sub-vista Página 3: Visión -->
+      <div class="subvista-tab" data-subtab="vision">
+        <!-- SVG preciso del contenedor Visión (639.47×266.46): tabs + cuerpo blanco traslúcido -->
+        <div
+          class="contenedor-svg-card"
+          style="left: 330px; top: 122px; width: 639px; height: 266px;"
+        >
+          <img src="/elementos/svg/contenedor-vision.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+          <div class="contenido-sobre-svg" style="top: 56px; padding: 42px 36px;">
+            <p class="cuerpo-19pt texto-verde" style="line-height: 1.45;">
+              Ser un referente mundial en la gestión de parques nacionales,<br />
+              donde la <strong>conservación ecológica</strong> convive armónicamente con&nbsp;el<br />
+              desarrollo turístico responsable y la investigación científica.
+            </p>
+          </div>
+        </div>
+
+        <!-- Hongos primer plano derecho Página 3 -->
+        <img
+          src="/elementos/hongos-vision-derecha.webp"
+          alt=""
+          aria-hidden="true"
+          class="recorte-derecho"
+          style="left: 875px; top: 350px; width: 525px; height: 300px; object-position: right bottom;"
+          draggable="false"
+        />
+      </div>
+    </article>
+
+    <!-- =====================================================================
+         PANTALLA 4 (Página 4 del PDF): Valor ecológico
+         ===================================================================== -->
+    <article
+      class="pantalla-vista"
+      data-vista="valor-ecologico"
+      data-bg="/fondos/bg-valor-ecologico.webp"
+    >
+      <!-- SVG preciso del contenedor Valor Ecológico (642.14×350.9): pestaña naranja + cuerpo blanco traslúcido con arco -->
+      <div
+        class="contenedor-svg-card"
+        style="left: 330px; top: 122px; width: 642px; height: 351px;"
+      >
+        <img src="/elementos/svg/contenedor-valor-ecologico.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+        <!-- Título en la pestaña naranja -->
+        <span class="titulo-pestana texto-blanco" style="position: absolute; left: 52px; top: 15px;">Valor ecológico</span>
+        <!-- Contenido -->
+        <div class="contenido-sobre-svg" style="top: 55px; padding: 36px 50px;">
+          <p class="cuerpo-19pt texto-verde">
+            Como epicentro de vida silvestre, este parque resguarda un<br />
+            patrimonio natural invaluable, <strong>su valor se manifiesta en:</strong>
+          </p>
+
+          <!-- Lista de 4 funciones ambientales con viñetas naranjas (19pt) -->
+          <div class="grid-funciones-ambientales">
+            <div class="columna-funciones">
+              <div class="item-funcion">
+                <span class="punto-naranja"></span>
+                <span class="cuerpo-19pt texto-verde">Alta biodiversidad</span>
+              </div>
+              <div class="item-funcion" style="align-items: flex-start;">
+                <span class="punto-naranja" style="margin-top: 8px;"></span>
+                <span class="cuerpo-19pt texto-verde">
+                  Protección de fuentes<br />de agua
+                </span>
+              </div>
+            </div>
+
+            <div class="columna-funciones">
+              <div class="item-funcion">
+                <span class="punto-naranja"></span>
+                <span class="cuerpo-19pt texto-verde">Regulación climática</span>
+              </div>
+              <div class="item-funcion" style="align-items: flex-start;">
+                <span class="punto-naranja" style="margin-top: 8px;"></span>
+                <span class="cuerpo-19pt texto-verde">
+                  Refugio de flora<br />y fauna silvestre
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <p class="subtitulo-20pt-naranja" style="margin-top: 16px;">
+            Este espacio natural es el refugio de:
+          </p>
+        </div>
+      </div>
+
+      <!-- 4 Cajas de estadísticas vectoriales de Dalianyela (SVG 578.46×127.87) alojadas bajo el arco (y=424..552) -->
+      <div style="position: absolute; left: 362px; top: 424px; width: 578px; height: 128px; z-index: 26;">
+        <img
+          src="/elementos/svg/cuadros-valor-ecologico.svg"
+          alt="Especies: 1.800 Plantas, 120 Mamíferos, 500 Aves, 30 Reptiles"
+          style="width: 100%; height: 100%; display: block;"
+          draggable="false"
+        />
+      </div>
+
+      <!-- Colibrí sobre musgo en esquina inferior derecha Página 4 -->
+      <img
+        src="/elementos/colibri-valor-ecologico.webp"
+        alt=""
+        aria-hidden="true"
+        class="recorte-derecho"
+        style="left: 865px; top: 470px; width: 535px; height: 180px; object-position: right bottom;"
+        draggable="false"
+      />
+    </article>
+
+    <!-- =====================================================================
+         PANTALLA 5 (Página 5 del PDF): INPARQUES
+         ===================================================================== -->
+    <article
+      class="pantalla-vista"
+      data-vista="inparques"
+      data-bg="/fondos/bg-inparques.webp"
+    >
+      <!-- SVG preciso del contenedor INPARQUES (642×351.57): pestaña naranja + cuerpo blanco traslúcido con arco -->
+      <div
+        class="contenedor-svg-card"
+        style="left: 330px; top: 122px; width: 642px; height: 352px;"
+      >
+        <img src="/elementos/svg/contenedor-inparques.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+        <!-- Título en la pestaña naranja -->
+        <span class="titulo-pestana texto-blanco" style="position: absolute; left: 52px; top: 15px;">INPARQUES</span>
+        <!-- Contenido -->
+        <div class="contenido-sobre-svg" style="top: 55px; padding: 38px 50px;">
+          <p class="cuerpo-19pt texto-verde">
+            <strong>El Instituto Nacional de Parques</strong> es una institución adscrita al<br />
+            Ministerio del Poder Popular para el Ecosocialismo y Aguas<br />
+            (Minea), creada por ley del 03 de octubre de 1973.
+          </p>
+          <p class="cuerpo-19pt texto-verde" style="margin-top: 10px;">
+            Tiene como misión ser el ente rector de las políticas públicas<br />
+            orientadas a la protección y manejo del sistema de parques de<br />
+            Venezuela, se encuentra <strong class="texto-naranja">integrado por:</strong>
+          </p>
+        </div>
+      </div>
+
+      <!-- Cajas de cifras de INPARQUES vectoriales de Dalianyela (SVG 565×136.92) alojadas bajo el arco (y=404..541) -->
+      <div style="position: absolute; left: 368px; top: 404px; width: 565px; height: 137px; z-index: 26;">
+        <img
+          src="/elementos/svg/cuadros-inparques.svg"
+          alt="Cifras INPARQUES: 44 Parques nacionales, 65 Parques de recreación, 37 Monumentos naturales"
+          style="width: 100%; height: 100%; display: block;"
+          draggable="false"
+        />
+      </div>
+
+      <!-- Tarjeta derecha (SVG 261×296) con logo oficial de INPARQUES: x=988..1250, y=176..473 -->
+      <div
+        class="tarjeta-derecha-foto centrar-logo"
+        style="left: 988px; top: 176px; width: 261px; height: 296px;"
+      >
+        <img src="/elementos/svg/contenedor-logo-inparques.svg" alt="" aria-hidden="true" class="svg-fondo-card" draggable="false" />
+        <img
+          src="/elementos/svg/logo-inparques.svg"
+          alt="Logotipo de INPARQUES"
+          class="img-logo-inparques"
+          style="position: relative; z-index: 2;"
+        />
+      </div>
+
+      <!-- Ramas y musgo en esquina inferior derecha Página 5 -->
+      <img
+        src="/elementos/musgo-inferior-inparques.webp"
+        alt=""
+        aria-hidden="true"
+        class="recorte-derecho"
+        style="left: 925px; top: 315px; width: 475px; height: 335px; object-position: right bottom;"
+        draggable="false"
+      />
+    </article>
+  </EstructuraCuadrados>
+</section>
+
+<script>
+  function inicializarQuienesSomos() {
+    const contenedor = document.querySelector(".modulo-quienes-somos");
+    if (!contenedor) return;
+
+    const imgFondo = contenedor.querySelector("#img-fondo-activo") as HTMLImageElement | null;
+    const botonesVista = contenedor.querySelectorAll("[data-vista-target]");
+    const pantallas = contenedor.querySelectorAll(".pantalla-vista");
+
+    botonesVista.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const target = btn.getAttribute("data-vista-target");
+        if (!target) return;
+
+        botonesVista.forEach((b) => b.classList.remove("activo"));
+        btn.classList.add("activo");
+
+        pantallas.forEach((p) => {
+          const esTarget = p.getAttribute("data-vista") === target;
+          p.classList.toggle("activa", esTarget);
+          if (esTarget && imgFondo) {
+            const nuevoBg = p.getAttribute("data-bg");
+            if (nuevoBg && imgFondo.getAttribute("src") !== nuevoBg) {
+              imgFondo.src = nuevoBg;
+            }
+          }
+        });
+      });
+    });
+
+    // Pestañas internas Misión / Visión
+    const botonesSubtab = contenedor.querySelectorAll("[data-subtab-target]");
+    const subvistas = contenedor.querySelectorAll(".subvista-tab");
+
+    botonesSubtab.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const subtarget = btn.getAttribute("data-subtab-target");
+        botonesSubtab.forEach((b) => b.classList.remove("activa"));
+        btn.classList.add("activa");
+
+        subvistas.forEach((sv) => {
+          sv.classList.toggle("activa", sv.getAttribute("data-subtab") === subtarget);
+        });
+      });
+    });
+
+    // Soporte para abrir directamente una subsección mediante URL (?vista=valor-ecologico o #inparques)
+    const urlParams = new URLSearchParams(window.location.search);
+    const vistaParam = urlParams.get('vista') || window.location.hash.replace('#', '');
+    if (vistaParam) {
+      const btnVista = contenedor.querySelector(`[data-vista-target="${vistaParam}"]`);
+      if (btnVista) (btnVista as HTMLElement).click();
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", inicializarQuienesSomos);
+  inicializarQuienesSomos();
+</script>
+
+<style>
+  .modulo-quienes-somos {
+    width: 1400px;
+    height: 650px;
+    position: relative;
+  }
+
+  .pantalla-vista {
+    display: none;
+    position: absolute;
+    inset: 0;
+  }
+
+  .pantalla-vista.activa {
+    display: block;
+    animation: fadeSuave 0.25s ease;
+  }
+
+  .subvista-tab {
+    display: none;
+  }
+
+  .subvista-tab.activa {
+    display: block;
+    animation: fadeSuave 0.22s ease;
+  }
+
+  @keyframes fadeSuave {
+    from {
+      opacity: 0.4;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* ============================================================
+     CONTENEDORES SVG: Formas vectoriales precisas del diseño
+     ============================================================ */
+  .contenedor-svg-card {
+    position: absolute;
+    z-index: 25;
+  }
+
+  .svg-fondo-card {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .contenido-sobre-svg {
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ============================================================
+     PESTAÑAS Y TÍTULOS
+     ============================================================ */
+  .titulo-pestana {
+    font-family: var(--fuente-principal);
+    font-size: var(--pt-pestana-titulo); /* 20pt exactos */
+    font-weight: 700;
+    line-height: 24px;
+  }
+
+  /* Pestañas dobles (Misión / Visión: 213px cada una según SVG) */
+  .grupo-pestanas {
+    position: absolute;
+    display: flex;
+    height: 55px;
+    z-index: 26;
+  }
+
+  .btn-pestana-doble {
+    width: 213px;
+    height: 55px;
+    border: none;
+    background: transparent;
+    color: #ffffff;
+    opacity: 0.88;
+    font-family: var(--fuente-principal);
+    font-size: var(--pt-pestana-titulo); /* 20pt */
+    font-weight: 700;
+    padding-bottom: 12px;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .btn-pestana-doble:hover {
+    opacity: 1;
+  }
+
+  .btn-pestana-doble.activa {
+    background: transparent;
+    color: #ffffff;
+    opacity: 1;
+  }
+
+  /* ============================================================
+     PUNTAJES TIPOGRÁFICOS
+     ============================================================ */
+  .subtitulo-22pt {
+    font-family: var(--fuente-principal);
+    font-size: var(--pt-subtitulo-card); /* 22pt */
+    font-weight: 700;
+    line-height: 26.4px;
+    color: var(--color-blanco);
+  }
+
+  .subtitulo-20pt-naranja {
+    font-family: var(--fuente-principal);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    color: var(--color-quienes-somos);
+  }
+
+  .cuerpo-19pt {
+    font-family: var(--fuente-principal);
+    font-size: var(--pt-cuerpo-card); /* 19pt */
+    font-weight: 400;
+    line-height: 23.2px;
+  }
+
+  .insignia-texto-17pt {
+    font-family: var(--fuente-principal);
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 21px;
+  }
+
+  .pie-foto-13pt {
+    font-family: var(--fuente-principal);
+    font-size: var(--pt-pie-foto); /* 13pt */
+    font-weight: 400;
+    line-height: 19px;
+    color: var(--color-texto-verde);
+    margin-top: 10px;
+    padding-left: 14px;
+  }
+
+  .texto-blanco {
+    color: var(--color-blanco);
+  }
+
+  .texto-naranja {
+    color: var(--color-quienes-somos);
+  }
+
+  .texto-verde {
+    color: var(--color-texto-verde);
+  }
+
+  /* Insignias de Página 1 */
+  .fila-insignias-intro {
+    display: flex;
+    align-items: center;
+    gap: 38px;
+    margin-top: 12px;
+  }
+
+  .insignia-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .icono-57 {
+    width: 57px;
+    height: 57px;
+    border-radius: 13px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  /* Tarjeta fotográfica derecha (x=983..1244, y=176..473) */
+  .tarjeta-derecha-foto {
+    position: absolute;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 12px 12px;
+    z-index: 25;
+  }
+
+  .marco-foto-derecha {
+    width: 237px;
+    height: 214px;
+    border-radius: 22px;
+    overflow: hidden;
+  }
+
+  .marco-foto-derecha img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .centrar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .img-logo-inparques {
+    width: 183px;
+    height: 220px;
+    object-fit: contain;
+  }
+
+  /* Valor ecológico (Página 4) */
+  .grid-funciones-ambientales {
+    display: flex;
+    gap: 54px;
+    margin-top: 12px;
+    padding-left: 6px;
+  }
+
+  .columna-funciones {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .item-funcion {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .punto-naranja {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-quienes-somos);
+    flex-shrink: 0;
+  }
+
+  .fila-tarjetas-biodiversidad {
+    position: absolute;
+    display: flex;
+    gap: 12px;
+    z-index: 26;
+  }
+
+  .caja-bio {
+    width: 136px;
+    height: 130px;
+    background: rgba(244, 240, 232, 0.88);
+    backdrop-filter: blur(4px);
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 14px 12px 14px 14px;
+    text-align: left;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  }
+
+  .cabecera-bio {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .cifra-24pt {
+    font-size: var(--pt-cifra-ecologica); /* 24pt */
+    font-weight: 800;
+    line-height: 26px;
+    color: var(--color-quienes-somos);
+  }
+
+  .etiqueta-17pt {
+    font-size: var(--pt-etiqueta-ecologica); /* 17pt */
+    font-weight: 700;
+    line-height: 19.5px;
+    color: var(--color-quienes-somos);
+  }
+
+  .icono-bio {
+    width: 50px;
+    height: 48px;
+    object-fit: contain;
+  }
+
+  /* INPARQUES (Página 5) */
+  .fila-cifras-inparques {
+    position: absolute;
+    display: flex;
+    gap: 34px;
+    z-index: 26;
+  }
+
+  .caja-inparques {
+    width: 165px;
+    height: 138px;
+    background: rgba(244, 240, 232, 0.88);
+    backdrop-filter: blur(4px);
+    border-radius: 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 12px 22px;
+  }
+
+  .cifra-50pt {
+    font-size: var(--pt-cifra-inparques); /* 50pt */
+    font-weight: 800;
+    line-height: 54px;
+    color: var(--color-quienes-somos);
+    align-self: center;
+  }
+
+  .etiqueta-inparques-19pt {
+    font-size: var(--pt-cuerpo-card); /* 19pt */
+    font-weight: 700;
+    line-height: 22px;
+    color: var(--color-quienes-somos);
+    margin-top: 4px;
+  }
+
+  /* Recortes naturales de primer plano derecho */
+  .recorte-derecho {
+    position: absolute;
+    object-fit: contain;
+    pointer-events: none;
+    user-select: none;
+    z-index: 35;
+  }
+</style>

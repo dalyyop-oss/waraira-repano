@@ -1,0 +1,158 @@
+---
+export interface Props {
+  title?: string;
+  modoModulo?: boolean;
+}
+
+const {
+  title = "Parque Nacional Waraira Repano | Dalianyela Torres - Instituto de Diseño Darias",
+  modoModulo = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta
+      name="description"
+      content="Sitio web interactivo del Parque Nacional Waraira Repano. Diseño gráfico y desarrollo por Dalianyela Torres, Instituto de Diseño Darias."
+    />
+    <meta name="author" content="Dalianyela Torres - Instituto de Diseño Darias" />
+    <!-- Tipografía oficial del diseño: Nunito (ExtraLight 200, Regular 400, MediumItalic 500i, SemiBold 600, Bold 700, ExtraBold 800) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class={modoModulo ? "modo-modulo" : "modo-pagina"}>
+    <main class="contenedor-adaptable" id="waraira-viewport">
+      <div class="escenario-1400x650" id="waraira-stage">
+        <slot />
+      </div>
+    </main>
+
+    <script>
+      function ajustarEscalaLienzo() {
+        const stage = document.getElementById("waraira-stage");
+        const viewport = document.getElementById("waraira-viewport");
+        if (!stage || !viewport) return;
+
+        // Si estamos en la página de Manual de Estilos (scroll vertical libre), no escalar fijo
+        if (stage.querySelector(".pagina-manual-estilos")) {
+          stage.style.transform = "none";
+          stage.style.width = "100%";
+          stage.style.height = "auto";
+          return;
+        }
+
+        const dispAncho = window.innerWidth;
+        const dispAlto = window.innerHeight;
+
+        const escalaX = dispAncho / 1400;
+        const escalaY = dispAlto / 650;
+        const escala = Math.min(escalaX, escalaY);
+
+        stage.style.transform = `scale(${escala})`;
+      }
+
+      window.addEventListener("resize", ajustarEscalaLienzo);
+      window.addEventListener("DOMContentLoaded", ajustarEscalaLienzo);
+      ajustarEscalaLienzo();
+    </script>
+  </body>
+</html>
+
+<style is:global>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+  :root {
+    /* Paleta cromática exacta extraída del PDF de Dalianyela Torres */
+    --color-quienes-somos: #ff8f00;
+    --color-patrimonio: #eac00f;
+    --color-patrimonio-intenso: #e7b118;
+    --color-guia-visitante: #4bae50;
+    --color-emergencias: #25a69a;
+    --color-normativa: #6856a0;
+    --color-texto-verde: #254226;
+    --color-blanco: #ffffff;
+    --color-madera-oscura: #6c5b51;
+    --color-madera-clara: #ad711f;
+    --color-cabezal-izq: #3a3a3c;
+
+    /* Tipografía y puntajes exactos del diseño (en base 1400x650: 1pt = 1px) */
+    --fuente-principal: "Nunito", sans-serif;
+    --pt-cabezal: 20px;
+    --pt-letrero-lateral: 16px;
+    --pt-pestana-titulo: 20px;
+    --pt-subtitulo-card: 22px;
+    --pt-cuerpo-card: 19px;
+    --pt-lista-hidrografia: 15px;
+    --pt-pie-foto: 13px;
+    --pt-cifra-ecologica: 24px;
+    --pt-etiqueta-ecologica: 17px;
+    --pt-cifra-inparques: 50px;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--fuente-principal) !important;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    font-family: var(--fuente-principal);
+    background-color: #141915;
+    color: var(--color-texto-verde);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body.modo-pagina {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  body.modo-pagina:has(.pagina-manual-estilos) {
+    overflow-y: auto;
+    justify-content: flex-start;
+  }
+
+  .contenedor-adaptable {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  body.modo-pagina:has(.pagina-manual-estilos) .contenedor-adaptable {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+  }
+
+  .escenario-1400x650 {
+    width: 1400px;
+    height: 650px;
+    position: relative;
+    transform-origin: center center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
+    background: #ffffff;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+</style>
