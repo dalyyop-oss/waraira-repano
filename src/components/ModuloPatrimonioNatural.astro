@@ -882,7 +882,7 @@ const cumbresGeologia = [
   // Base de datos exacta de las 12 pantallas de Fauna (Páginas 29 a 40 del PDF)
   const CATALOGO_FAUNA: Record<
     string,
-    Array<{ comun: string; cientifico: string; foto: string; recorte: string }>
+    Array<{ comun: string; cientifico: string; foto: string; recorte: string; posicionFoto?: string }>
   > = {
     mamiferos: [
       {
@@ -896,6 +896,7 @@ const cumbresGeologia = [
         cientifico: "Cerdocyon thous",
         foto: "/fotos/fauna/zorro-comun.webp",
         recorte: "/elementos/venado-mamiferos-derecha.webp",
+        posicionFoto: "50% 12%",
       },
       {
         comun: "Perezoso",
@@ -916,6 +917,7 @@ const cumbresGeologia = [
         cientifico: "Ortalis ruficauda",
         foto: "/fotos/fauna/guacharaca.webp",
         recorte: "/elementos/ave-amarilla-derecha.webp",
+        posicionFoto: "50% 0%",
       },
       {
         comun: "Guacamaya azul y amarilla",
@@ -1207,6 +1209,7 @@ const cumbresGeologia = [
       if (imgFauna) {
         imgFauna.src = item.foto;
         imgFauna.alt = item.comun;
+        imgFauna.style.objectPosition = item.posicionFoto || "center";
       }
       if (nomFaunaComun) nomFaunaComun.textContent = item.comun;
       if (nomFaunaCient) nomFaunaCient.textContent = item.cientifico;

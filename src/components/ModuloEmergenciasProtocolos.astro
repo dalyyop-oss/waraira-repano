@@ -512,11 +512,9 @@ const GOLPES_PAGINAS: SubPaginaProtocoloCards[] = [
 ];
 
 interface ItemIncendio {
-  num?: string;
-  x1Offset?: number;
+  num: string;
   linea1: string;
   linea2?: string;
-  x2Offset?: number;
 }
 
 interface PaginaIncendio {
@@ -530,105 +528,92 @@ const INCENDIO_PAGINAS: PaginaIncendio[] = [
     x: 394.47,
     y: 338.81,
     items: [
-      { linea1: "1. Mantener la Calma" },
-      { linea1: "2.\u00A0 Llama a los servicios de emergencia de la zona" },
+      { num: "1.", linea1: "Mantener la Calma" },
+      { num: "2.", linea1: "Llama a los servicios de emergencia de la zona" },
       {
-        linea1: "3. Desciende, no subas\u00A0 busca rutas de descenso por senderos consolidados hacia",
+        num: "3.",
+        linea1: "Desciende, no subas\u00A0 busca rutas de descenso por senderos consolidados hacia",
         linea2: "la base o zonas bajas.",
-        x2Offset: 18,
       },
       {
-        linea1: "4. Llama a un servicio de emergencias. Si no hay señal, muévete lentamente hacia",
+        num: "4.",
+        linea1: "Llama a un servicio de emergencias. Si no hay señal, muévete lentamente hacia",
         linea2: "una zona más alta para intentar capturar señal.",
-        x2Offset: 18,
-      },
-    ],
-  },
-  {
-    x: 392.47,
-    y: 338.81,
-    items: [
-      {
-        linea1: "5.\u00A0 No camines en la misma dirección hacia donde el viento empuja el humo",
-        linea2: "o las llamas.",
-        x2Offset: 18,
-      },
-      {
-        linea1: "6.\u00A0 Nunca te refugies en cañadas, quebradas secas, valles estrechos o zanjas, el",
-        linea2: "fuego y el humo se concentran y ascienden a gran velocidad.",
-        x2Offset: 18,
-      },
-      {
-        linea1: "7. Aléjate de áreas de vegetación densa y seca, busca senderos anchos,",
-        linea2: "afloramientos rocosos, cauces de agua con caudal o áreas ya quemadas",
-        x2Offset: 18,
-      },
-      {
-        linea1: "8. Cubre tu nariz y boca con una prenda o pañuelo preferiblemente húmedo.",
       },
     ],
   },
   {
     x: 394.47,
-    y: 339.24,
+    y: 338.81,
     items: [
       {
-        num: "9.",
-        x1Offset: 24,
-        linea1: "Protege tu piel. Cubre la piel expuesta abrochándote la chaqueta, subiéndote",
-        linea2: "el cuello y bajándote las manga.",
-        x2Offset: 18,
+        num: "5.",
+        linea1: "No camines en la misma dirección hacia donde el viento empuja el humo",
+        linea2: "o las llamas.",
       },
       {
-        num: "10.",
-        x1Offset: 28,
-        linea1: "Utiliza ropa preferiblemente de algodón o lana; evita tejidos sintéticos que",
-        linea2: "puedan derretirse sobre la piel con el calor radiante.",
-        x2Offset: 28,
+        num: "6.",
+        linea1: "Nunca te refugies en cañadas, quebradas secas, valles estrechos o zanjas, el",
+        linea2: "fuego y el humo se concentran y ascienden a gran velocidad.",
       },
       {
-        num: "11.",
-        x1Offset: 28,
-        linea1: "Si el equipaje pesa demasiado y dificulta tu movilidad, descarta lo",
-        linea2: "innecesario, pero conserva siempre el agua, teléfono/radio y linterna.",
-        x2Offset: 18,
+        num: "7.",
+        linea1: "Aléjate de áreas de vegetación densa y seca, busca senderos anchos,",
+        linea2: "afloramientos rocosos, cauces de agua con caudal o áreas ya quemadas",
       },
       {
-        num: "12.",
-        x1Offset: 28,
-        linea1: "Si la evacuación es imposible y el fuego te corta el paso: busca\u00A0 la zona que",
-        linea2: "ya se quemó (donde ya no hay combustible).",
-        x2Offset: 18,
+        num: "8.",
+        linea1: "Cubre tu nariz y boca con una prenda o pañuelo preferiblemente húmedo.",
       },
     ],
   },
   {
-    x: 394.79,
-    y: 339.81,
+    x: 394.47,
+    y: 338.81,
+    items: [
+      {
+        num: "9.",
+        linea1: "Protege tu piel. Cubre la piel expuesta abrochándote la chaqueta, subiéndote",
+        linea2: "el cuello y bajándote las manga.",
+      },
+      {
+        num: "10.",
+        linea1: "Utiliza ropa preferiblemente de algodón o lana; evita tejidos sintéticos que",
+        linea2: "puedan derretirse sobre la piel con el calor radiante.",
+      },
+      {
+        num: "11.",
+        linea1: "Si el equipaje pesa demasiado y dificulta tu movilidad, descarta lo",
+        linea2: "innecesario, pero conserva siempre el agua, teléfono/radio y linterna.",
+      },
+      {
+        num: "12.",
+        linea1: "Si la evacuación es imposible y el fuego te corta el paso: busca\u00A0 la zona que",
+        linea2: "ya se quemó (donde ya no hay combustible).",
+      },
+    ],
+  },
+  {
+    x: 394.47,
+    y: 338.81,
     items: [
       {
         num: "13.",
-        x1Offset: 36,
         linea1: "Adopta la posición de protección. Tírate al suelo boca abajo, sobre tierra",
         linea2: "limpia de vegetación.",
-        x2Offset: 18,
       },
       {
         num: "14.",
-        x1Offset: 36,
         linea1: "Protégete la cabeza y cubre tus vías respiratorias pegando la cara al suelo.",
       },
       {
         num: "15.",
-        x1Offset: 36,
         linea1: "Cubre tu cuerpo totalmente con una manta, chaqueta o mochila.",
       },
       {
         num: "16.",
-        x1Offset: 36,
         linea1: "No corras a ciegas a través del humo denso: La falta de visibilidad pueden",
         linea2: "llevarte a despeñaderos o directamente al centro de las llamas.",
-        x2Offset: 18,
       },
     ],
   },
@@ -1008,21 +993,9 @@ const INCENDIO_PAGINAS: PaginaIncendio[] = [
           <ol class="lista-incendio-inferior" style={`left: ${pag.x}px; top: ${pag.y}px;`}>
             {pag.items.map((item) => (
               <li>
-                <div class="linea1-incendio">
-                  {item.num ? (
-                    <>
-                      <span class="num-incendio-abs">{item.num}</span>
-                      <span style={`padding-left: ${item.x1Offset || 0}px;`}>{item.linea1}</span>
-                    </>
-                  ) : (
-                    <span>{item.linea1}</span>
-                  )}
-                </div>
-                {item.linea2 && (
-                  <div class="linea2-incendio" style={`padding-left: ${item.x2Offset || 0}px;`}>
-                    {item.linea2}
-                  </div>
-                )}
+                <span class="num-incendio-abs">{item.num}</span>
+                <div class="linea1-incendio">{item.linea1}</div>
+                {item.linea2 && <div class="linea2-incendio">{item.linea2}</div>}
               </li>
             ))}
           </ol>
@@ -1107,8 +1080,7 @@ const INCENDIO_PAGINAS: PaginaIncendio[] = [
           data-contacto-target="proteccion-civil"
           style="top: 17.7px;"
         >
-          <span class="label-tab-contacto label-pc-activo">Protección civil:<br />Bomberos - Policía</span>
-          <span class="label-tab-contacto label-pc-inactivo">Bomberos/Policía/<br />Protección civil:</span>
+          <span class="label-tab-contacto">Protección civil:<br />Bomberos - Policía</span>
         </button>
 
         <button
@@ -1567,11 +1539,14 @@ const INCENDIO_PAGINAS: PaginaIncendio[] = [
   }
 
   .lista-incendio-inferior li {
+    position: relative;
     display: block;
+    padding-left: 28px;
   }
 
-  .linea1-incendio {
-    position: relative;
+  .linea1-incendio,
+  .linea2-incendio {
+    display: block;
   }
 
   .num-incendio-abs {
@@ -1674,21 +1649,5 @@ const INCENDIO_PAGINAS: PaginaIncendio[] = [
     line-height: 18px;
     color: #26a69a;
     transition: opacity 0.16s ease;
-  }
-
-  .tab-contacto[data-contacto-target="proteccion-civil"] .label-pc-inactivo {
-    display: inline;
-  }
-
-  .tab-contacto[data-contacto-target="proteccion-civil"] .label-pc-activo {
-    display: none;
-  }
-
-  .tab-contacto[data-contacto-target="proteccion-civil"].activa .label-pc-activo {
-    display: inline;
-  }
-
-  .tab-contacto[data-contacto-target="proteccion-civil"].activa .label-pc-inactivo {
-    display: none;
   }
 </style>
