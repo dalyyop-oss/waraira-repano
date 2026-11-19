@@ -795,7 +795,7 @@ const cumbresGeologia = [
   // Base de datos exacta de las 12 pantallas de Flora (Páginas 16 a 27 del PDF)
   const CATALOGO_FLORA: Record<
     string,
-    Array<{ comun: string; cientifico: string; foto: string; recorte: string }>
+    Array<{ comun: string; cientifico: string; foto: string; recorte: string; posicionFoto?: string }>
   > = {
     emblematicas: [
       {
@@ -835,6 +835,7 @@ const cumbresGeologia = [
         cientifico: "Epidendrum secundum",
         foto: "/fotos/flora/varita-de-san-jose.webp",
         recorte: "/elementos/flor-orquidea-derecha.webp",
+        posicionFoto: "50% 23%",
       },
     ],
     helechos: [
@@ -896,7 +897,7 @@ const cumbresGeologia = [
         cientifico: "Cerdocyon thous",
         foto: "/fotos/fauna/zorro-comun.webp",
         recorte: "/elementos/venado-mamiferos-derecha.webp",
-        posicionFoto: "50% 12%",
+        posicionFoto: "50% 10%",
       },
       {
         comun: "Perezoso",
@@ -971,6 +972,70 @@ const cumbresGeologia = [
   function inicializarPatrimonioNatural() {
     const contenedor = document.querySelector(".modulo-patrimonio-natural");
     if (!contenedor) return;
+    if ((contenedor as HTMLElement).dataset.inicializado === "1") return;
+    (contenedor as HTMLElement).dataset.inicializado = "1";
+
+    const cacheFotos = new Map<string, HTMLImageElement>();
+    const precargarFoto = (url: string): HTMLImageElement => {
+      let cached = cacheFotos.get(url);
+      if (!cached) {
+        cached = new Image();
+        cached.src = url;
+        cacheFotos.set(url, cached);
+      }
+      return cached;
+    };
+
+    Object.values(CATALOGO_FLORA).forEach((lista) =>
+      lista.forEach((item) => precargarFoto(item.foto))
+    );
+    Object.values(CATALOGO_FAUNA).forEach((lista) =>
+      lista.forEach((item) => precargarFoto(item.foto))
+    );
+
+    let reqFlora = 0;
+    let reqFauna = 0;
+
+    const actualizarFotoEspecie = (
+      imgEl: HTMLImageElement | null,
+      foto: string,
+      alt: string,
+      posicion: string,
+      token: number,
+      getToken: () => number
+    ) => {
+      if (!imgEl) return;
+      const cached = precargarFoto(foto);
+      if (cached.complete && cached.naturalWidth > 0) {
+        imgEl.style.objectPosition = posicion;
+        imgEl.src = foto;
+        imgEl.alt = alt;
+        imgEl.style.visibility = "visible";
+        return;
+      }
+
+      imgEl.style.visibility = "hidden";
+      const onLoad = () => {
+        cached.removeEventListener("load", onLoad);
+        cached.removeEventListener("error", onError);
+        if (token !== getToken()) return;
+        imgEl.style.objectPosition = posicion;
+        imgEl.src = foto;
+        imgEl.alt = alt;
+        imgEl.style.visibility = "visible";
+      };
+      const onError = () => {
+        cached.removeEventListener("load", onLoad);
+        cached.removeEventListener("error", onError);
+        if (token !== getToken()) return;
+        imgEl.style.objectPosition = posicion;
+        imgEl.src = foto;
+        imgEl.alt = alt;
+        imgEl.style.visibility = "visible";
+      };
+      cached.addEventListener("load", onLoad);
+      cached.addEventListener("error", onError);
+    };
 
     const imgFondo = contenedor.querySelector("#img-fondo-activo") as HTMLImageElement | null;
     const cambiarFondo = (src: string) => {
@@ -1125,10 +1190,14 @@ const cumbresGeologia = [
       const lista = CATALOGO_FLORA[catFloraActual];
       if (!lista) return;
       const item = lista[idxFloraActual] || lista[0];
-      if (imgFlora) {
-        imgFlora.src = item.foto;
-        imgFlora.alt = item.comun;
-      }
+      actualizarFotoEspecie(
+        imgFlora,
+        item.foto,
+        item.comun,
+        item.posicionFoto || "center",
+        ++reqFlora,
+        () => reqFlora
+      );
       if (nomFloraComun) nomFloraComun.textContent = item.comun;
       if (nomFloraCient) nomFloraCient.textContent = item.cientifico;
       if (recorteFlora) recorteFlora.src = item.recorte;
@@ -1206,11 +1275,14 @@ const cumbresGeologia = [
       const lista = CATALOGO_FAUNA[catFaunaActual];
       if (!lista) return;
       const item = lista[idxFaunaActual] || lista[0];
-      if (imgFauna) {
-        imgFauna.src = item.foto;
-        imgFauna.alt = item.comun;
-        imgFauna.style.objectPosition = item.posicionFoto || "center";
-      }
+      actualizarFotoEspecie(
+        imgFauna,
+        item.foto,
+        item.comun,
+        item.posicionFoto || "center",
+        ++reqFauna,
+        () => reqFauna
+      );
       if (nomFaunaComun) nomFaunaComun.textContent = item.comun;
       if (nomFaunaCient) nomFaunaCient.textContent = item.cientifico;
       if (recorteFauna) recorteFauna.src = item.recorte;
@@ -1649,9 +1721,9 @@ const cumbresGeologia = [
   /* Tarjeta fotográfica derecha */
   .tarjeta-especie-ff {
     position: absolute;
-    left: 290px;
+    left: 292px;
     top: 0;
-    width: 350px;
+    width: 348px;
     height: 220px;
     z-index: 3;
     pointer-events: none;
@@ -1659,11 +1731,11 @@ const cumbresGeologia = [
 
   .marco-foto-especie {
     position: absolute;
-    left: 16px;
-    top: 14px;
-    width: 312px;
-    height: 150px;
-    border-radius: 18px;
+    left: 17px;
+    top: 12px;
+    width: 314px;
+    height: 168px;
+    border-radius: 20px;
     overflow: hidden;
     pointer-events: auto;
   }
@@ -1678,8 +1750,8 @@ const cumbresGeologia = [
     /* Nombre común y científico alineado al final de la esquina redondeada izquierda debajo de la foto */
   .pie-especie-nombre {
     position: absolute;
-    left: 34px;
-    top: 174px;
+    left: 37px;
+    top: 190px;
     width: 294px;
     text-align: left;
     pointer-events: auto;

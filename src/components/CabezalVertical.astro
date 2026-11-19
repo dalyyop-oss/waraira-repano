@@ -176,7 +176,24 @@ const { tema = "naranja", items = [], itemActivo = "intro" } = Astro.props;
   }
 
   .tabla-madera-btn.con-texto .img-reposo {
-    filter: brightness(0.68) contrast(1.08) saturate(1.12);
+    filter: brightness(0.60) contrast(1.24) saturate(1.18);
+  }
+
+  .tabla-madera-btn.con-texto:not(.activo):hover .img-reposo {
+    filter: brightness(0.76) contrast(1.14) saturate(1.12);
+  }
+
+  .tabla-madera-btn.con-texto:not(.activo) .texto-tabla {
+    color: #c8c7bf;
+    transition: color 0.18s ease;
+  }
+
+  .tabla-madera-btn.con-texto:not(.activo):hover .texto-tabla {
+    color: #eae9e4;
+  }
+
+  .tabla-madera-btn.con-texto.activo .texto-tabla {
+    color: #ffffff;
   }
 
   .tabla-madera-btn.activo .img-reposo {
