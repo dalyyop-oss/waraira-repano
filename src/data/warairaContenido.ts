@@ -1,7 +1,8 @@
 /**
  * Fuente única de datos estructurados de los 5 módulos del Parque Nacional Waraira Repano
  * utilizada por la vista responsiva móvil vertical (VistaMovilWaraira.astro) para mantener
- * fidelidad exacta de textos, rutas, especies, números de emergencia y normativas.
+ * fidelidad exacta al diseño original (mismos textos, letreros de madera, íconos, SVGs, fotos
+ * y reglas ortotipográficas de cero viudas y cero vocales/«y» al borde de banderillas).
  */
 
 export type SeccionId =
@@ -11,9 +12,59 @@ export type SeccionId =
   | "emergencias"
   | "normativa";
 
-export interface SubvistaConfig {
+/**
+ * Aplica reglas editoriales españolas sobre un bloque de texto:
+ * 1) Une vocales sueltas (a, e, i, o, u) e «y» latina con espacio duro (\u00A0) a la palabra siguiente
+ *    para que jamás queden sueltas en el borde derecho de las banderillas.
+ * 2) Une las últimas palabras del párrafo con espacio duro para evitar palabras viudas al final.
+ */
+export function tipografiaEditorial(texto: string): string {
+  const limpio = String(texto).replace(/[ \t]+/g, " ").trim();
+  if (!limpio) return "";
+
+  // Paso 1: pegar toda vocal suelta o 'y' latina a la palabra siguiente (bucle para casos como "o a pie")
+  let res = limpio;
+  let anterior = "";
+  while (anterior !== res) {
+    anterior = res;
+    res = res.replace(
+      /(^|[\s\u00A0(«¿¡—–-])([aeiouyáéíóúAEIOUYÁÉÍÓÚ]) +/g,
+      "$1$2\u00A0"
+    );
+  }
+
+  // Paso 2: evitar palabra viuda al cierre del párrafo o enunciado
+  const tokens = res.split(" ");
+  if (tokens.length >= 2) {
+    const ultima = tokens[tokens.length - 1];
+    const penultima = tokens[tokens.length - 2];
+
+    if (penultima.length + 1 + ultima.length <= 26) {
+      let cierre = `${penultima}\u00A0${ultima}`;
+      const sinPuntuacion = penultima.replace(/[.,;:!?«»()"\u00A0]/g, "");
+
+      if (tokens.length >= 3 && sinPuntuacion.length <= 3) {
+        const antepenultima = tokens[tokens.length - 3];
+        if (antepenultima.length + 1 + cierre.length <= 28) {
+          cierre = `${antepenultima}\u00A0${cierre}`;
+          return [...tokens.slice(0, -3), cierre].join(" ");
+        }
+      }
+      return [...tokens.slice(0, -2), cierre].join(" ");
+    }
+  }
+
+  return res;
+}
+
+export interface MaderaSubvistaConfig {
   id: string;
   etiqueta: string;
+  inactivo: string;
+  activo: string;
+  mostrarTexto?: boolean;
+  dosLineas?: boolean;
+  lineasTexto?: [string, string];
   fondo?: string;
 }
 
@@ -26,8 +77,13 @@ export interface SeccionConfig {
   lomitaSvg: string;
   esquinaImg: string;
   fondoIntro: string;
-  subvistas: SubvistaConfig[];
+  dotActivo: string;
+  dotInactivo: string;
+  recorteIntroDerecho: string;
+  subvistas: MaderaSubvistaConfig[];
 }
+
+const B = "/elementos/botones/";
 
 export const SECCIONES_WARAIRA: SeccionConfig[] = [
   {
@@ -39,11 +95,31 @@ export const SECCIONES_WARAIRA: SeccionConfig[] = [
     lomitaSvg: "/elementos/svg/lomita-quienes-somos.svg",
     esquinaImg: "/elementos/rocas-esquina-izquierda.webp",
     fondoIntro: "/fondos/bg-quienes-somos-intro.webp",
+    dotActivo: "/elementos/svg/dot-activo.svg",
+    dotInactivo: "/elementos/svg/dot-inactivo.svg",
+    recorteIntroDerecho: "/elementos/tronco-musgo-derecha.webp",
     subvistas: [
-      { id: "intro", etiqueta: "Portada", fondo: "/fondos/bg-quienes-somos-intro.webp" },
-      { id: "mision-vision", etiqueta: "Misión y Visión", fondo: "/fondos/bg-mision-vision.webp" },
-      { id: "valor-ecologico", etiqueta: "Valor ecológico", fondo: "/fondos/bg-valor-ecologico.webp" },
-      { id: "inparques", etiqueta: "INPARQUES", fondo: "/fondos/bg-inparques.webp" },
+      {
+        id: "mision-vision",
+        etiqueta: "Misión y Visión",
+        inactivo: B + "mision-vision-inactivo.webp",
+        activo: B + "mision-vision-activo.webp",
+        fondo: "/fondos/bg-mision-vision.webp",
+      },
+      {
+        id: "valor-ecologico",
+        etiqueta: "Valor ecológico",
+        inactivo: B + "valor-ecologico-inactivo.webp",
+        activo: B + "valor-ecologico-activo.webp",
+        fondo: "/fondos/bg-valor-ecologico.webp",
+      },
+      {
+        id: "inparques",
+        etiqueta: "INPARQUES",
+        inactivo: B + "inparques-inactivo.webp",
+        activo: B + "inparques-activo.webp",
+        fondo: "/fondos/bg-inparques.webp",
+      },
     ],
   },
   {
@@ -51,16 +127,42 @@ export const SECCIONES_WARAIRA: SeccionConfig[] = [
     etiquetaLineas: ["Patrimonio", "natural"],
     titulo: "Patrimonio natural",
     color: "#eac00f",
-    colorOscuro: "#c29905",
+    colorOscuro: "#b98d00",
     lomitaSvg: "/elementos/svg/lomita-patrimonio-natural.svg",
     esquinaImg: "/elementos/hojas-esquina-izquierda.webp",
     fondoIntro: "/fondos/bg-patrimonio-intro.webp",
+    dotActivo: "/elementos/svg/dot-activo.svg",
+    dotInactivo: "/elementos/svg/dot-inactivo.svg",
+    recorteIntroDerecho: "/elementos/rama-patrimonio-derecha.webp",
     subvistas: [
-      { id: "intro", etiqueta: "Portada", fondo: "/fondos/bg-patrimonio-intro.webp" },
-      { id: "clima", etiqueta: "Clima", fondo: "/fondos/bg-clima.webp" },
-      { id: "geologia", etiqueta: "Geología", fondo: "/fondos/bg-geologia.webp" },
-      { id: "hidrografia", etiqueta: "Hidrografía", fondo: "/fondos/bg-hidrografia.webp" },
-      { id: "flora-fauna", etiqueta: "Flora y Fauna", fondo: "/fondos/bg-flora-fauna.webp" },
+      {
+        id: "clima",
+        etiqueta: "Clima",
+        inactivo: B + "clima-inactivo.webp",
+        activo: B + "clima-activo.webp",
+        fondo: "/fondos/bg-clima.webp",
+      },
+      {
+        id: "geologia",
+        etiqueta: "Geología",
+        inactivo: B + "geologia-inactivo.webp",
+        activo: B + "geologia-activo.webp",
+        fondo: "/fondos/bg-geologia.webp",
+      },
+      {
+        id: "hidrografia",
+        etiqueta: "Hidrografía",
+        inactivo: B + "hidrografia-inactivo.webp",
+        activo: B + "hidrografia-activo.webp",
+        fondo: "/fondos/bg-hidrografia.webp",
+      },
+      {
+        id: "flora-fauna",
+        etiqueta: "Flora y Fauna",
+        inactivo: B + "flora-fauna-inactivo.webp",
+        activo: B + "flora-fauna-activo.webp",
+        fondo: "/fondos/bg-flora-fauna.webp",
+      },
     ],
   },
   {
@@ -72,29 +174,84 @@ export const SECCIONES_WARAIRA: SeccionConfig[] = [
     lomitaSvg: "/elementos/svg/lomita-guia-visitante.svg",
     esquinaImg: "/elementos/flores-esquina-guia.webp",
     fondoIntro: "/fondos/bg-guia-visitante.webp",
+    dotActivo: "/elementos/svg/dot-guia-activo.svg",
+    dotInactivo: "/elementos/svg/dot-guia-inactivo.svg",
+    recorteIntroDerecho: "/elementos/rama-guia-derecha.webp",
     subvistas: [
-      { id: "intro", etiqueta: "Portada", fondo: "/fondos/bg-guia-visitante.webp" },
-      { id: "rutas-parque", etiqueta: "Rutas del parque", fondo: "/fondos/bg-guia-visitante.webp" },
+      {
+        id: "rutas-parque",
+        etiqueta: "Rutas del parque",
+        inactivo: B + "madera-inactiva-rutas-parque.svg",
+        activo: B + "madera-activa-rutas-parque.svg",
+        mostrarTexto: true,
+        fondo: "/fondos/bg-guia-visitante.webp",
+      },
     ],
   },
   {
     id: "emergencias",
-    etiquetaLineas: ["Emergencias y", "protocolos"],
+    etiquetaLineas: ["Emergencias\u00A0y", "protocolos"],
     titulo: "Emergencias y protocolos",
     color: "#25a69a",
     colorOscuro: "#167a70",
     lomitaSvg: "/elementos/svg/lomita-emergencias.svg",
     esquinaImg: "/elementos/hojas-izquierda-emergencias.webp",
     fondoIntro: "/fondos/bg-emergencias.webp",
+    dotActivo: "/elementos/svg/dot-emergencias-activo.svg",
+    dotInactivo: "/elementos/svg/dot-emergencias-inactivo.svg",
+    recorteIntroDerecho: "/elementos/hojas-decorativas-derecha-emergencias.webp",
     subvistas: [
-      { id: "intro", etiqueta: "Portada", fondo: "/fondos/bg-emergencias.webp" },
-      { id: "prepara-ascenso", etiqueta: "Prepara tu ascenso" },
-      { id: "protocolo-extravio", etiqueta: "Protocolo ante extravío" },
-      { id: "urgencias-medicas", etiqueta: "Urgencias médicas" },
-      { id: "golpes-heridas", etiqueta: "Golpes y heridas" },
-      { id: "niebla-densa", etiqueta: "Niebla densa" },
-      { id: "incendio-forestal", etiqueta: "Incendio forestal" },
-      { id: "contactos-emergencia", etiqueta: "Contactos de emergencia" },
+      {
+        id: "prepara-ascenso",
+        etiqueta: "Prepara tu ascenso",
+        inactivo: B + "madera-inactiva-prepara-ascenso.svg",
+        activo: B + "madera-activa-prepara-ascenso.svg",
+        mostrarTexto: true,
+      },
+      {
+        id: "protocolo-extravio",
+        etiqueta: "Protocolo ante Extravío",
+        inactivo: B + "madera-inactiva-protocolo-extravio.svg",
+        activo: B + "madera-activa-protocolo-extravio.svg",
+        mostrarTexto: true,
+      },
+      {
+        id: "urgencias-medicas",
+        etiqueta: "Urgencias médicas",
+        inactivo: B + "madera-inactiva-urgencias-medicas.svg",
+        activo: B + "madera-activa-urgencias-medicas.svg",
+        mostrarTexto: true,
+      },
+      {
+        id: "golpes-heridas",
+        etiqueta: "Golpes y heridas",
+        inactivo: B + "madera-inactiva-golpes-heridas.svg",
+        activo: B + "madera-activa-golpes-heridas.svg",
+        mostrarTexto: true,
+      },
+      {
+        id: "niebla-densa",
+        etiqueta: "Niebla densa",
+        inactivo: B + "madera-inactiva-niebla-densa.svg",
+        activo: B + "madera-activa-niebla-densa.svg",
+        mostrarTexto: true,
+      },
+      {
+        id: "incendio-forestal",
+        etiqueta: "Incendio forestal",
+        inactivo: B + "madera-inactiva-incendio-forestal.svg",
+        activo: B + "madera-activa-incendio-forestal.svg",
+        mostrarTexto: true,
+      },
+      {
+        id: "contactos-emergencia",
+        etiqueta: "Contactos de emergencia",
+        inactivo: B + "madera-inactiva-contactos-emergencia.svg",
+        activo: B + "madera-activa-contactos-emergencia.svg",
+        mostrarTexto: true,
+        dosLineas: true,
+        lineasTexto: ["Contactos de", "emergencia"],
+      },
     ],
   },
   {
@@ -106,12 +263,38 @@ export const SECCIONES_WARAIRA: SeccionConfig[] = [
     lomitaSvg: "/elementos/svg/lomita-normativa.svg",
     esquinaImg: "/elementos/hojas-izquierda-normativa.webp",
     fondoIntro: "/fondos/bg-normativa.webp",
+    dotActivo: "/elementos/svg/dot-normativa-activo.svg",
+    dotInactivo: "/elementos/svg/dot-normativa-inactivo.svg",
+    recorteIntroDerecho: "/elementos/helecho-normativas-intro.webp",
     subvistas: [
-      { id: "intro", etiqueta: "Portada", fondo: "/fondos/bg-normativa.webp" },
-      { id: "seguridad-ambiental", etiqueta: "Seguridad ambiental" },
-      { id: "acceso-horarios", etiqueta: "Acceso y horarios" },
-      { id: "seguridad-visitante", etiqueta: "Seguridad del visitante" },
-      { id: "manejo-desechos", etiqueta: "Manejo de desechos" },
+      {
+        id: "seguridad-ambiental",
+        etiqueta: "Seguridad ambiental",
+        inactivo: B + "madera-inactiva-seguridad-ambiental.svg",
+        activo: B + "madera-activa-seguridad-ambiental.svg",
+        mostrarTexto: true,
+      },
+      {
+        id: "acceso-horarios",
+        etiqueta: "Acceso y horarios",
+        inactivo: B + "madera-inactiva-acceso-horarios.svg",
+        activo: B + "madera-activa-acceso-horarios.svg",
+        mostrarTexto: true,
+      },
+      {
+        id: "seguridad-visitante",
+        etiqueta: "Seguridad del visitante",
+        inactivo: B + "madera-inactiva-seguridad-visitante.svg",
+        activo: B + "madera-activa-seguridad-visitante.svg",
+        mostrarTexto: true,
+      },
+      {
+        id: "manejo-desechos",
+        etiqueta: "Manejo de desechos",
+        inactivo: B + "madera-inactiva-manejo-desechos.svg",
+        activo: B + "madera-activa-manejo-desechos.svg",
+        mostrarTexto: true,
+      },
     ],
   },
 ];
@@ -176,7 +359,7 @@ export const CUMBRES_GEOLOGIA: CumbreGeologia[] = [
     id: "silla-de-caracas",
     nombre: "Silla de Caracas",
     foto: "/fotos/geologia/silla-de-caracas.webp",
-    desc: "Está compuesta por el Pico Occidental y el Pico Oriental",
+    desc: "Está compuesta por el Pico Occidental y el Pico Oriental.",
     altura: "",
   },
 ];
@@ -185,6 +368,7 @@ export interface EspecieItem {
   comun: string;
   cientifico: string;
   foto: string;
+  recorte: string;
   posicionFoto?: string;
 }
 
@@ -199,21 +383,22 @@ export const CATALOGO_FLORA_MOVIL: CategoriaEspecies[] = [
     id: "emblematicas",
     nombre: "Plantas emblemáticas",
     especies: [
-      { comun: "Árbol niño", cientifico: "Gyranthera caribensis", foto: "/fotos/flora/arbol-nino.webp" },
-      { comun: "Arrayán", cientifico: "Myrcianthes karsteniana", foto: "/fotos/flora/arrayan.webp" },
-      { comun: "Frailejón arbolito", cientifico: "Espeletia neriifolia", foto: "/fotos/flora/frailejon-arbolito.webp" },
+      { comun: "Árbol niño", cientifico: "Gyranthera caribensis", foto: "/fotos/flora/arbol-nino.webp", recorte: "/elementos/flor-emblematica-3.webp" },
+      { comun: "Arrayán", cientifico: "Myrcianthes karsteniana", foto: "/fotos/flora/arrayan.webp", recorte: "/elementos/flor-emblematica-3.webp" },
+      { comun: "Frailejón arbolito", cientifico: "Espeletia neriifolia", foto: "/fotos/flora/frailejon-arbolito.webp", recorte: "/elementos/flor-emblematica-3.webp" },
     ],
   },
   {
     id: "orquideas",
     nombre: "Orquídeas",
     especies: [
-      { comun: "Orquídea Cattleya", cientifico: "Cattleya mossiae", foto: "/fotos/flora/orquidea-cattleya.webp" },
-      { comun: "Coronas de Cristo", cientifico: "Epidendrum leucochilum", foto: "/fotos/flora/coronas-de-cristo.webp" },
+      { comun: "Orquídea Cattleya", cientifico: "Cattleya mossiae", foto: "/fotos/flora/orquidea-cattleya.webp", recorte: "/elementos/flor-orquidea-derecha.webp" },
+      { comun: "Coronas de Cristo", cientifico: "Epidendrum leucochilum", foto: "/fotos/flora/coronas-de-cristo.webp", recorte: "/elementos/flor-orquidea-derecha.webp" },
       {
         comun: "Varita de San José",
         cientifico: "Epidendrum secundum",
         foto: "/fotos/flora/varita-de-san-jose.webp",
+        recorte: "/elementos/flor-orquidea-derecha.webp",
         posicionFoto: "50% 23%",
       },
     ],
@@ -222,18 +407,18 @@ export const CATALOGO_FLORA_MOVIL: CategoriaEspecies[] = [
     id: "helechos",
     nombre: "Helechos",
     especies: [
-      { comun: "Helecho Pincel", cientifico: "Blechnum occidentale", foto: "/fotos/flora/helecho-pincel.webp" },
-      { comun: "Palma boba", cientifico: "Cyathea caracasana", foto: "/fotos/flora/palma-boba.webp" },
-      { comun: "Helecho Corocillo", cientifico: "Pteridium aquilinum", foto: "/fotos/flora/helecho-corocillo.webp" },
+      { comun: "Helecho Pincel", cientifico: "Blechnum occidentale", foto: "/fotos/flora/helecho-pincel.webp", recorte: "/elementos/rama-helecho-derecha.webp" },
+      { comun: "Palma boba", cientifico: "Cyathea caracasana", foto: "/fotos/flora/palma-boba.webp", recorte: "/elementos/rama-helecho-derecha.webp" },
+      { comun: "Helecho Corocillo", cientifico: "Pteridium aquilinum", foto: "/fotos/flora/helecho-corocillo.webp", recorte: "/elementos/rama-helecho-derecha.webp" },
     ],
   },
   {
     id: "endemicas",
     nombre: "Especies endémicas",
     especies: [
-      { comun: "Vira Vira Avileña", cientifico: "Achyrocline flaccida", foto: "/fotos/flora/vira-vira-avilena.webp" },
-      { comun: "El Nogal de Caracas", cientifico: "Juglans venezuelensis", foto: "/fotos/flora/nogal-de-caracas.webp" },
-      { comun: "Rosa del Ávila", cientifico: "Befaria glauca", foto: "/fotos/flora/rosa-del-avila.webp" },
+      { comun: "Vira Vira Avileña", cientifico: "Achyrocline flaccida", foto: "/fotos/flora/vira-vira-avilena.webp", recorte: "/elementos/flor-endemica-3.webp" },
+      { comun: "El Nogal de Caracas", cientifico: "Juglans venezuelensis", foto: "/fotos/flora/nogal-de-caracas.webp", recorte: "/elementos/flor-endemica-3.webp" },
+      { comun: "Rosa del Ávila", cientifico: "Befaria glauca", foto: "/fotos/flora/rosa-del-avila.webp", recorte: "/elementos/flor-endemica-3.webp" },
     ],
   },
 ];
@@ -243,46 +428,48 @@ export const CATALOGO_FAUNA_MOVIL: CategoriaEspecies[] = [
     id: "mamiferos",
     nombre: "Mamíferos",
     especies: [
-      { comun: "Cunaguaro", cientifico: "Leopardus pardalis", foto: "/fotos/fauna/cunaguaro.webp" },
+      { comun: "Cunaguaro", cientifico: "Leopardus pardalis", foto: "/fotos/fauna/cunaguaro.webp", recorte: "/elementos/venado-mamiferos-derecha.webp" },
       {
         comun: "Zorro común",
         cientifico: "Cerdocyon thous",
         foto: "/fotos/fauna/zorro-comun.webp",
+        recorte: "/elementos/venado-mamiferos-derecha.webp",
         posicionFoto: "50% 10%",
       },
-      { comun: "Perezoso", cientifico: "Bradypus variegatus", foto: "/fotos/fauna/perezoso.webp" },
+      { comun: "Perezoso", cientifico: "Bradypus variegatus", foto: "/fotos/fauna/perezoso.webp", recorte: "/elementos/venado-mamiferos-derecha.webp" },
     ],
   },
   {
     id: "aves",
     nombre: "Aves",
     especies: [
-      { comun: "Tangara coroniazul", cientifico: "Thraupis cyanocephala", foto: "/fotos/fauna/tangara-coroniazul.webp" },
+      { comun: "Tangara coroniazul", cientifico: "Thraupis cyanocephala", foto: "/fotos/fauna/tangara-coroniazul.webp", recorte: "/elementos/ave-amarilla-derecha.webp" },
       {
         comun: "Guacharaca",
         cientifico: "Ortalis ruficauda",
         foto: "/fotos/fauna/guacharaca.webp",
+        recorte: "/elementos/ave-amarilla-derecha.webp",
         posicionFoto: "50% 0%",
       },
-      { comun: "Guacamaya azul y amarilla", cientifico: "Ara ararauna", foto: "/fotos/fauna/guacamaya-azul-amarilla.webp" },
+      { comun: "Guacamaya azul y amarilla", cientifico: "Ara ararauna", foto: "/fotos/fauna/guacamaya-azul-amarilla.webp", recorte: "/elementos/ave-amarilla-derecha.webp" },
     ],
   },
   {
     id: "reptiles",
     nombre: "Reptiles",
     especies: [
-      { comun: "Iguana", cientifico: "Iguana iguana", foto: "/fotos/fauna/iguana.webp" },
-      { comun: "Cascabel", cientifico: "Crotalus durissus", foto: "/fotos/fauna/cascabel.webp" },
-      { comun: "Tragavenado", cientifico: "Boa constrictor", foto: "/fotos/fauna/tragavenado.webp" },
+      { comun: "Iguana", cientifico: "Iguana iguana", foto: "/fotos/fauna/iguana.webp", recorte: "/elementos/camaleon-reptiles-derecha.webp" },
+      { comun: "Cascabel", cientifico: "Crotalus durissus", foto: "/fotos/fauna/cascabel.webp", recorte: "/elementos/camaleon-reptiles-derecha.webp" },
+      { comun: "Tragavenado", cientifico: "Boa constrictor", foto: "/fotos/fauna/tragavenado.webp", recorte: "/elementos/camaleon-reptiles-derecha.webp" },
     ],
   },
   {
     id: "anfibios",
     nombre: "Anfibios",
     especies: [
-      { comun: "Ranita de cristal del Ávila", cientifico: "Hyalinobatrachium guairarepanensis", foto: "/fotos/fauna/ranita-de-cristal.webp" },
-      { comun: "Sapo común", cientifico: "Rhaebo guttatus", foto: "/fotos/fauna/sapo-comun.webp" },
-      { comun: "Ranita de las bromelias", cientifico: "Dendropsophus microcephalus", foto: "/fotos/fauna/ranita-de-las-bromelias.webp" },
+      { comun: "Ranita de cristal del Ávila", cientifico: "Hyalinobatrachium guairarepanensis", foto: "/fotos/fauna/ranita-de-cristal.webp", recorte: "/elementos/rana-anfibios-derecha.webp" },
+      { comun: "Sapo común", cientifico: "Rhaebo guttatus", foto: "/fotos/fauna/sapo-comun.webp", recorte: "/elementos/rana-anfibios-derecha.webp" },
+      { comun: "Ranita de las bromelias", cientifico: "Dendropsophus microcephalus", foto: "/fotos/fauna/ranita-de-las-bromelias.webp", recorte: "/elementos/rana-anfibios-derecha.webp" },
     ],
   },
 ];
@@ -543,34 +730,58 @@ export const RUTAS_PARQUE_MOVIL: RutaParque[] = [
 ];
 
 /* ----------------------------------------------------------
-   DATOS: EMERGENCIAS Y PROTOCOLOS
+   DATOS: EMERGENCIAS Y PROTOCOLOS (con íconos SVG exactos)
    ---------------------------------------------------------- */
+export const ICONOS_EMERGENCIAS_SVG = {
+  "prepara-ascenso": { svg: "/elementos/svg/contenedor-prepara-ascenso.svg", x: 53.91, y: 88.18 },
+  "protocolo-extravio": { svg: "/elementos/svg/contenedor-protocolo-extravio.svg", x: 53.91, y: 88.18 },
+  "niebla-densa": { svg: "/elementos/svg/contenedor-niebla-densa.svg", x: 54.3, y: 87.99 },
+  "incendio-forestal": { svg: "/elementos/svg/contenedor-incendio-forestal.svg", x: 53.91, y: 88.18 },
+  "contactos-emergencia": { svg: "/elementos/svg/contenedor-contactos-emergencia.svg", x: 53.91, y: 81.18 },
+} as const;
+
 export const PREPARA_PAGINAS_MOVIL = [
   {
+    svgSuperior: "/elementos/svg/contenedor-prepara-ascenso.svg",
+    cardsSvg: "/elementos/svg/cards-prepara-ascenso-1.svg",
+    svgW: 636.54,
+    svgH: 203.75,
+    colW: 152.31,
+    cols: [
+      { colX: 0, texto: "Avisar sobre tu salida" },
+      { colX: 161.43, texto: "Llevar suficiente agua y comida" },
+      { colX: 322.85, texto: "Llevar ropa ligera y abrigo." },
+      { colX: 484.23, texto: "Usar calzado cerrado." },
+    ],
     lead: "Anticipa cualquier riesgo siguiendo nuestras recomendaciones de seguridad.",
-    items: [
-      "Avisar sobre tu salida",
-      "Llevar suficiente agua y comida",
-      "Llevar ropa ligera y abrigo.",
-      "Usar calzado cerrado.",
-    ],
   },
   {
-    lead: "Anticipa cualquier riesgo siguiendo nuestras recomendaciones prácticas de seguridad.",
-    items: [
-      "Llevar protector solar.",
-      "Llevar repelente de insectos.",
-      "Llevar silbato de emergencia.",
-      "Llevar linterna.",
+    svgSuperior: "/elementos/svg/contenedor-prepara-ascenso.svg",
+    cardsSvg: "/elementos/svg/cards-prepara-ascenso-2.svg",
+    svgW: 636.54,
+    svgH: 203.75,
+    colW: 152.31,
+    cols: [
+      { colX: 0, texto: "Llevar protector solar." },
+      { colX: 161.43, texto: "Llevar repelente de insectos." },
+      { colX: 322.85, texto: "Llevar silbato de emergencia." },
+      { colX: 484.23, texto: "Llevar linterna." },
     ],
+    lead: "Anticipa cualquier riesgo siguiendo nuestras recomendaciones prácticas de seguridad.",
   },
   {
-    lead: "Anticipa cualquier riesgo siguiendo nuestras recomendaciones prácticas de seguridad.",
-    items: [
-      "Lleva tu celular con suficiente batería.",
-      "Llevar mapa o screenshot de la ruta.",
-      "Lleva un bolso impermeable para proteger tus pertenencias de la lluvia.",
+    svgSuperior: "/elementos/svg/contenedor-prepara-ascenso.svg",
+    cardsSvg: "/elementos/svg/cards-prepara-ascenso-3.svg",
+    svgW: 642.54,
+    svgH: 206.51,
+    colW: 205.6,
+    tresCards: true,
+    cols: [
+      { colX: 0, texto: "Lleva tu celular con suficiente batería." },
+      { colX: 217.9, texto: "Llevar mapa o screenshot de la ruta." },
+      { colX: 436.94, texto: "Lleva un bolso impermeable para proteger tus pertenencias de la lluvia." },
     ],
+    lead: "Anticipa cualquier riesgo siguiendo nuestras recomendaciones prácticas de seguridad.",
   },
 ];
 
@@ -592,6 +803,9 @@ export const EXTRAVIO_PASOS_MOVIL = [
 
 export const URGENCIAS_PAGINAS_MOVIL = [
   {
+    svgSuperior: "/elementos/svg/contenedor-urgencias-golpe-calor.svg",
+    iconX: 53.91,
+    iconY: 88.18,
     subtitulo: "Golpe de Calor / Deshidratación.",
     lead: "Subir senderos exigentes con sol directo puede provocar deshidratación severa y golpe de calor.",
     pasos: [
@@ -602,6 +816,9 @@ export const URGENCIAS_PAGINAS_MOVIL = [
     ],
   },
   {
+    svgSuperior: "/elementos/svg/contenedor-urgencias-hipotermia.svg",
+    iconX: 53.91,
+    iconY: 88.18,
     subtitulo: "Hipotermia",
     lead: "Los cambios drásticos de clima y la lluvia en las crestas del parque pueden causar enfriamiento rápido.",
     pasos: [
@@ -612,6 +829,9 @@ export const URGENCIAS_PAGINAS_MOVIL = [
     ],
   },
   {
+    svgSuperior: "/elementos/svg/contenedor-urgencias-picada-abeja.svg",
+    iconX: 54.3,
+    iconY: 87.99,
     subtitulo: "Picadura de Avispa o Abeja (Reacción Alérgica)",
     lead: "En los senderos del Waraira Repano es común encontrar abejas y avispas.",
     pasos: [
@@ -621,6 +841,9 @@ export const URGENCIAS_PAGINAS_MOVIL = [
     ],
   },
   {
+    svgSuperior: "/elementos/svg/contenedor-urgencias-picada-serpiente.svg",
+    iconX: 53.91,
+    iconY: 88.18,
     subtitulo: "Picadura de serpiente",
     lead: "Hay serpientes venenosas en El Ávila. En caso de picaduras actúa rápido.",
     pasos: [
@@ -634,6 +857,9 @@ export const URGENCIAS_PAGINAS_MOVIL = [
 
 export const GOLPES_PAGINAS_MOVIL = [
   {
+    svgSuperior: "/elementos/svg/contenedor-golpes-torcedura.svg",
+    iconX: 53.91,
+    iconY: 88.18,
     subtitulo: "Torcedura o Fractura de Tobillo / Pierna",
     lead: "El terreno irregular, las piedras sueltas y los desniveles del sendero pueden causar torceduras de tobillo o fracturas.",
     pasos: [
@@ -643,6 +869,9 @@ export const GOLPES_PAGINAS_MOVIL = [
     ],
   },
   {
+    svgSuperior: "/elementos/svg/contenedor-golpes-cabeza.svg",
+    iconX: 53.91,
+    iconY: 88.18,
     subtitulo: "Caída con Golpe en la Cabeza",
     lead: "Un resbalón o tropezón en senderos empinados puede derivar en un impacto en la cabeza.",
     pasos: [
@@ -653,6 +882,9 @@ export const GOLPES_PAGINAS_MOVIL = [
     ],
   },
   {
+    svgSuperior: "/elementos/svg/contenedor-golpes-cortes.svg",
+    iconX: 53.91,
+    iconY: 88.18,
     subtitulo: "Cortes y Heridas",
     lead: "Las rocas filosas o las caídas accidentales en el sendero pueden provocar heridas abiertas o cortes.",
     pasos: [
@@ -673,8 +905,8 @@ export const NIEBLA_PASOS_MOVIL = [
 
 export const INCENDIO_PAGINAS_MOVIL = [
   [
-    { num: "1.", texto: "Mantener la Calma." },
-    { num: "2.", texto: "Llama a los servicios de emergencia de la zona." },
+    { num: "1.", texto: "Mantener la Calma" },
+    { num: "2.", texto: "Llama a los servicios de emergencia de la zona" },
     { num: "3.", texto: "Desciende, no subas: busca rutas de descenso por senderos consolidados hacia la base o zonas bajas." },
     { num: "4.", texto: "Llama a un servicio de emergencias. Si no hay señal, muévete lentamente hacia una zona más alta para intentar capturar señal." },
   ],
@@ -701,7 +933,7 @@ export const INCENDIO_PAGINAS_MOVIL = [
 export const CONTACTOS_MOVIL = [
   {
     id: "proteccion-civil",
-    etiqueta: "Protección civil: Bomberos - Policía",
+    etiquetaLineas: ["Protección civil:", "Bomberos - Policía"],
     tipo: "grid" as const,
     numeros: [
       { operadora: "Cantv", numero: "171", href: "tel:171" },
@@ -712,7 +944,7 @@ export const CONTACTOS_MOVIL = [
   },
   {
     id: "bomberos",
-    etiqueta: "Bomberos Metropolitanos Caracas:",
+    etiquetaLineas: ["Bomberos Metropolitanos", "Caracas:"],
     tipo: "fijo" as const,
     codigo: "(0212)",
     numero: "263-1234",
@@ -720,7 +952,7 @@ export const CONTACTOS_MOVIL = [
   },
   {
     id: "inparques",
-    etiqueta: "INPARQUES El Ávila:",
+    etiquetaLineas: ["INPARQUES", "El Ávila:"],
     tipo: "fijo" as const,
     codigo: "(0212)",
     numero: "285-4106",
@@ -729,11 +961,15 @@ export const CONTACTOS_MOVIL = [
 ];
 
 /* ----------------------------------------------------------
-   DATOS: CONOCE SU NORMATIVA
+   DATOS: CONOCE SU NORMATIVA (con íconos SVG exactos)
    ---------------------------------------------------------- */
 export const NORMATIVA_SECCIONES_MOVIL = {
   "seguridad-ambiental": {
     titulo: "Seguridad ambiental",
+    svgSuperior: "/elementos/svg/contenedor-seguridad-ambiental.svg",
+    iconX: 53.87,
+    iconY: 89.11,
+    helecho: "/elementos/helecho-seguridad-ambiental.webp",
     lead: "Nuestra principal prioridad es la conservación de este espacio natural.",
     paginas: [
       [
@@ -766,6 +1002,10 @@ export const NORMATIVA_SECCIONES_MOVIL = {
   },
   "acceso-horarios": {
     titulo: "Acceso y Horarios",
+    svgSuperior: "/elementos/svg/contenedor-acceso-horarios.svg",
+    iconX: 50.73,
+    iconY: 86.49,
+    helecho: "/elementos/helecho-acceso-horarios.webp",
     lead: "El acceso responsable comienza con la planificación.",
     paginas: [
       [
@@ -784,6 +1024,10 @@ export const NORMATIVA_SECCIONES_MOVIL = {
   },
   "seguridad-visitante": {
     titulo: "Seguridad del visitante",
+    svgSuperior: "/elementos/svg/contenedor-seguridad-visitante.svg",
+    iconX: 53.91,
+    iconY: 88.18,
+    helecho: "/elementos/helecho-seguridad-visitante.webp",
     lead: "Disfruta la montaña sin riesgos. Revisa nuestras normas de seguridad.",
     paginas: [
       [
@@ -811,6 +1055,10 @@ export const NORMATIVA_SECCIONES_MOVIL = {
   },
   "manejo-desechos": {
     titulo: "Manejo de desechos",
+    svgSuperior: "/elementos/svg/contenedor-manejo-desechos.svg",
+    iconX: 53.91,
+    iconY: 88.18,
+    helecho: "/elementos/helecho-manejo-desechos.webp",
     lead: "Mantener el parque libre de contaminación es responsabilidad de todos.",
     paginas: [
       [

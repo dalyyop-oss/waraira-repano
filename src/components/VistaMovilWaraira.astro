@@ -2,11 +2,11 @@
 import {
   SECCIONES_WARAIRA,
   CIFRAS_VALOR_ECOLOGICO,
-  CIFRAS_INPARQUES,
   CUMBRES_GEOLOGIA,
   CATALOGO_FLORA_MOVIL,
   CATALOGO_FAUNA_MOVIL,
   RUTAS_PARQUE_MOVIL,
+  ICONOS_EMERGENCIAS_SVG,
   PREPARA_PAGINAS_MOVIL,
   EXTRAVIO_PASOS_MOVIL,
   URGENCIAS_PAGINAS_MOVIL,
@@ -15,6 +15,7 @@ import {
   INCENDIO_PAGINAS_MOVIL,
   CONTACTOS_MOVIL,
   NORMATIVA_SECCIONES_MOVIL,
+  tipografiaEditorial,
   type SeccionId,
 } from "../data/warairaContenido";
 
@@ -23,7 +24,9 @@ export interface Props {
 }
 
 const { seccionInicial = "quienes-somos" } = Astro.props;
-const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || SECCIONES_WARAIRA[0];
+const configInicial =
+  SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || SECCIONES_WARAIRA[0];
+const te = tipografiaEditorial;
 ---
 
 <div
@@ -32,7 +35,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   data-seccion-activa={configInicial.id}
   style={`--mv-tema: ${configInicial.color}; --mv-tema-oscuro: ${configInicial.colorOscuro};`}
 >
-  <!-- Fondo fotográfico fijo en doble capa para fundido cruzado suave -->
+  <!-- Fondo fotográfico vivo en doble capa (fundido cruzado suave) -->
   <div class="mv-fondo-fijo" aria-hidden="true">
     <img
       src={configInicial.fondoIntro}
@@ -46,10 +49,9 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
       class="mv-fondo-img mv-fondo-actual"
       draggable="false"
     />
-    <div class="mv-fondo-velo"></div>
   </div>
 
-  <!-- Lomita inferior + recorte botánico izquierdo fiel al tema activo -->
+  <!-- Lomita ondulada inferior + recorte natural izquierdo de la sección -->
   <div class="mv-marco-inferior" aria-hidden="true">
     <img
       src={configInicial.lomitaSvg}
@@ -65,29 +67,8 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     />
   </div>
 
-  <!-- Cabezal fijo móvil: madera superior + 5 módulos + listón de maderas secundarias -->
+  <!-- Cabezal fijo: barra de 5 secciones (Techo) + franja flotante con letrero WARAIRA REPANO y maderas reales -->
   <header class="mv-header" role="banner" aria-label="Navegación móvil Parque Nacional Waraira Repano">
-    <div class="mv-barra-marca">
-      <button
-        type="button"
-        class="mv-btn-letrero-principal"
-        aria-label="WARAIRA REPANO - Volver a la portada de esta sección"
-        title="Volver a la portada de la sección"
-      >
-        <img
-          src="/elementos/poste-madera-limpio.webp"
-          alt="Waraira Repano"
-          class="mv-img-letrero-recortada"
-          draggable="false"
-        />
-      </button>
-      <div class="mv-indicador-modulo-actual">
-        <span class="mv-punto-color"></span>
-        <span class="mv-titulo-modulo-bar">{configInicial.titulo}</span>
-      </div>
-    </div>
-
-    <!-- 5 botones de secciones con la síntesis poligonal detrás (estilo Techo.astro) -->
     <nav class="mv-techo-tabs" aria-label="Secciones principales">
       <img
         src="/elementos/silueta-waraira-cabezal.webp"
@@ -103,7 +84,6 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
           data-mv-sec={sec.id}
           data-mv-color={sec.color}
           data-mv-oscuro={sec.colorOscuro}
-          data-mv-titulo={sec.titulo}
           data-mv-lomita={sec.lomitaSvg}
           data-mv-esquina={sec.esquinaImg}
           data-mv-fondo={sec.fondoIntro}
@@ -121,29 +101,76 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
       ))}
     </nav>
 
-    <!-- Listones de madera horizontales deslizables para las subsecciones -->
-    <nav class="mv-subnav-maderas" aria-label="Subsecciones del módulo activo">
-      {SECCIONES_WARAIRA.map((sec) => (
-        <div
-          class:list={["mv-grupo-maderas", { activo: sec.id === configInicial.id }]}
-          data-mv-maderas-sec={sec.id}
-        >
-          {sec.subvistas.map((sub, idx) => (
-            <button
-              type="button"
-              class:list={["mv-madera-btn", { activa: idx === 0 }]}
-              data-mv-vista-target={sub.id}
-              data-mv-vista-bg={sub.fondo || sec.fondoIntro}
-            >
-              {sub.etiqueta}
-            </button>
-          ))}
-        </div>
-      ))}
-    </nav>
+    <!-- Franja flotante fiel al diseño: letrero WARAIRA REPANO + maderas reales deslizables -->
+    <div class="mv-letrero-bar">
+      <button
+        type="button"
+        class="mv-btn-letrero-principal activo"
+        aria-label="WARAIRA REPANO - portada de la sección"
+        title="Ver portada principal de la sección"
+      >
+        <img
+          src="/elementos/poste-madera-limpio.webp"
+          alt="Waraira Repano"
+          class="mv-img-letrero-recortada"
+          draggable="false"
+        />
+      </button>
+
+      <nav class="mv-subnav-maderas" aria-label="Subsecciones">
+        {SECCIONES_WARAIRA.map((sec) => (
+          <div
+            class:list={["mv-grupo-maderas", { activo: sec.id === configInicial.id }]}
+            data-mv-maderas-sec={sec.id}
+          >
+            {sec.subvistas.map((item) => (
+              <button
+                type="button"
+                class:list={[
+                  "mv-madera-btn",
+                  {
+                    "con-texto": item.mostrarTexto,
+                    "dos-lineas": item.dosLineas,
+                  },
+                ]}
+                data-mv-vista-target={item.id}
+                data-mv-vista-bg={item.fondo || sec.fondoIntro}
+                aria-label={item.etiqueta}
+              >
+                <img
+                  class="mv-madera-img-reposo"
+                  src={item.inactivo}
+                  alt={item.mostrarTexto ? "" : item.etiqueta}
+                  draggable="false"
+                />
+                <img
+                  class="mv-madera-img-activa"
+                  src={item.activo}
+                  alt=""
+                  draggable="false"
+                />
+                {item.mostrarTexto && (
+                  <span class="mv-madera-texto">
+                    {item.lineasTexto ? (
+                      <>
+                        {item.lineasTexto[0]}
+                        <br />
+                        {item.lineasTexto[1]}
+                      </>
+                    ) : (
+                      item.etiqueta
+                    )}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
+        ))}
+      </nav>
+    </div>
   </header>
 
-  <!-- Cuerpo principal desplazable verticalmente -->
+  <!-- Cuerpo de tarjetas de contenido -->
   <main class="mv-contenido" id="mv-contenido-principal">
     <!-- ==========================================================
          SECCIÓN 1: ¿QUIÉNES SOMOS?
@@ -153,27 +180,27 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
       data-mv-seccion="quienes-somos"
       data-mv-vista-actual="intro"
     >
-      <!-- Vista Intro -->
+      <!-- Intro -->
       <article class="mv-vista activa" data-mv-vista="intro">
         <div class="mv-card-intro">
           <div class="mv-card-intro-tab">P.N. Waraira Repano</div>
           <div class="mv-card-intro-cuerpo">
-            <h1 class="mv-intro-subtitulo">El Corazón Verde de Caracas</h1>
-            <p class="mv-texto-blanco">
-              Somos el pulmón vegetal que resguarda la biodiversidad, la historia y la esencia de nuestra región. Más que una majestuosa montaña, el Parque Nacional Waraira Repano es:
+            <h1 class="mv-intro-subtitulo">{te("El Corazón Verde de Caracas")}</h1>
+            <p class="mv-texto-blanco mv-prose">
+              {te("Somos el pulmón vegetal que resguarda la biodiversidad, la historia y la esencia de nuestra región. Más que una majestuosa montaña, el Parque Nacional Waraira Repano es:")}
             </p>
-            <div class="mv-insignias-grid">
-              <div class="mv-insignia-pill">
+            <div class="mv-insignias-fila">
+              <div class="mv-insignia-item">
                 <img src="/iconos/icono-guardian-refugio.webp" alt="" loading="lazy" />
-                <span>Guardián y refugio natural</span>
+                <span>{te("Guardián y refugio natural")}</span>
               </div>
-              <div class="mv-insignia-pill">
+              <div class="mv-insignia-item">
                 <img src="/iconos/icono-espacio-paz.webp" alt="" loading="lazy" />
-                <span>Espacio vivo de paz</span>
+                <span>{te("Espacio vivo de paz")}</span>
               </div>
             </div>
-            <p class="mv-texto-blanco">
-              Protege la flora y fauna silvestre y conecta a la comunidad con la magia de la naturaleza en el centro mismo de la ciudad.
+            <p class="mv-texto-blanco mv-prose">
+              {te("Protege la flora y fauna silvestre y conecta a la comunidad con la magia de la naturaleza en el centro mismo de la ciudad.")}
             </p>
           </div>
         </div>
@@ -186,13 +213,13 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
               loading="lazy"
             />
           </div>
-          <figcaption class="mv-pie-foto">
-            Hotel Humboldt visto desde el Lagunazo.
+          <figcaption class="mv-pie-foto mv-prose">
+            {te("Hotel Humboldt visto desde el Lagunazo.")}
           </figcaption>
         </figure>
       </article>
 
-      <!-- Vista Misión y Visión -->
+      <!-- Misión y Visión -->
       <article class="mv-vista" data-mv-vista="mision-vision">
         <div class="mv-card-doble-tab">
           <div class="mv-doble-tab-barra" role="tablist" aria-label="Misión y Visión">
@@ -205,36 +232,40 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
           </div>
           <div class="mv-card-cuerpo">
             <div class="mv-subpanel activa" data-mv-qs-panel="mision">
-              <p>
-                <strong>Conservar y proteger</strong> la biodiversidad del Parque Nacional Waraira Repano, promoviendo el uso sustentable de sus recursos naturales y la educación ambiental para las generaciones presentes y futuras.
+              <p class="mv-prose">
+                <strong>{te("Conservar y proteger")}</strong>{" "}
+                {te("la biodiversidad del Parque Nacional Waraira Repano, promoviendo el uso sustentable de sus recursos naturales y la educación ambiental para las generaciones presentes y futuras.")}
               </p>
             </div>
             <div class="mv-subpanel" data-mv-qs-panel="vision">
-              <p>
-                Ser un referente mundial en la gestión de parques nacionales, donde la <strong>conservación ecológica</strong> convive armónicamente con el desarrollo turístico responsable y la investigación científica.
+              <p class="mv-prose">
+                {te("Ser un referente mundial en la gestión de parques nacionales, donde")}{" "}
+                <strong>{te("la conservación ecológica")}</strong>{" "}
+                {te("convive armónicamente con el desarrollo turístico responsable y la investigación científica.")}
               </p>
             </div>
           </div>
         </div>
       </article>
 
-      <!-- Vista Valor ecológico -->
+      <!-- Valor ecológico -->
       <article class="mv-vista" data-mv-vista="valor-ecologico">
         <div class="mv-card-contenido">
           <div class="mv-card-header-tab">
             <h2 class="mv-card-titulo-tab">Valor ecológico</h2>
           </div>
           <div class="mv-card-cuerpo">
-            <p>
-              Como epicentro de vida silvestre, este parque resguarda un patrimonio natural invaluable, <strong>su valor se manifiesta en:</strong>
+            <p class="mv-prose">
+              {te("Como epicentro de vida silvestre, este parque resguarda un patrimonio natural invaluable,")}{" "}
+              <strong>{te("su valor se manifiesta en:")}</strong>
             </p>
             <ul class="mv-lista-puntos-color">
-              <li>Alta biodiversidad</li>
-              <li>Regulación climática</li>
-              <li>Protección de fuentes de agua</li>
-              <li>Refugio de flora y fauna silvestre</li>
+              <li class="mv-prose">{te("Alta biodiversidad")}</li>
+              <li class="mv-prose">{te("Regulación climática")}</li>
+              <li class="mv-prose">{te("Protección de fuentes de agua")}</li>
+              <li class="mv-prose">{te("Refugio de flora y fauna silvestre")}</li>
             </ul>
-            <p class="mv-subtitulo-acento">Este espacio natural es el refugio de:</p>
+            <p class="mv-subtitulo-acento mv-prose">{te("Este espacio natural es el refugio de:")}</p>
           </div>
         </div>
 
@@ -251,29 +282,31 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
         </div>
       </article>
 
-      <!-- Vista INPARQUES -->
+      <!-- INPARQUES -->
       <article class="mv-vista" data-mv-vista="inparques">
         <div class="mv-card-contenido">
           <div class="mv-card-header-tab">
             <h2 class="mv-card-titulo-tab">INPARQUES</h2>
           </div>
           <div class="mv-card-cuerpo">
-            <p>
-              <strong>El Instituto Nacional de Parques</strong> es una institución adscrita al Ministerio del Poder Popular para el Ecosocialismo y Aguas (Minea), creada por ley del 03 de octubre de 1973.
+            <p class="mv-prose">
+              <strong>{te("El Instituto Nacional de Parques")}</strong>{" "}
+              {te("es una institución adscrita al Ministerio del Poder Popular para el Ecosocialismo y Aguas (Minea), creada por ley del 03 de octubre de 1973.")}
             </p>
-            <p class="mv-mt-12">
-              Tiene como misión ser el ente rector de las políticas públicas orientadas a la protección y manejo del sistema de parques de Venezuela, se encuentra <strong class="mv-texto-acento">integrado por:</strong>
+            <p class="mv-mt-12 mv-prose">
+              {te("Tiene como misión ser el ente rector de las políticas públicas orientadas a la protección y manejo del sistema de parques de Venezuela, se encuentra")}{" "}
+              <strong class="mv-texto-acento">integrado por:</strong>
             </p>
           </div>
         </div>
 
-        <div class="mv-grid-inparques">
-          {CIFRAS_INPARQUES.map((c) => (
-            <div class="mv-inparques-card">
-              <span class="mv-inparques-cifra">{c.cifra}</span>
-              <span class="mv-inparques-etiqueta">{c.etiqueta}</span>
-            </div>
-          ))}
+        <!-- Cuadros vectoriales originales de Dalianyela -->
+        <div class="mv-cuadros-svg-wrap mv-mt-12">
+          <img
+            src="/elementos/svg/cuadros-inparques.svg"
+            alt="44 Parques nacionales, 65 Parques de recreación, 37 Monumentos naturales"
+            loading="lazy"
+          />
         </div>
 
         <div class="mv-logo-card">
@@ -295,11 +328,11 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
         <div class="mv-card-intro">
           <div class="mv-card-intro-tab">Patrimonio Natural</div>
           <div class="mv-card-intro-cuerpo">
-            <p class="mv-texto-blanco">
-              Decretado como Parque Nacional el 12 de diciembre de 1958 (Decreto N° 473). El parque abarca una superficie de más de 85.000 hectáreas que se extienden a lo largo de la serranía.
+            <p class="mv-texto-blanco mv-prose">
+              {te("Decretado como Parque Nacional el 12 de diciembre de 1958 (Decreto N° 473). El parque abarca una superficie de más de 85.000 hectáreas que se extienden a lo largo de la serranía.")}
             </p>
-            <p class="mv-texto-blanco mv-mt-12">
-              En 2010, mediante la Ley de Protección del Parque Nacional, se ratificó de forma oficial la denominación indígena Waraira Repano, término derivado de la lengua de las etnias originarias Caribes que significa «Sierra Grande» o «Lugar de dantas».
+            <p class="mv-texto-blanco mv-mt-12 mv-prose">
+              {te("En 2010, mediante la Ley de Protección del Parque Nacional, se ratificó de forma oficial la denominación indígena Waraira Repano, término derivado de la lengua de las etnias originarias Caribes que significa «Sierra Grande» o «Lugar de dantas».")}
             </p>
           </div>
         </div>
@@ -312,12 +345,12 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
             <h2 class="mv-card-titulo-tab">Clima</h2>
           </div>
           <div class="mv-card-cuerpo">
-            <p>
-              El clima del Parque es de montaña, con diferencias notables de acuerdo con la altitud y los pisos térmicos correspondientes y también de acuerdo a la exposición de sus laderas con respecto a la insolación y a la procedencia de los vientos.
+            <p class="mv-prose">
+              {te("El clima del Parque es de montaña, con diferencias notables de acuerdo con la altitud y los pisos térmicos correspondientes y también de acuerdo a la exposición de sus laderas con respecto a la insolación y a la procedencia de los vientos.")}
             </p>
             <div class="mv-insignia-clima">
               <img src="/iconos/icono-clima-frio.webp" alt="Icono clima frío de montaña" loading="lazy" />
-              <span>Clima frío de montaña</span>
+              <span class="mv-prose">{te("Clima frío de montaña")}</span>
             </div>
           </div>
         </div>
@@ -339,26 +372,29 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
               {[1, 2].map((p) => (
                 <button
                   type="button"
-                  class:list={["mv-dot-cuadro", { activo: p === 1 }]}
+                  class:list={["mv-dot-svg-btn", { activo: p === 1 }]}
                   data-mv-geo-pag={String(p)}
                   aria-label={`Geología página ${p}`}
                   aria-selected={p === 1 ? "true" : "false"}
-                />
+                >
+                  <img class="mv-dot-activo" src="/elementos/svg/dot-activo.svg" alt="" draggable="false" />
+                  <img class="mv-dot-inactivo" src="/elementos/svg/dot-inactivo.svg" alt="" draggable="false" />
+                </button>
               ))}
             </div>
           </div>
           <div class="mv-card-cuerpo">
             <div class="mv-subpanel activa" data-mv-geo-panel="1">
-              <p>
-                Corresponde a una abrupta región montañosa con laderas muy pendientes, originada a partir del hundimiento de la placa del Caribe y el levantamiento de la placa continental sudamericana durante el período Eoceno.
+              <p class="mv-prose">
+                {te("Corresponde a una abrupta región montañosa con laderas muy pendientes, originada a partir del hundimiento de la placa del Caribe y el levantamiento de la placa continental sudamericana durante el período Eoceno.")}
               </p>
-              <p class="mv-mt-12">
-                También está constituido por rocas deformadas y meteorizadas del período Cretácico.
+              <p class="mv-mt-12 mv-prose">
+                {te("También está constituido por rocas deformadas y meteorizadas del período Cretácico.")}
               </p>
             </div>
 
             <div class="mv-subpanel" data-mv-geo-panel="2">
-              <p>Al recorrer la cordillera, destacan de forma natural sus puntos más elevados:</p>
+              <p class="mv-prose">{te("Al recorrer la cordillera, destacan de forma natural sus puntos más elevados:")}</p>
               <div class="mv-chips-lista mv-mt-12">
                 {CUMBRES_GEOLOGIA.map((c, idx) => (
                   <button
@@ -366,7 +402,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
                     class:list={["mv-chip-btn", { activo: idx === 0 }]}
                     data-mv-cumbre-foto={c.foto}
                     data-mv-cumbre-nombre={c.nombre}
-                    data-mv-cumbre-desc={c.desc}
+                    data-mv-cumbre-desc={te(c.desc)}
                     data-mv-cumbre-altura={c.altura}
                   >
                     {c.nombre}
@@ -382,7 +418,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
                     loading="lazy"
                   />
                 </div>
-                <p id="mv-desc-cumbre" class="mv-visor-desc">{CUMBRES_GEOLOGIA[0].desc}</p>
+                <p id="mv-desc-cumbre" class="mv-visor-desc mv-prose">{te(CUMBRES_GEOLOGIA[0].desc)}</p>
                 <p id="mv-altura-cumbre" class="mv-visor-altura">{CUMBRES_GEOLOGIA[0].altura}</p>
               </div>
             </div>
@@ -397,8 +433,11 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
             <h2 class="mv-card-titulo-tab">Hidrografía</h2>
           </div>
           <div class="mv-card-cuerpo">
-            <p>
-              El abundante volumen de agua del parque drena al <strong>mar Caribe</strong> mediante una densa red hidrográfica <strong class="mv-texto-acento">dividida en dos vertientes:</strong>
+            <p class="mv-prose">
+              {te("El abundante volumen de agua del parque drena al")}{" "}
+              <strong>{te("mar Caribe")}</strong>{" "}
+              {te("mediante una densa red hidrográfica")}{" "}
+              <strong class="mv-texto-acento">{te("dividida en dos vertientes:")}</strong>
             </p>
           </div>
         </div>
@@ -407,14 +446,14 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
           <div class="mv-card-secundaria">
             <h3>Vertiente Norte</h3>
             <ul>
-              <li>Desemboca directamente en el Litoral Central.</li>
-              <li>Alimenta la cuenca del río Guaire, principal colector de la capital.</li>
+              <li class="mv-prose">{te("Desemboca directamente en el Litoral Central.")}</li>
+              <li class="mv-prose">{te("Alimenta la cuenca del río Guaire, principal colector de la capital.")}</li>
             </ul>
           </div>
           <div class="mv-card-secundaria">
             <h3>Vertiente Sur</h3>
             <ul>
-              <li>Desemboca de forma indirecta, principalmente a través del río Tuy.</li>
+              <li class="mv-prose">{te("Desemboca de forma indirecta, principalmente a través del río Tuy.")}</li>
             </ul>
           </div>
         </div>
@@ -427,15 +466,27 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
             <div class="mv-doble-tab-btn con-muesca activa" data-mv-ff-tab="flora" role="tab" aria-selected="true" tabindex="0">
               <span>Flora</span>
               <span class="mv-muesca-inline">
-                <button type="button" class="mv-dot-cuadro activo" data-mv-flora-pag="1" aria-label="Flora página 1"></button>
-                <button type="button" class="mv-dot-cuadro" data-mv-flora-pag="2" aria-label="Flora página 2"></button>
+                <button type="button" class="mv-dot-svg-btn activo" data-mv-flora-pag="1" aria-label="Flora página 1">
+                  <img class="mv-dot-activo" src="/elementos/svg/dot-activo.svg" alt="" draggable="false" />
+                  <img class="mv-dot-inactivo" src="/elementos/svg/dot-inactivo.svg" alt="" draggable="false" />
+                </button>
+                <button type="button" class="mv-dot-svg-btn" data-mv-flora-pag="2" aria-label="Flora página 2">
+                  <img class="mv-dot-activo" src="/elementos/svg/dot-activo.svg" alt="" draggable="false" />
+                  <img class="mv-dot-inactivo" src="/elementos/svg/dot-inactivo.svg" alt="" draggable="false" />
+                </button>
               </span>
             </div>
             <div class="mv-doble-tab-btn con-muesca" data-mv-ff-tab="fauna" role="tab" aria-selected="false" tabindex="0">
               <span>Fauna</span>
               <span class="mv-muesca-inline">
-                <button type="button" class="mv-dot-cuadro activo" data-mv-fauna-pag="1" aria-label="Fauna página 1"></button>
-                <button type="button" class="mv-dot-cuadro" data-mv-fauna-pag="2" aria-label="Fauna página 2"></button>
+                <button type="button" class="mv-dot-svg-btn activo" data-mv-fauna-pag="1" aria-label="Fauna página 1">
+                  <img class="mv-dot-activo" src="/elementos/svg/dot-activo.svg" alt="" draggable="false" />
+                  <img class="mv-dot-inactivo" src="/elementos/svg/dot-inactivo.svg" alt="" draggable="false" />
+                </button>
+                <button type="button" class="mv-dot-svg-btn" data-mv-fauna-pag="2" aria-label="Fauna página 2">
+                  <img class="mv-dot-activo" src="/elementos/svg/dot-activo.svg" alt="" draggable="false" />
+                  <img class="mv-dot-inactivo" src="/elementos/svg/dot-inactivo.svg" alt="" draggable="false" />
+                </button>
               </span>
             </div>
           </div>
@@ -444,16 +495,13 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
             <!-- Bloque Flora -->
             <div class="mv-subpanel activa" data-mv-ff-bloque="flora">
               <div class="mv-subpanel activa" data-mv-flora-panel="1">
-                <p>
-                  El parque alberga una extraordinaria diversidad vegetal que varía con la altitud. Desde los bosques secos de la base hasta los subpáramos de las cumbres, cada piso altitudinal presenta comunidades vegetales únicas y adaptadas a sus condiciones específicas.
+                <p class="mv-prose">
+                  {te("El parque alberga una extraordinaria diversidad vegetal que varía con la altitud. Desde los bosques secos de la base hasta los subpáramos de las cumbres, cada piso altitudinal presenta comunidades vegetales únicas y adaptadas a sus condiciones específicas.")}
                 </p>
-                <button type="button" class="mv-btn-accion-secundaria mv-mt-12" data-mv-ir-catalogo="flora">
-                  Explorar especies de Flora
-                </button>
               </div>
 
               <div class="mv-subpanel" data-mv-flora-panel="2">
-                <p>Dentro de esta vasta riqueza botánica destacan:</p>
+                <p class="mv-prose">{te("Dentro de esta vasta riqueza botánica destacan:")}</p>
                 <div class="mv-chips-lista mv-chips-grid mv-mt-12">
                   {CATALOGO_FLORA_MOVIL.map((cat, idx) => (
                     <button
@@ -486,7 +534,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
                       ))}
                     </div>
                   </div>
-                  <p class="mv-especie-pie">
+                  <p class="mv-especie-pie mv-prose">
                     <strong id="mv-flora-comun">{CATALOGO_FLORA_MOVIL[0].especies[0].comun}</strong> -{" "}
                     <em id="mv-flora-cient">{CATALOGO_FLORA_MOVIL[0].especies[0].cientifico}</em>
                   </p>
@@ -497,19 +545,16 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
             <!-- Bloque Fauna -->
             <div class="mv-subpanel" data-mv-ff-bloque="fauna">
               <div class="mv-subpanel activa" data-mv-fauna-panel="1">
-                <p>
-                  El Warairarepano constituye un refugio biológico estratégico en la región central de Venezuela.
+                <p class="mv-prose">
+                  {te("El Warairarepano constituye un refugio biológico estratégico en la región central de Venezuela.")}
                 </p>
-                <p class="mv-mt-12">
-                  A nivel de especies, su geografía alberga desde mamíferos de gran porte y una amplia variedad de aves nativas y migratorias, hasta anfibios y reptiles adaptados a los microclimas específicos de la montaña.
+                <p class="mv-mt-12 mv-prose">
+                  {te("A nivel de especies, su geografía alberga desde mamíferos de gran porte y una amplia variedad de aves nativas y migratorias, hasta anfibios y reptiles adaptados a los microclimas específicos de la montaña.")}
                 </p>
-                <button type="button" class="mv-btn-accion-secundaria mv-mt-12" data-mv-ir-catalogo="fauna">
-                  Explorar especies de Fauna
-                </button>
               </div>
 
               <div class="mv-subpanel" data-mv-fauna-panel="2">
-                <p>La montaña alberga distintas comunidades de fauna, cada una moldeada por su nivel de altitud:</p>
+                <p class="mv-prose">{te("La montaña alberga distintas comunidades de fauna, cada una moldeada por su nivel de altitud:")}</p>
                 <div class="mv-chips-lista mv-chips-grid mv-mt-12">
                   {CATALOGO_FAUNA_MOVIL.map((cat, idx) => (
                     <button
@@ -542,7 +587,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
                       ))}
                     </div>
                   </div>
-                  <p class="mv-especie-pie">
+                  <p class="mv-especie-pie mv-prose">
                     <strong id="mv-fauna-comun">{CATALOGO_FAUNA_MOVIL[0].especies[0].comun}</strong> -{" "}
                     <em id="mv-fauna-cient">{CATALOGO_FAUNA_MOVIL[0].especies[0].cientifico}</em>
                   </p>
@@ -567,11 +612,11 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
         <div class="mv-card-intro">
           <div class="mv-card-intro-tab">Guía del visitante</div>
           <div class="mv-card-intro-cuerpo">
-            <p class="mv-texto-blanco">
-              El Parque Nacional Waraira Repano te espera con caminos llenos de historia, vegetación única y paisajes inolvidables. La Guía al Visitante es tu herramienta definitiva para explorar cada rincón de forma segura, planificada y emocionante.
+            <p class="mv-texto-blanco mv-prose">
+              {te("El Parque Nacional Waraira Repano te espera con caminos llenos de historia, vegetación única y paisajes inolvidables. La Guía al Visitante es tu herramienta definitiva para explorar cada rincón de forma segura, planificada y emocionante.")}
             </p>
-            <p class="mv-texto-blanco mv-mt-12">
-              Estas rutas han sido trazadas pensando exclusivamente en los amantes del senderismo.
+            <p class="mv-texto-blanco mv-mt-12 mv-prose">
+              {te("Estas rutas han sido trazadas pensando exclusivamente en los amantes del senderismo.")}
             </p>
           </div>
         </div>
@@ -586,16 +631,19 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
               {[0, 1].map((p) => (
                 <button
                   type="button"
-                  class:list={["mv-dot-cuadro", { activo: p === 0 }]}
+                  class:list={["mv-dot-svg-btn", { activo: p === 0 }]}
                   data-mv-rutas-pag={String(p)}
                   aria-label={`Rutas página ${p + 1}`}
                   aria-selected={p === 0 ? "true" : "false"}
-                />
+                >
+                  <img class="mv-dot-activo" src="/elementos/svg/dot-guia-activo.svg" alt="" draggable="false" />
+                  <img class="mv-dot-inactivo" src="/elementos/svg/dot-guia-inactivo.svg" alt="" draggable="false" />
+                </button>
               ))}
             </div>
           </div>
           <div class="mv-card-cuerpo">
-            <p>Descubre las rutas de nuestro parque y conéctate con la naturaleza.</p>
+            <p class="mv-prose">{te("Descubre las rutas de nuestro parque y conéctate con la naturaleza.")}</p>
             <div class="mv-lista-rutas-btns mv-mt-12" role="listbox" aria-label="Rutas del parque">
               {RUTAS_PARQUE_MOVIL.slice(0, 4).map((r, idx) => (
                 <button
@@ -647,7 +695,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
               <div class="mv-metrica-item">
                 <img src="/elementos/svg/icono-ruta-tiempo.svg" alt="" loading="lazy" />
                 <div>
-                  <span class="mv-metrica-label">Tiempo</span>
+                  <span class="mv-metrica-label">Tiempo de recorrido</span>
                   <strong class="mv-metrica-valor" id="mv-val-tiempo">{RUTAS_PARQUE_MOVIL[0].tiempo}</strong>
                 </div>
               </div>
@@ -665,11 +713,11 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
               </div>
             </div>
 
-            <p id="mv-desc-detalle-ruta" class="mv-mt-12">
-              {RUTAS_PARQUE_MOVIL[0].descripcion}
+            <p id="mv-desc-detalle-ruta" class="mv-mt-12 mv-prose">
+              {te(RUTAS_PARQUE_MOVIL[0].descripcion)}
             </p>
 
-            <!-- Galería 3 fotos -->
+            <!-- Galería 3 fotos con dot-galeria-*.svg reales -->
             <div class="mv-especie-fila-foto mv-mt-12">
               <div class="mv-foto-marco-especie mv-foto-detalle-aspect">
                 <img
@@ -679,19 +727,22 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
                   loading="lazy"
                 />
               </div>
-              <div class="mv-dots-verticales" role="tablist" aria-label="Galería de la ruta">
+              <div class="mv-dots-galeria-col" role="tablist" aria-label="Galería de la ruta">
                 {[0, 1, 2].map((g) => (
                   <button
                     type="button"
-                    class:list={["mv-dot-especie", { activo: g === 0 }]}
+                    class:list={["mv-dot-svg-btn mv-dot-galeria", { activo: g === 0 }]}
                     data-mv-galeria-idx={String(g)}
                     aria-label={`Foto ${g + 1} de 3`}
-                  />
+                  >
+                    <img class="mv-dot-activo" src="/elementos/svg/dot-galeria-activo.svg" alt="" draggable="false" />
+                    <img class="mv-dot-inactivo" src="/elementos/svg/dot-galeria-inactivo.svg" alt="" draggable="false" />
+                  </button>
                 ))}
               </div>
             </div>
 
-            <!-- Pestañas de información + Ver mapa -->
+            <!-- Pestañas verdes + Ver mapa -->
             <div class="mv-tabs-detalle-grid mv-mt-12" role="tablist" aria-label="Información de la ruta">
               <button type="button" class="mv-tab-verde activa" data-mv-detalle-tab="acceso" aria-selected="true">
                 Acceso
@@ -710,9 +761,9 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
             <div class="mv-caja-bullets-verde mv-mt-12">
               <ul id="mv-lista-bullets-detalle">
                 {RUTAS_PARQUE_MOVIL[0].acceso.map((b) => (
-                  <li>
-                    {b.prefix && <strong>{b.prefix} </strong>}
-                    {b.texto}
+                  <li class="mv-prose">
+                    {b.prefix && <strong>{te(b.prefix)} </strong>}
+                    {te(b.texto)}
                   </li>
                 ))}
               </ul>
@@ -735,17 +786,17 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
         <div class="mv-card-intro">
           <div class="mv-card-intro-tab">Emergencias y protocolos</div>
           <div class="mv-card-intro-cuerpo">
-            <p class="mv-texto-blanco">
-              Recorrer el Waraira Repano es una experiencia enriquecedora, pero la montaña exige respeto y cautela. Ante variaciones del clima, extravíos o emergencias médicas, la prevención es tu mejor herramienta.
+            <p class="mv-texto-blanco mv-prose">
+              {te("Recorrer el Waraira Repano es una experiencia enriquecedora, pero la montaña exige respeto y cautela. Ante variaciones del clima, extravíos o emergencias médicas, la prevención es tu mejor herramienta.")}
             </p>
-            <p class="mv-texto-blanco mv-mt-12">
-              Revisa nuestros protocolos paso a paso, conoce las recomendaciones de los cuerpos de rescate y asegúrate de contar con la información necesaria para reaccionar de manera rápida y coordinada.
+            <p class="mv-texto-blanco mv-mt-12 mv-prose">
+              {te("Revisa nuestros protocolos paso a paso, conoce las recomendaciones de los cuerpos de rescate y asegúrate de contar con la información necesaria para reaccionar de manera rápida y coordinada.")}
             </p>
           </div>
         </div>
       </article>
 
-      <!-- Prepara tu ascenso -->
+      <!-- Prepara tu ascenso (con ícono 57×57 real + ilustraciones reales de cards-prepara-ascenso-*.svg) -->
       <article class="mv-vista" data-mv-vista="prepara-ascenso">
         <div class="mv-card-contenido">
           <div class="mv-card-header-tab">
@@ -754,25 +805,54 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
               {PREPARA_PAGINAS_MOVIL.map((_, i) => (
                 <button
                   type="button"
-                  class:list={["mv-dot-cuadro", { activo: i === 0 }]}
+                  class:list={["mv-dot-svg-btn", { activo: i === 0 }]}
                   data-mv-grupo="prepara"
                   data-mv-pag-idx={String(i)}
                   aria-label={`Prepara tu ascenso página ${i + 1}`}
-                />
+                >
+                  <img class="mv-dot-activo" src="/elementos/svg/dot-emergencias-activo.svg" alt="" draggable="false" />
+                  <img class="mv-dot-inactivo" src="/elementos/svg/dot-emergencias-inactivo.svg" alt="" draggable="false" />
+                </button>
               ))}
             </div>
           </div>
           <div class="mv-card-cuerpo">
             {PREPARA_PAGINAS_MOVIL.map((pag, idx) => (
               <div class:list={["mv-subpanel", { activa: idx === 0 }]} data-mv-panel-grupo="prepara" data-mv-pag-idx={String(idx)}>
-                <p>{pag.lead}</p>
-                <div class="mv-grid-pasos mv-mt-12">
-                  {pag.items.map((txt) => (
-                    <div class="mv-paso-box mv-paso-check">
-                      <span class="mv-check-icon" aria-hidden="true">✓</span>
-                      <p>{txt}</p>
-                    </div>
-                  ))}
+                <div class="mv-lead-con-icono">
+                  <div
+                    class="mv-icono-svg-wrap"
+                    style={`--ix: ${ICONOS_EMERGENCIAS_SVG["prepara-ascenso"].x}px; --iy: ${ICONOS_EMERGENCIAS_SVG["prepara-ascenso"].y}px;`}
+                    aria-hidden="true"
+                  >
+                    <img src={pag.svgSuperior} alt="" loading="lazy" />
+                  </div>
+                  <p class="mv-prose">{te(pag.lead)}</p>
+                </div>
+
+                <div class:list={["mv-grid-pasos mv-mt-12", { "mv-grid-prepara-3": pag.tresCards }]}>
+                  {pag.cols.map((col) => {
+                    const escala = pag.tresCards ? 0.68 : 0.78;
+                    const anchoMarco = Math.round(pag.colW * escala);
+                    const altoMarco = Math.round(62 * escala);
+                    return (
+                      <div class="mv-paso-box mv-paso-prepara-ilustrado">
+                        <div
+                          class="mv-prepara-svg-crop"
+                          style={`width: ${anchoMarco}px; height: ${altoMarco}px;`}
+                          aria-hidden="true"
+                        >
+                          <img
+                            src={pag.cardsSvg}
+                            alt=""
+                            loading="lazy"
+                            style={`width: ${pag.svgW * escala}px; height: ${pag.svgH * escala}px; left: -${col.colX * escala}px; top: -${14 * escala}px;`}
+                          />
+                        </div>
+                        <p class="mv-prose">{te(col.texto)}</p>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             ))}
@@ -787,11 +867,20 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
             <h2 class="mv-card-titulo-tab">Protocolo ante extravío</h2>
           </div>
           <div class="mv-card-cuerpo">
-            <p>El parque tiene muchos senderos y es fácil desorientarse.</p>
+            <div class="mv-lead-con-icono">
+              <div
+                class="mv-icono-svg-wrap"
+                style={`--ix: ${ICONOS_EMERGENCIAS_SVG["protocolo-extravio"].x}px; --iy: ${ICONOS_EMERGENCIAS_SVG["protocolo-extravio"].y}px;`}
+                aria-hidden="true"
+              >
+                <img src={ICONOS_EMERGENCIAS_SVG["protocolo-extravio"].svg} alt="" loading="lazy" />
+              </div>
+              <p class="mv-prose">{te("El parque tiene muchos senderos y es fácil desorientarse.")}</p>
+            </div>
             <ol class="mv-lista-numerada mv-mt-12">
               {EXTRAVIO_PASOS_MOVIL.map((p) => (
-                <li>
-                  <strong>{p.negrita}</strong> {p.texto}
+                <li class="mv-prose">
+                  <strong>{p.negrita}</strong> {te(p.texto)}
                 </li>
               ))}
             </ol>
@@ -808,24 +897,38 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
               {URGENCIAS_PAGINAS_MOVIL.map((_, i) => (
                 <button
                   type="button"
-                  class:list={["mv-dot-cuadro", { activo: i === 0 }]}
+                  class:list={["mv-dot-svg-btn", { activo: i === 0 }]}
                   data-mv-grupo="urgencias"
                   data-mv-pag-idx={String(i)}
                   aria-label={`Urgencias médicas página ${i + 1}`}
-                />
+                >
+                  <img class="mv-dot-activo" src="/elementos/svg/dot-emergencias-activo.svg" alt="" draggable="false" />
+                  <img class="mv-dot-inactivo" src="/elementos/svg/dot-emergencias-inactivo.svg" alt="" draggable="false" />
+                </button>
               ))}
             </div>
           </div>
           <div class="mv-card-cuerpo">
             {URGENCIAS_PAGINAS_MOVIL.map((pag, idx) => (
               <div class:list={["mv-subpanel", { activa: idx === 0 }]} data-mv-panel-grupo="urgencias" data-mv-pag-idx={String(idx)}>
-                <h3 class="mv-subtitulo-acento">{pag.subtitulo}</h3>
-                <p class="mv-mt-6">{pag.lead}</p>
+                <div class="mv-lead-con-icono">
+                  <div
+                    class="mv-icono-svg-wrap"
+                    style={`--ix: ${pag.iconX}px; --iy: ${pag.iconY}px;`}
+                    aria-hidden="true"
+                  >
+                    <img src={pag.svgSuperior} alt="" loading="lazy" />
+                  </div>
+                  <div>
+                    <h3 class="mv-subtitulo-acento mv-prose">{te(pag.subtitulo)}</h3>
+                    <p class="mv-mt-6 mv-prose">{te(pag.lead)}</p>
+                  </div>
+                </div>
                 <div class="mv-grid-pasos mv-mt-12">
                   {pag.pasos.map((paso) => (
                     <div class="mv-paso-box">
                       <span class="mv-paso-num">{paso.num}</span>
-                      <p>{paso.texto}</p>
+                      <p class="mv-prose">{te(paso.texto)}</p>
                     </div>
                   ))}
                 </div>
@@ -844,24 +947,38 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
               {GOLPES_PAGINAS_MOVIL.map((_, i) => (
                 <button
                   type="button"
-                  class:list={["mv-dot-cuadro", { activo: i === 0 }]}
+                  class:list={["mv-dot-svg-btn", { activo: i === 0 }]}
                   data-mv-grupo="golpes"
                   data-mv-pag-idx={String(i)}
                   aria-label={`Golpes y heridas página ${i + 1}`}
-                />
+                >
+                  <img class="mv-dot-activo" src="/elementos/svg/dot-emergencias-activo.svg" alt="" draggable="false" />
+                  <img class="mv-dot-inactivo" src="/elementos/svg/dot-emergencias-inactivo.svg" alt="" draggable="false" />
+                </button>
               ))}
             </div>
           </div>
           <div class="mv-card-cuerpo">
             {GOLPES_PAGINAS_MOVIL.map((pag, idx) => (
               <div class:list={["mv-subpanel", { activa: idx === 0 }]} data-mv-panel-grupo="golpes" data-mv-pag-idx={String(idx)}>
-                <h3 class="mv-subtitulo-acento">{pag.subtitulo}</h3>
-                <p class="mv-mt-6">{pag.lead}</p>
+                <div class="mv-lead-con-icono">
+                  <div
+                    class="mv-icono-svg-wrap"
+                    style={`--ix: ${pag.iconX}px; --iy: ${pag.iconY}px;`}
+                    aria-hidden="true"
+                  >
+                    <img src={pag.svgSuperior} alt="" loading="lazy" />
+                  </div>
+                  <div>
+                    <h3 class="mv-subtitulo-acento mv-prose">{te(pag.subtitulo)}</h3>
+                    <p class="mv-mt-6 mv-prose">{te(pag.lead)}</p>
+                  </div>
+                </div>
                 <div class="mv-grid-pasos mv-mt-12">
                   {pag.pasos.map((paso) => (
                     <div class="mv-paso-box">
                       <span class="mv-paso-num">{paso.num}</span>
-                      <p>{paso.texto}</p>
+                      <p class="mv-prose">{te(paso.texto)}</p>
                     </div>
                   ))}
                 </div>
@@ -878,14 +995,23 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
             <h2 class="mv-card-titulo-tab">Niebla densa</h2>
           </div>
           <div class="mv-card-cuerpo">
-            <p>
-              En las zonas altas del parque, la neblina puede cubrir la ruta en cuestión de minutos, ocultando las marcas del camino y aumentando el riesgo de desorientación o caídas.
-            </p>
+            <div class="mv-lead-con-icono">
+              <div
+                class="mv-icono-svg-wrap"
+                style={`--ix: ${ICONOS_EMERGENCIAS_SVG["niebla-densa"].x}px; --iy: ${ICONOS_EMERGENCIAS_SVG["niebla-densa"].y}px;`}
+                aria-hidden="true"
+              >
+                <img src={ICONOS_EMERGENCIAS_SVG["niebla-densa"].svg} alt="" loading="lazy" />
+              </div>
+              <p class="mv-prose">
+                {te("En las zonas altas del parque, la neblina puede cubrir la ruta en cuestión de minutos, ocultando las marcas del camino y aumentando el riesgo de desorientación o caídas.")}
+              </p>
+            </div>
             <div class="mv-grid-pasos mv-mt-12">
               {NIEBLA_PASOS_MOVIL.map((paso) => (
                 <div class="mv-paso-box">
                   <span class="mv-paso-num">{paso.num}</span>
-                  <p>{paso.texto}</p>
+                  <p class="mv-prose">{te(paso.texto)}</p>
                 </div>
               ))}
             </div>
@@ -902,23 +1028,37 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
               {INCENDIO_PAGINAS_MOVIL.map((_, i) => (
                 <button
                   type="button"
-                  class:list={["mv-dot-cuadro", { activo: i === 0 }]}
+                  class:list={["mv-dot-svg-btn", { activo: i === 0 }]}
                   data-mv-grupo="incendio"
                   data-mv-pag-idx={String(i)}
                   aria-label={`Incendio forestal página ${i + 1}`}
-                />
+                >
+                  <img class="mv-dot-activo" src="/elementos/svg/dot-emergencias-activo.svg" alt="" draggable="false" />
+                  <img class="mv-dot-inactivo" src="/elementos/svg/dot-emergencias-inactivo.svg" alt="" draggable="false" />
+                </button>
               ))}
             </div>
           </div>
           <div class="mv-card-cuerpo">
-            <p><strong>Protocolo de Emergencia: Incendio Forestal en Montaña</strong></p>
+            <div class="mv-lead-con-icono">
+              <div
+                class="mv-icono-svg-wrap"
+                style={`--ix: ${ICONOS_EMERGENCIAS_SVG["incendio-forestal"].x}px; --iy: ${ICONOS_EMERGENCIAS_SVG["incendio-forestal"].y}px;`}
+                aria-hidden="true"
+              >
+                <img src={ICONOS_EMERGENCIAS_SVG["incendio-forestal"].svg} alt="" loading="lazy" />
+              </div>
+              <p class="mv-prose">
+                <strong>{te("Protocolo de Emergencia: Incendio Forestal en Montaña")}</strong>
+              </p>
+            </div>
             {INCENDIO_PAGINAS_MOVIL.map((items, idx) => (
               <div class:list={["mv-subpanel mv-mt-12", { activa: idx === 0 }]} data-mv-panel-grupo="incendio" data-mv-pag-idx={String(idx)}>
                 <ol class="mv-lista-incendio-alineada">
                   {items.map((it) => (
                     <li>
                       <span class="mv-num-izq">{it.num}</span>
-                      <span>{it.texto}</span>
+                      <span class="mv-prose">{te(it.texto)}</span>
                     </li>
                   ))}
                 </ol>
@@ -935,9 +1075,18 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
             <h2 class="mv-card-titulo-tab">Contactos de emergencia</h2>
           </div>
           <div class="mv-card-cuerpo">
-            <p>
-              Ante cualquier accidente, extravío o eventualidad en la montaña, comunícate de inmediato con los organismos de rescate y protección.
-            </p>
+            <div class="mv-lead-con-icono">
+              <div
+                class="mv-icono-svg-wrap"
+                style={`--ix: ${ICONOS_EMERGENCIAS_SVG["contactos-emergencia"].x}px; --iy: ${ICONOS_EMERGENCIAS_SVG["contactos-emergencia"].y}px;`}
+                aria-hidden="true"
+              >
+                <img src={ICONOS_EMERGENCIAS_SVG["contactos-emergencia"].svg} alt="" loading="lazy" />
+              </div>
+              <p class="mv-prose">
+                {te("Ante cualquier accidente, extravío o eventualidad en la montaña, comunícate de inmediato con los organismos de rescate y protección.")}
+              </p>
+            </div>
             <div class="mv-contactos-tabs mv-mt-12">
               {CONTACTOS_MOVIL.map((c, idx) => (
                 <button
@@ -945,7 +1094,9 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
                   class:list={["mv-tab-contacto", { activa: idx === 0 }]}
                   data-mv-contacto-target={c.id}
                 >
-                  {c.etiqueta}
+                  {c.etiquetaLineas[0]}
+                  <br />
+                  {c.etiquetaLineas[1]}
                 </button>
               ))}
             </div>
@@ -965,7 +1116,6 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
                     <a href={c.href} class="mv-num-enlace mv-num-fijo">
                       <span class="mv-operadora">{c.codigo}</span>
                       <strong class="mv-num-valor">{c.numero}</strong>
-                      <span class="mv-tocar-llamar">Tocar para llamar</span>
                     </a>
                   )}
                 </div>
@@ -989,11 +1139,11 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
         <div class="mv-card-intro">
           <div class="mv-card-intro-tab">Normativa del parque</div>
           <div class="mv-card-intro-cuerpo">
-            <p class="mv-texto-blanco">
-              De acuerdo con el Plan de Ordenamiento y Reglamento de Uso (PORU), el Instituto Nacional de Parques (INPARQUES) establece un conjunto de normas de cumplimiento obligatorio para garantizar la preservación de los ecosistemas del Parque Nacional Waraira Repano y la seguridad de sus visitantes.
+            <p class="mv-texto-blanco mv-prose">
+              {te("De acuerdo con el Plan de Ordenamiento y Reglamento de Uso (PORU), el Instituto Nacional de Parques (INPARQUES) establece un conjunto de normas de cumplimiento obligatorio para garantizar la preservación de los ecosistemas del Parque Nacional Waraira Repano y la seguridad de sus visitantes.")}
             </p>
-            <p class="mv-texto-blanco mv-mt-12">
-              Conocer y respetar estas directrices es fundamental para disfrutar de la montaña de forma responsable.
+            <p class="mv-texto-blanco mv-mt-12 mv-prose">
+              {te("Conocer y respetar estas directrices es fundamental para disfrutar de la montaña de forma responsable.")}
             </p>
           </div>
         </div>
@@ -1008,16 +1158,28 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
                 {sec.paginas.map((_, idx) => (
                   <button
                     type="button"
-                    class:list={["mv-dot-cuadro", { activo: idx === 0 }]}
+                    class:list={["mv-dot-svg-btn", { activo: idx === 0 }]}
                     data-mv-grupo={`norm-${key}`}
                     data-mv-pag-idx={String(idx)}
                     aria-label={`${sec.titulo} página ${idx + 1}`}
-                  />
+                  >
+                    <img class="mv-dot-activo" src="/elementos/svg/dot-normativa-activo.svg" alt="" draggable="false" />
+                    <img class="mv-dot-inactivo" src="/elementos/svg/dot-normativa-inactivo.svg" alt="" draggable="false" />
+                  </button>
                 ))}
               </div>
             </div>
             <div class="mv-card-cuerpo">
-              <p>{sec.lead}</p>
+              <div class="mv-lead-con-icono">
+                <div
+                  class="mv-icono-svg-wrap"
+                  style={`--ix: ${sec.iconX}px; --iy: ${sec.iconY}px;`}
+                  aria-hidden="true"
+                >
+                  <img src={sec.svgSuperior} alt="" loading="lazy" />
+                </div>
+                <p class="mv-prose">{te(sec.lead)}</p>
+              </div>
               {sec.paginas.map((bullets, idx) => (
                 <div
                   class:list={["mv-subpanel mv-mt-12", { activa: idx === 0 }]}
@@ -1026,7 +1188,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
                 >
                   <ul class="mv-lista-puntos-normativa">
                     {bullets.map((b) => (
-                      <li>{b}</li>
+                      <li class="mv-prose">{te(b)}</li>
                     ))}
                   </ul>
                 </div>
@@ -1071,6 +1233,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     CATALOGO_FLORA_MOVIL,
     CATALOGO_FAUNA_MOVIL,
     RUTAS_PARQUE_MOVIL,
+    tipografiaEditorial,
   } from "../data/warairaContenido";
 
   function inicializarVistaMovil() {
@@ -1082,12 +1245,11 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     const imgFondoAnterior = root.querySelector(".mv-fondo-anterior") as HTMLImageElement | null;
     const imgLomita = root.querySelector(".mv-lomita-svg") as HTMLImageElement | null;
     const imgEsquina = root.querySelector(".mv-esquina-izq") as HTMLImageElement | null;
-    const lblModuloBar = root.querySelector(".mv-titulo-modulo-bar");
 
     const tabsTecho = root.querySelectorAll<HTMLButtonElement>(".mv-techo-tab[data-mv-sec]");
     const gruposMaderas = root.querySelectorAll<HTMLElement>(".mv-grupo-maderas[data-mv-maderas-sec]");
     const secciones = root.querySelectorAll<HTMLElement>(".mv-seccion[data-mv-seccion]");
-    const btnMarcaPrincipal = root.querySelector(".mv-btn-letrero-principal");
+    const btnMarcaPrincipal = root.querySelector<HTMLButtonElement>(".mv-btn-letrero-principal");
 
     const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const animarSuave = (el: Element | null, dur = 320, fromY = 6) => {
@@ -1139,7 +1301,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
       }
     };
 
-    // Precarga de fotos de especies y rutas
+    // Precarga limpia de fotos de especies y rutas
     CATALOGO_FLORA_MOVIL.forEach((c) => c.especies.forEach((e) => precargarImg(e.foto)));
     CATALOGO_FAUNA_MOVIL.forEach((c) => c.especies.forEach((e) => precargarImg(e.foto)));
     RUTAS_PARQUE_MOVIL.forEach((r) => {
@@ -1157,6 +1319,10 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
         v.classList.toggle("activa", esAct);
         if (esAct) animarSuave(v, 320, 6);
       });
+
+      if (btnMarcaPrincipal) {
+        btnMarcaPrincipal.classList.toggle("activo", vistaId === "intro");
+      }
 
       const madTarget = vistaId === "detalle-ruta" ? "rutas-parque" : vistaId;
       const grupo = root.querySelector(`.mv-grupo-maderas[data-mv-maderas-sec="${secId}"]`);
@@ -1186,9 +1352,6 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
       root.style.setProperty("--mv-tema", color);
       root.style.setProperty("--mv-tema-oscuro", oscuro);
 
-      if (lblModuloBar && tab.dataset.mvTitulo) {
-        lblModuloBar.textContent = tab.dataset.mvTitulo;
-      }
       if (imgLomita && tab.dataset.mvLomita && imgLomita.getAttribute("src") !== tab.dataset.mvLomita) {
         imgLomita.src = tab.dataset.mvLomita;
       }
@@ -1214,6 +1377,9 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
 
       const secEl = root.querySelector<HTMLElement>(`.mv-seccion[data-mv-seccion="${secId}"]`);
       const vistaActual = secEl?.dataset.mvVistaActual || "intro";
+      if (btnMarcaPrincipal) {
+        btnMarcaPrincipal.classList.toggle("activo", vistaActual === "intro");
+      }
       const btnMadera = root.querySelector<HTMLButtonElement>(
         `.mv-grupo-maderas[data-mv-maderas-sec="${secId}"] .mv-madera-btn[data-mv-vista-target="${vistaActual}"]`
       );
@@ -1262,7 +1428,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
       }
     });
 
-    // ¿Quiénes somos? - Misión / Visión
+    // Misión / Visión
     const btnsQsTab = root.querySelectorAll<HTMLButtonElement>("[data-mv-qs-tab]");
     const panelsQs = root.querySelectorAll<HTMLElement>("[data-mv-qs-panel]");
     btnsQsTab.forEach((btn) => {
@@ -1314,7 +1480,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
           imgCumbre.alt = btn.dataset.mvCumbreNombre || "";
           animarSuave(imgCumbre, 260, 0);
         }
-        if (descCumbre) descCumbre.textContent = btn.dataset.mvCumbreDesc || "";
+        if (descCumbre) descCumbre.textContent = tipografiaEditorial(btn.dataset.mvCumbreDesc || "");
         if (altCumbre) altCumbre.textContent = btn.dataset.mvCumbreAltura || "";
       });
     });
@@ -1381,21 +1547,9 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
       });
     });
     root.querySelectorAll<HTMLButtonElement>("[data-mv-fauna-pag]").forEach((b) => {
-      btnClickStop(b, () => {
-        if (b.dataset.mvFaunaPag) activarFaunaPag(b.dataset.mvFaunaPag);
-      });
-    });
-    function btnClickStop(el: HTMLElement, fn: () => void) {
-      el.addEventListener("click", (e) => {
+      b.addEventListener("click", (e) => {
         e.stopPropagation();
-        fn();
-      });
-    }
-
-    root.querySelectorAll<HTMLButtonElement>("[data-mv-ir-catalogo]").forEach((b) => {
-      b.addEventListener("click", () => {
-        if (b.dataset.mvIrCatalogo === "flora") activarFloraPag("2");
-        else activarFaunaPag("2");
+        if (b.dataset.mvFaunaPag) activarFaunaPag(b.dataset.mvFaunaPag);
       });
     });
 
@@ -1546,12 +1700,13 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
       listBulletsDet.innerHTML = "";
       items.forEach((it) => {
         const li = document.createElement("li");
+        li.className = "mv-prose";
         if (it.prefix) {
           const st = document.createElement("strong");
-          st.textContent = `${it.prefix} `;
+          st.textContent = `${tipografiaEditorial(it.prefix)} `;
           li.appendChild(st);
         }
-        li.appendChild(document.createTextNode(it.texto));
+        li.appendChild(document.createTextNode(tipografiaEditorial(it.texto)));
         listBulletsDet.appendChild(li);
       });
       animarSuave(listBulletsDet, 220, 3);
@@ -1563,9 +1718,12 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
         b.classList.toggle("activo", Number(b.dataset.mvGaleriaIdx) === galeriaIdx);
       });
       const src = ruta.fotosDetalle[galeriaIdx] || ruta.fotosDetalle[0];
-      if (imgDetFoto && imgDetFoto.getAttribute("src") !== src) {
-        imgDetFoto.src = src;
-        animarSuave(imgDetFoto, 260, 0);
+      if (imgDetFoto) {
+        imgDetFoto.alt = `Fotografía ${galeriaIdx + 1} de ${ruta.nombreDetalle}`;
+        if (imgDetFoto.getAttribute("src") !== src) {
+          imgDetFoto.src = src;
+          animarSuave(imgDetFoto, 260, 0);
+        }
       }
     };
 
@@ -1584,7 +1742,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
             ? "/elementos/svg/icono-ruta-dificultad-alta.svg"
             : "/elementos/svg/icono-ruta-dificultad-media.svg";
       }
-      if (elDetDesc) elDetDesc.textContent = ruta.descripcion;
+      if (elDetDesc) elDetDesc.textContent = tipografiaEditorial(ruta.descripcion);
       btnsDetTab.forEach((b) => {
         const act = b.dataset.mvDetalleTab === tabDetalle;
         b.classList.toggle("activa", act);
@@ -1708,7 +1866,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
       });
     });
 
-    // Soporte para URL params (?vista=...&sub=...)
+    // Soporte URL (?vista=...)
     const params = new URLSearchParams(window.location.search);
     const vParam = params.get("vista");
     if (vParam) {
@@ -1740,6 +1898,16 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   }
 
   /* ==========================================================
+     REGULA ORTOTIPOGRÁFICA GLOBAL DE PARRAFOS / BANDERILLAS
+     ========================================================== */
+  .mv-prose {
+    text-align: left;
+    text-wrap: pretty;
+    hyphens: none;
+    overflow-wrap: break-word;
+  }
+
+  /* ==========================================================
      CAPAS FIJAS DE FONDO Y LOMITA INFERIOR
      ========================================================== */
   .mv-fondo-fijo {
@@ -1764,18 +1932,6 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
 
   .mv-fondo-actual {
     z-index: 2;
-  }
-
-  .mv-fondo-velo {
-    position: absolute;
-    inset: 0;
-    z-index: 3;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.12) 0%,
-      rgba(24, 38, 25, 0.14) 55%,
-      rgba(24, 38, 25, 0.28) 100%
-    );
   }
 
   .mv-marco-inferior {
@@ -1812,74 +1968,13 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   }
 
   /* ==========================================================
-     CABEZAL FIJO SUPERIOR (MARCA MADERA + 5 TABS + MADERAS)
+     CABEZAL FIJO SUPERIOR (TECHO ORIGINAL + LETRERO DE MADERA)
      ========================================================== */
   .mv-header {
     position: sticky;
     top: 0;
     z-index: 30;
     width: 100%;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
-  }
-
-  .mv-barra-marca {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: calc(6px + env(safe-area-inset-top)) 12px 6px;
-    background: rgba(226, 227, 229, 0.92);
-    backdrop-filter: blur(8px);
-  }
-
-  .mv-btn-letrero-principal {
-    flex-shrink: 0;
-    width: 138px;
-    height: 52px;
-    overflow: hidden;
-    border: none;
-    background: transparent;
-    padding: 0;
-    cursor: pointer;
-    border-radius: 6px;
-  }
-
-  .mv-img-letrero-recortada {
-    width: 138px;
-    height: 384px;
-    margin-top: -6px;
-    display: block;
-    object-fit: fill;
-  }
-
-  .mv-indicador-modulo-actual {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    min-width: 0;
-    padding: 6px 11px;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.88);
-    border: 1px solid rgba(37, 66, 38, 0.08);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
-  }
-
-  .mv-punto-color {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: var(--mv-tema);
-    flex-shrink: 0;
-    transition: background-color 0.26s ease;
-  }
-
-  .mv-titulo-modulo-bar {
-    font-size: 13px;
-    font-weight: 700;
-    color: #254226;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   /* 5 Tabs superiores imitando Techo.astro */
@@ -1888,9 +1983,12 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
     width: 100%;
-    min-height: 46px;
+    min-height: 52px;
+    padding-top: env(safe-area-inset-top);
     overflow: hidden;
-    background: #2e3b30;
+    border-bottom-left-radius: 22px;
+    background: rgba(215, 215, 217, 0.85);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   }
 
   .mv-silueta-cabezal {
@@ -1905,8 +2003,8 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
 
   .mv-techo-tab {
     position: relative;
-    min-height: 46px;
-    padding: 9px 2px 5px;
+    min-height: 52px;
+    padding: 9px 2px 6px;
     border: none;
     background: transparent;
     color: #ffffff;
@@ -1924,11 +2022,11 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     z-index: 2;
     background-color: var(--tab-color);
     opacity: 0.85;
-    transition: opacity 0.22s ease, filter 0.22s ease;
+    transition: opacity 0.24s ease, filter 0.24s ease;
   }
 
   .mv-techo-tab.activa .mv-tab-fondo {
-    opacity: 0.94;
+    opacity: 0.92;
   }
 
   .mv-tab-indicador {
@@ -1943,7 +2041,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     border-bottom-right-radius: 5px;
     opacity: 0;
     z-index: 4;
-    transition: opacity 0.24s ease;
+    transition: opacity 0.26s ease;
   }
 
   .mv-techo-tab.activa .mv-tab-indicador {
@@ -1953,19 +2051,46 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   .mv-tab-texto {
     position: relative;
     z-index: 3;
-    font-size: clamp(10px, 2.75vw, 12.5px);
-    font-weight: 600;
-    line-height: 1.12;
+    font-size: clamp(9.5px, 2.55vw, 12.5px);
+    font-weight: 500;
+    line-height: 1.15;
+    white-space: nowrap;
     color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
-    word-break: break-word;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
   }
 
-  /* Barra horizontal de maderas oscurecidas/activas */
+  /* Franja transparente flotante con poste WARAIRA REPANO + tablas de madera reales */
+  .mv-letrero-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px 10px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.34) 0%, rgba(255, 255, 255, 0) 100%);
+  }
+
+  .mv-btn-letrero-principal {
+    flex-shrink: 0;
+    width: 118px;
+    height: 45px;
+    overflow: hidden;
+    border: none;
+    background: transparent;
+    padding: 0;
+    cursor: pointer;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.28));
+  }
+
+  .mv-img-letrero-recortada {
+    width: 118px;
+    height: 329px;
+    margin-top: -5px;
+    display: block;
+    object-fit: fill;
+  }
+
   .mv-subnav-maderas {
-    width: 100%;
-    padding: 8px 10px;
-    background: linear-gradient(180deg, rgba(35, 22, 11, 0.92), rgba(45, 29, 15, 0.88));
+    flex: 1;
+    min-width: 0;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -1978,8 +2103,9 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   .mv-grupo-maderas {
     display: none;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     width: max-content;
+    padding: 2px 0;
   }
 
   .mv-grupo-maderas.activo {
@@ -1987,32 +2113,78 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   }
 
   .mv-madera-btn {
+    position: relative;
     flex-shrink: 0;
-    min-height: 34px;
-    padding: 6px 14px;
-    border-radius: 8px;
-    border: 1px solid rgba(196, 154, 108, 0.24);
-    background: linear-gradient(180deg, #4b3119 0%, #372210 100%);
-    color: #aba89e;
-    font-size: 13.5px;
-    font-weight: 500;
-    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    width: 156px;
+    height: 29px;
+    border: none;
+    background: transparent;
+    padding: 0;
     cursor: pointer;
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 4px rgba(0, 0, 0, 0.24);
-    transition:
-      background 0.24s ease,
-      color 0.24s ease,
-      border-color 0.24s ease,
-      transform 0.16s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.22));
   }
 
-  .mv-madera-btn.activa {
-    background: var(--mv-tema);
-    border-color: rgba(255, 255, 255, 0.48);
+  .mv-madera-btn.dos-lineas {
+    height: 39px;
+  }
+
+  .mv-madera-btn img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: fill;
+    pointer-events: none;
+    transition: opacity 0.26s ease, filter 0.22s ease;
+  }
+
+  .mv-madera-img-activa {
+    opacity: 0;
+    z-index: 1;
+  }
+
+  .mv-madera-img-reposo {
+    opacity: 1;
+    z-index: 0;
+    filter: brightness(0.54) contrast(1.28) saturate(1.10);
+  }
+
+  .mv-madera-btn.con-texto .mv-madera-img-reposo {
+    filter: brightness(0.42) contrast(1.30) saturate(1.12);
+  }
+
+  .mv-madera-btn.activa .mv-madera-img-reposo {
+    opacity: 0;
+  }
+
+  .mv-madera-btn.activa .mv-madera-img-activa {
+    opacity: 1;
+  }
+
+  .mv-madera-texto {
+    position: relative;
+    z-index: 2;
+    display: block;
+    padding: 0 6px 0 8px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 15px;
+    color: #a6a59d;
+    white-space: nowrap;
+    transition: color 0.26s ease;
+  }
+
+  .mv-madera-btn.dos-lineas .mv-madera-texto {
+    white-space: normal;
+    line-height: 14px;
+  }
+
+  .mv-madera-btn.activa .mv-madera-texto {
     color: #ffffff;
-    font-weight: 700;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.28);
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.26);
   }
 
   /* ==========================================================
@@ -2023,7 +2195,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     z-index: 5;
     width: 100%;
     flex: 1;
-    padding: 14px 14px 104px;
+    padding: 4px 14px 104px;
   }
 
   .mv-seccion,
@@ -2038,7 +2210,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     display: block;
   }
 
-  /* Tarjeta Intro (pestaña blanca + cuerpo de color) */
+  /* Tarjeta Intro fiel (pestaña blanca + cuerpo color original) */
   .mv-card-intro {
     width: 100%;
   }
@@ -2046,71 +2218,68 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   .mv-card-intro-tab {
     display: inline-flex;
     align-items: center;
-    padding: 9px 20px;
+    padding: 9px 22px;
     background: #ffffff;
     color: var(--mv-tema-oscuro);
-    border-radius: 18px 18px 0 0;
-    font-size: 17px;
+    border-radius: 20px 20px 0 0;
+    font-size: 18px;
     font-weight: 700;
     line-height: 1.2;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.06);
   }
 
   .mv-card-intro-cuerpo {
-    padding: 18px 16px;
-    border-radius: 0 20px 20px 20px;
+    padding: 18px 18px;
+    border-radius: 0 22px 22px 22px;
     background: var(--mv-tema);
-    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.16);
   }
 
   .mv-intro-subtitulo {
-    font-size: 19px;
-    font-weight: 800;
+    font-size: 19.5px;
+    font-weight: 700;
     line-height: 1.25;
     color: #ffffff;
     margin-bottom: 8px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.16);
   }
 
   .mv-texto-blanco {
-    font-size: 15.5px;
+    font-size: 16px;
     font-weight: 400;
-    line-height: 1.48;
+    line-height: 1.44;
     color: #ffffff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.14);
   }
 
-  .mv-insignias-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+  .mv-insignias-fila {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     gap: 10px;
-    margin: 12px 0;
+    margin: 14px 0;
   }
 
-  .mv-insignia-pill {
+  .mv-insignia-item {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 8px 10px;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.18);
+    flex: 1;
   }
 
-  .mv-insignia-pill img {
-    width: 36px;
-    height: 36px;
+  .mv-insignia-item img {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
     object-fit: contain;
     flex-shrink: 0;
   }
 
-  .mv-insignia-pill span {
-    font-size: 13.5px;
+  .mv-insignia-item span {
+    font-size: 14px;
     font-weight: 700;
     line-height: 1.2;
     color: #ffffff;
   }
 
-  /* Tarjeta contenido general (pestaña de color + cuerpo crema traslúcido) */
+  /* Tarjeta contenido general (pestaña de color + cuerpo crema original rgba(244, 240, 232, 0.90)) */
   .mv-card-contenido {
     width: 100%;
   }
@@ -2125,89 +2294,110 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   .mv-card-titulo-tab {
     display: inline-flex;
     align-items: center;
-    min-height: 40px;
-    padding: 8px 18px;
+    min-height: 42px;
+    padding: 8px 20px;
     background: var(--mv-tema);
     color: #ffffff;
-    border-radius: 18px 18px 0 0;
-    font-size: 17px;
+    border-radius: 20px 20px 0 0;
+    font-size: 18px;
     font-weight: 700;
     line-height: 1.2;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.18);
   }
 
+  /* Muesca blanca con SVG dots originales (sin bordes inventados) */
   .mv-paginador-muesca {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     padding: 8px 12px;
     border-radius: 14px 14px 0 0;
-    background: rgba(247, 244, 237, 0.96);
+    background: rgba(244, 240, 232, 0.95);
     flex-shrink: 0;
   }
 
-  .mv-dot-cuadro {
+  .mv-dot-svg-btn {
     position: relative;
-    width: 14px;
-    height: 14px;
-    border-radius: 4px;
-    border: 1.8px solid var(--mv-tema-oscuro);
-    background: transparent;
+    width: 12px;
+    height: 12px;
     padding: 0;
+    border: none;
+    background: transparent;
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.15s ease;
+    display: block;
+    flex-shrink: 0;
   }
 
-  .mv-dot-cuadro::after,
+  .mv-dot-svg-btn::after,
   .mv-dot-especie::after {
     content: "";
     position: absolute;
     inset: -9px;
   }
 
-  .mv-dot-cuadro.activo {
-    background-color: var(--mv-tema);
-    border-color: var(--mv-tema);
+  .mv-dot-svg-btn img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+  }
+
+  .mv-dot-svg-btn .mv-dot-activo {
+    opacity: 0;
+  }
+
+  .mv-dot-svg-btn .mv-dot-inactivo {
+    opacity: 1;
+  }
+
+  .mv-dot-svg-btn.activo .mv-dot-activo {
+    opacity: 1;
+  }
+
+  .mv-dot-svg-btn.activo .mv-dot-inactivo {
+    opacity: 0;
   }
 
   .mv-card-cuerpo {
-    padding: 18px 16px;
-    border-radius: 0 20px 20px 20px;
-    background: rgba(247, 244, 237, 0.95);
-    backdrop-filter: blur(8px);
-    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.16);
-    font-size: 15.5px;
-    line-height: 1.5;
+    padding: 18px 18px;
+    border-radius: 0 22px 22px 22px;
+    background: rgba(244, 240, 232, 0.90);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+    font-size: 16px;
+    line-height: 1.44;
     color: #254226;
   }
 
-  /* Pestañas dobles (Misión / Visión y Flora / Fauna) */
+  /* Pestañas dobles Misión/Visión y Flora/Fauna con unión sin huecos */
   .mv-doble-tab-barra {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 4px;
+    gap: 2px;
     width: 100%;
   }
 
   .mv-card-doble-tab .mv-card-cuerpo {
-    border-radius: 0 0 20px 20px;
+    border-radius: 0 0 22px 22px;
   }
 
   .mv-doble-tab-btn {
     min-height: 44px;
     padding: 8px 10px;
     border: none;
-    border-radius: 18px 18px 0 0;
-    background: color-mix(in srgb, var(--mv-tema) 60%, #ffffff);
+    border-radius: 20px 20px 0 0;
+    background: color-mix(in srgb, var(--mv-tema) 56%, #f4f0e8);
     color: #ffffff;
-    font-size: 16.5px;
+    font-size: 17px;
     font-weight: 700;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: background-color 0.22s ease, opacity 0.22s ease;
+    transition: background-color 0.22s ease;
   }
 
   .mv-doble-tab-btn.activa {
@@ -2217,10 +2407,10 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   .mv-muesca-inline {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 4px 8px;
+    gap: 7px;
+    padding: 5px 9px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.92);
+    background: #ffffff;
     opacity: 0.45;
     pointer-events: none;
     transition: opacity 0.2s ease;
@@ -2231,20 +2421,46 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     pointer-events: auto;
   }
 
-  /* Tarjeta foto independiente */
+  /* Ícono vector 57×57 real recortado del SVG original */
+  .mv-lead-con-icono {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .mv-icono-svg-wrap {
+    position: relative;
+    width: 57px;
+    height: 57px;
+    border-radius: 12px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .mv-icono-svg-wrap img {
+    position: absolute;
+    left: calc(var(--ix) * -1);
+    top: calc(var(--iy) * -1);
+    width: 709.3px;
+    height: 238.97px;
+    max-width: none;
+    pointer-events: none;
+  }
+
+  /* Tarjeta fotográfica derecha (Hotel Humboldt, Pico Naiguatá) */
   .mv-card-foto-sola {
     margin-top: 12px;
     padding: 12px;
-    border-radius: 20px;
-    background: rgba(247, 244, 237, 0.95);
-    backdrop-filter: blur(8px);
-    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.16);
+    border-radius: 22px;
+    background: rgba(244, 240, 232, 0.90);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
   }
 
   .mv-foto-marco {
     width: 100%;
-    aspect-ratio: 16 / 10;
-    border-radius: 14px;
+    aspect-ratio: 237 / 180;
+    border-radius: 18px;
     overflow: hidden;
     background: rgba(37, 66, 38, 0.08);
   }
@@ -2257,14 +2473,14 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   }
 
   .mv-pie-foto {
-    margin-top: 8px;
-    padding-left: 4px;
+    margin-top: 10px;
+    padding-left: 8px;
     font-size: 13.5px;
-    font-weight: 600;
+    font-weight: 400;
     color: #254226;
   }
 
-  /* Listas y grillas específicas */
+  /* Listas, cifras y grillas */
   .mv-mt-6 {
     margin-top: 6px;
   }
@@ -2280,7 +2496,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   }
 
   .mv-subtitulo-acento {
-    font-size: 16.5px;
+    font-size: 17px;
   }
 
   .mv-lista-puntos-color,
@@ -2296,8 +2512,8 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   .mv-lista-puntos-normativa li {
     position: relative;
     padding-left: 16px;
-    font-size: 15px;
-    line-height: 1.45;
+    font-size: 15.5px;
+    line-height: 1.42;
   }
 
   .mv-lista-puntos-color li::before,
@@ -2320,13 +2536,14 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   }
 
   .mv-bio-card {
-    padding: 12px;
-    border-radius: 18px;
-    background: rgba(247, 244, 237, 0.95);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+    padding: 12px 14px;
+    border-radius: 20px;
+    background: rgba(244, 240, 232, 0.90);
+    backdrop-filter: blur(4px);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
   }
 
   .mv-bio-top {
@@ -2336,62 +2553,41 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   }
 
   .mv-bio-top img {
-    width: 36px;
-    height: 34px;
+    width: 40px;
+    height: 38px;
     object-fit: contain;
   }
 
   .mv-bio-cifra {
-    font-size: 23px;
+    font-size: 24px;
     font-weight: 800;
     color: #ff8f00;
   }
 
   .mv-bio-etiqueta {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     color: #ff8f00;
   }
 
-  .mv-grid-inparques {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 8px;
-    margin-top: 12px;
+  .mv-cuadros-svg-wrap {
+    width: 100%;
+    border-radius: 18px;
+    overflow: hidden;
   }
 
-  .mv-inparques-card {
-    padding: 12px 8px;
-    border-radius: 16px;
-    background: rgba(247, 244, 237, 0.95);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 4px;
-  }
-
-  .mv-inparques-cifra {
-    font-size: 30px;
-    font-weight: 800;
-    line-height: 1.05;
-    color: #ff8f00;
-  }
-
-  .mv-inparques-etiqueta {
-    font-size: 12.5px;
-    font-weight: 700;
-    line-height: 1.2;
-    color: #ff8f00;
+  .mv-cuadros-svg-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
 
   .mv-logo-card {
     margin-top: 12px;
-    padding: 16px;
-    border-radius: 18px;
-    background: rgba(247, 244, 237, 0.95);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+    padding: 14px;
+    border-radius: 22px;
+    background: rgba(244, 240, 232, 0.90);
+    backdrop-filter: blur(4px);
     display: flex;
     justify-content: center;
   }
@@ -2408,21 +2604,18 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     align-items: center;
     gap: 12px;
     margin-top: 14px;
-    padding: 10px 12px;
-    border-radius: 14px;
-    background: rgba(234, 192, 15, 0.15);
   }
 
   .mv-insignia-clima img {
-    width: 44px;
-    height: 34px;
+    width: 52px;
+    height: 38px;
     object-fit: contain;
   }
 
   .mv-insignia-clima span {
-    font-size: 16.5px;
+    font-size: 17px;
     font-weight: 700;
-    color: #b48900;
+    color: var(--mv-tema-oscuro);
   }
 
   .mv-vertientes-stack {
@@ -2433,17 +2626,17 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   }
 
   .mv-card-secundaria {
-    padding: 14px 16px;
-    border-radius: 18px;
-    background: rgba(247, 244, 237, 0.95);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
+    padding: 16px 18px;
+    border-radius: 22px;
+    background: rgba(244, 240, 232, 0.90);
+    backdrop-filter: blur(4px);
   }
 
   .mv-card-secundaria h3 {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 700;
-    color: #c29905;
-    margin-bottom: 6px;
+    color: var(--mv-tema-oscuro);
+    margin-bottom: 8px;
   }
 
   .mv-card-secundaria ul {
@@ -2452,11 +2645,11 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     display: flex;
     flex-direction: column;
     gap: 6px;
-    font-size: 14.5px;
+    font-size: 15px;
     line-height: 1.4;
   }
 
-  /* Chips Geología & Catálogo Flora / Fauna */
+  /* Chips Geología & Catálogo Flora / Fauna fieles a los botones crema originales */
   .mv-chips-lista {
     display: flex;
     flex-wrap: wrap;
@@ -2471,31 +2664,29 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
 
   .mv-chip-btn {
     min-height: 38px;
-    padding: 7px 12px;
-    border-radius: 12px;
-    border: 1.5px solid rgba(201, 153, 0, 0.35);
+    padding: 7px 10px;
+    border-radius: 13px;
+    border: none;
     background: rgba(255, 255, 255, 0.72);
-    color: #8f6b00;
+    color: var(--mv-tema-oscuro);
     font-size: 13.5px;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.18;
     cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   .mv-chip-btn.activo {
-    background: #eac00f;
-    border-color: #d6a900;
-    color: #ffffff;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.18);
+    background: #ffffff;
+    color: var(--mv-tema-oscuro);
+    box-shadow: inset 0 0 0 2px var(--mv-tema);
   }
 
   .mv-visor-cumbre,
   .mv-visor-especie {
     padding: 10px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.78);
-    border: 1px solid rgba(234, 192, 15, 0.28);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.85);
   }
 
   .mv-visor-desc {
@@ -2508,7 +2699,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     margin-top: 4px;
     font-size: 13.5px;
     font-weight: 700;
-    color: #a67d00;
+    color: var(--mv-tema-oscuro);
   }
 
   .mv-especie-fila-foto {
@@ -2521,13 +2712,13 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     flex: 1;
     min-width: 0;
     aspect-ratio: 314 / 168;
-    border-radius: 14px;
+    border-radius: 16px;
     overflow: hidden;
     background: rgba(37, 66, 38, 0.08);
   }
 
   .mv-foto-marco-especie.mv-foto-detalle-aspect {
-    aspect-ratio: 4 / 3;
+    aspect-ratio: 234 / 215;
   }
 
   .mv-foto-marco-especie img {
@@ -2542,9 +2733,9 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 12px;
-    padding: 12px 7px;
-    border-radius: 14px;
+    gap: 14px;
+    padding: 14px 8px;
+    border-radius: 16px;
     background: var(--mv-tema);
     flex-shrink: 0;
   }
@@ -2567,23 +2758,10 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
 
   .mv-especie-pie {
     margin-top: 8px;
+    padding-left: 4px;
     font-size: 13.5px;
     line-height: 1.35;
     color: #254226;
-  }
-
-  .mv-btn-accion-secundaria {
-    width: 100%;
-    min-height: 42px;
-    padding: 10px 14px;
-    border-radius: 12px;
-    border: none;
-    background: var(--mv-tema);
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   }
 
   /* Guía del visitante: Rutas y detalle */
@@ -2595,37 +2773,35 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
 
   .mv-ruta-selector-btn {
     width: 100%;
-    min-height: 42px;
-    padding: 9px 14px;
+    min-height: 40px;
+    padding: 8px 14px;
     border-radius: 12px;
-    border: 1.5px solid rgba(75, 174, 80, 0.3);
-    background: rgba(255, 255, 255, 0.8);
-    color: #2c7a31;
-    font-size: 15.5px;
-    font-weight: 600;
+    border: none;
+    background: rgba(255, 255, 255, 0.85);
+    color: #4caf50;
+    font-size: 16px;
+    font-weight: 500;
     text-align: left;
     cursor: pointer;
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   .mv-ruta-selector-btn.activo {
-    background: #4bae50;
-    border-color: #3d9a42;
-    color: #ffffff;
+    background: #ffffff;
+    color: #2e7d32;
     font-weight: 700;
+    box-shadow: inset 4px 0 0 #4bae50;
   }
 
   .mv-btn-ver-ruta {
-    width: 100%;
-    min-height: 44px;
+    padding: 7px 18px;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px 10px 0 0;
     background: #4bae50;
     color: #ffffff;
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 15px;
+    font-weight: 500;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(75, 174, 80, 0.3);
   }
 
   .mv-header-detalle {
@@ -2637,8 +2813,8 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     padding: 6px 12px;
     border-radius: 12px;
     border: none;
-    background: rgba(255, 255, 255, 0.92);
-    color: #2f7d34;
+    background: rgba(244, 240, 232, 0.96);
+    color: #38893c;
     font-size: 13.5px;
     font-weight: 700;
     cursor: pointer;
@@ -2654,8 +2830,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   .mv-metrica-item {
     padding: 8px 6px;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.86);
-    border: 1px solid rgba(75, 174, 80, 0.2);
+    background: rgba(255, 255, 255, 0.72);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -2672,14 +2847,14 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   .mv-metrica-label {
     display: block;
     font-size: 11px;
-    font-weight: 700;
+    font-weight: 600;
     color: #4caf50;
   }
 
   .mv-metrica-valor {
     display: block;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 400;
     color: #254226;
     line-height: 1.2;
   }
@@ -2687,7 +2862,22 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   .mv-metrica-nota {
     display: block;
     font-size: 10px;
-    color: #3a5c3c;
+    color: #254226;
+  }
+
+  .mv-dots-galeria-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 6px;
+    flex-shrink: 0;
+  }
+
+  .mv-dot-galeria {
+    width: 14px;
+    height: 14px;
   }
 
   .mv-tabs-detalle-grid {
@@ -2697,28 +2887,27 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   }
 
   .mv-tab-verde {
-    min-height: 38px;
-    padding: 7px 10px;
+    min-height: 36px;
+    padding: 6px 10px;
     border-radius: 10px;
-    border: 1.5px solid #4bae50;
-    background: rgba(255, 255, 255, 0.85);
-    color: #2f7d34;
-    font-size: 13.5px;
-    font-weight: 600;
+    border: none;
+    background: rgba(75, 174, 80, 0.72);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.2s ease;
   }
 
   .mv-tab-verde.activa,
   .mv-btn-mapa-verde {
     background: #4bae50;
-    color: #ffffff;
     font-weight: 700;
   }
 
   .mv-caja-bullets-verde {
-    padding: 13px 14px;
-    border-radius: 14px;
+    padding: 14px 16px;
+    border-radius: 16px;
     background: #4bae50;
     color: #ffffff;
   }
@@ -2729,54 +2918,57 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     display: flex;
     flex-direction: column;
     gap: 8px;
-    font-size: 14.5px;
-    line-height: 1.45;
+    font-size: 15px;
+    line-height: 1.42;
   }
 
-  /* Emergencias: pasos y contactos */
+  /* Emergencias: cards y contactos fieles */
   .mv-grid-pasos {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
 
+  .mv-grid-prepara-3 {
+    grid-template-columns: 1fr;
+  }
+
   .mv-paso-box {
     padding: 12px 10px;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.88);
-    border: 1px solid rgba(38, 166, 154, 0.22);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.84);
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
+  }
+
+  .mv-paso-prepara-ilustrado {
+    align-items: center;
+    text-align: left;
+  }
+
+  .mv-prepara-svg-crop {
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .mv-prepara-svg-crop img {
+    position: absolute;
+    max-width: none;
+    pointer-events: none;
   }
 
   .mv-paso-num {
-    font-size: 26px;
+    font-size: 28px;
     font-weight: 800;
     line-height: 1;
     color: #26a69a;
   }
 
-  .mv-paso-check {
-    align-items: center;
-    text-align: center;
-  }
-
-  .mv-check-icon {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #26a69a;
-    color: #ffffff;
-    font-size: 15px;
-    font-weight: 800;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .mv-paso-box p {
-    font-size: 13.5px;
+    width: 100%;
+    font-size: 14px;
     line-height: 1.38;
   }
 
@@ -2788,8 +2980,8 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
   }
 
   .mv-lista-numerada li {
-    font-size: 15px;
-    line-height: 1.45;
+    font-size: 15.5px;
+    line-height: 1.42;
   }
 
   .mv-lista-incendio-alineada {
@@ -2803,13 +2995,13 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     display: grid;
     grid-template-columns: 28px 1fr;
     gap: 4px;
-    font-size: 15px;
-    line-height: 1.45;
+    font-size: 15.5px;
+    line-height: 1.42;
   }
 
   .mv-num-izq {
     font-weight: 700;
-    color: #167a70;
+    color: #254226;
   }
 
   .mv-contactos-tabs {
@@ -2820,32 +3012,31 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
 
   .mv-tab-contacto {
     width: 100%;
-    min-height: 44px;
-    padding: 9px 14px;
+    min-height: 46px;
+    padding: 8px 14px;
     border-radius: 12px;
-    border: 1.5px solid rgba(38, 166, 154, 0.35);
+    border: none;
     background: rgba(255, 255, 255, 0.85);
     color: #26a69a;
-    font-size: 14.5px;
+    font-size: 15px;
     font-weight: 400;
+    line-height: 1.25;
     text-align: left;
     cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease, transform 0.16s ease;
+    transition: color 0.16s ease, background-color 0.16s ease;
   }
 
   .mv-tab-contacto:hover,
   .mv-tab-contacto.activa {
-    background: rgba(38, 166, 154, 0.16);
-    border-color: #167a70;
+    background: rgba(38, 166, 154, 0.14);
     color: #167a70;
     font-weight: 700;
   }
 
   .mv-contactos-panel-box {
     padding: 14px;
-    border-radius: 16px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1.5px solid rgba(38, 166, 154, 0.3);
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.90);
   }
 
   .mv-numeros-grid {
@@ -2859,35 +3050,28 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 10px;
+    padding: 8px;
     border-radius: 12px;
-    background: rgba(38, 166, 154, 0.08);
+    background: rgba(38, 166, 154, 0.06);
     text-decoration: none;
     color: #26a69a;
   }
 
   .mv-operadora {
-    font-size: 13.5px;
-    font-weight: 600;
+    font-size: 14px;
+    font-weight: 400;
+    color: #26a69a;
   }
 
   .mv-num-valor {
-    font-size: 30px;
-    font-weight: 700;
+    font-size: 32px;
+    font-weight: 600;
     line-height: 1.15;
-    color: #167a70;
+    color: #26a69a;
   }
 
   .mv-num-fijo {
-    padding: 16px 12px;
-  }
-
-  .mv-tocar-llamar {
-    margin-top: 6px;
-    font-size: 12px;
-    font-weight: 700;
-    color: #254226;
-    opacity: 0.78;
+    padding: 14px;
   }
 
   /* Modal Mapa móvil */
@@ -2897,7 +3081,7 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     inset: 0;
     z-index: 95;
     padding: 16px;
-    background: rgba(18, 40, 20, 0.64);
+    background: rgba(18, 40, 20, 0.58);
     backdrop-filter: blur(4px);
     align-items: center;
     justify-content: center;
@@ -2926,12 +3110,12 @@ const configInicial = SECCIONES_WARAIRA.find((s) => s.id === seccionInicial) || 
     width: 100%;
     max-width: 460px;
     height: min(78dvh, 480px);
-    border-radius: 20px;
+    border-radius: 22px;
     background: #ffffff;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 22px 54px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 22px 54px rgba(0, 0, 0, 0.32);
     transform: translateY(10px) scale(0.96);
     transition: transform 0.28s var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1));
   }
