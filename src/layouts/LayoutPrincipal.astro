@@ -1,12 +1,17 @@
 ---
+import VistaMovilWaraira from "../components/VistaMovilWaraira.astro";
+import type { SeccionId } from "../data/warairaContenido";
+
 export interface Props {
   title?: string;
   modoModulo?: boolean;
+  seccionMovil?: SeccionId | null;
 }
 
 const {
   title = "Parque Nacional Waraira Repano | Dalianyela Torres - Instituto de Diseño Darias",
   modoModulo = false,
+  seccionMovil = "quienes-somos",
 } = Astro.props;
 ---
 
@@ -14,7 +19,7 @@ const {
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>{title}</title>
     <meta
       name="description"
@@ -36,6 +41,8 @@ const {
       </div>
     </main>
 
+    {seccionMovil !== null && <VistaMovilWaraira seccionInicial={seccionMovil} />}
+
     <script>
       function ajustarEscalaLienzo() {
         const stage = document.getElementById("waraira-stage");
@@ -50,8 +57,12 @@ const {
           return;
         }
 
-        const dispAncho = window.innerWidth;
-        const dispAlto = window.innerHeight;
+        const csViewport = window.getComputedStyle(viewport);
+        const padX = (parseFloat(csViewport.paddingLeft) || 0) + (parseFloat(csViewport.paddingRight) || 0);
+        const padY = (parseFloat(csViewport.paddingTop) || 0) + (parseFloat(csViewport.paddingBottom) || 0);
+        const dispAncho = Math.max(0, (viewport.clientWidth || window.innerWidth) - padX);
+        const dispAlto = Math.max(0, (viewport.clientHeight || window.innerHeight) - padY);
+        if (dispAncho <= 0 || dispAlto <= 0) return;
 
         const escalaX = dispAncho / 1400;
         const escalaY = dispAlto / 650;
@@ -61,6 +72,8 @@ const {
       }
 
       window.addEventListener("resize", ajustarEscalaLienzo);
+      window.addEventListener("orientationchange", () => window.setTimeout(ajustarEscalaLienzo, 120));
+      window.visualViewport?.addEventListener("resize", ajustarEscalaLienzo);
       window.addEventListener("DOMContentLoaded", ajustarEscalaLienzo);
       ajustarEscalaLienzo();
     </script>
@@ -139,6 +152,12 @@ const {
   .contenedor-adaptable {
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
+    padding:
+      env(safe-area-inset-top)
+      env(safe-area-inset-right)
+      env(safe-area-inset-bottom)
+      env(safe-area-inset-left);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -168,6 +187,57 @@ const {
       animation-duration: 0.01ms !important;
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* ============================================================
+     HÍBRIDO RESPONSIVO INTELIGENTE:
+     - PC, tablets y móviles en horizontal conservan intacto el diseño 1400×650
+     - Teléfonos en vertical (o <= 520px) muestran VistaMovilWaraira
+     ============================================================ */
+  .vista-movil-waraira {
+    display: none;
+  }
+
+  @media (max-width: 767px) and (orientation: portrait), (max-width: 520px) {
+    html:has(.vista-movil-waraira),
+    body:has(.vista-movil-waraira):not(:has(.pagina-manual-estilos)) {
+      height: auto;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      background-color: #1c2b1e;
+    }
+
+    body:has(.vista-movil-waraira):not(:has(.pagina-manual-estilos)) {
+      display: block;
+    }
+
+    body:has(.vista-movil-waraira):not(:has(.pagina-manual-estilos)) .contenedor-adaptable {
+      display: none !important;
+    }
+
+    body:has(.vista-movil-waraira):not(:has(.pagina-manual-estilos)) .vista-movil-waraira {
+      display: flex !important;
+    }
+  }
+
+  /* Áreas táctiles invisibles ampliadas en dispositivos táctiles sin alterar el diseño visual */
+  @media (pointer: coarse) {
+    .escenario-1400x650 .cuadro-paginador,
+    .escenario-1400x650 .cuadro-especie {
+      position: relative;
+    }
+
+    .escenario-1400x650 .cuadro-paginador::after,
+    .escenario-1400x650 .cuadro-especie::after,
+    .escenario-1400x650 .btn-dot-guia::after,
+    .escenario-1400x650 .btn-dot-galeria::after,
+    .escenario-1400x650 .btn-dot-emergencias::after,
+    .escenario-1400x650 .btn-dot-normativa::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
     }
   }
 </style>

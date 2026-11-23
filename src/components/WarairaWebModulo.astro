@@ -72,7 +72,20 @@ const { seccionInicial = "quienes-somos" } = Astro.props;
             contenedores.forEach((c) => {
               c.classList.toggle("activa", c.getAttribute("data-spa-seccion") === target);
             });
+            window.dispatchEvent(
+              new CustomEvent("waraira:seccion-cambiada", {
+                detail: { seccion: target, origen: "desktop" },
+              })
+            );
           }
+        });
+      });
+
+      window.addEventListener("waraira:seccion-cambiada", (e: Event) => {
+        const detail = (e as CustomEvent).detail;
+        if (!detail || detail.origen !== "movil" || !detail.seccion) return;
+        contenedores.forEach((c) => {
+          c.classList.toggle("activa", c.getAttribute("data-spa-seccion") === detail.seccion);
         });
       });
     });
