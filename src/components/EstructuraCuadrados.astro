@@ -45,10 +45,17 @@ const configTema = {
   <!-- CAPA 1: Fotografía de fondo (1400 x 650) -->
   <div class="capa-foto-fondo">
     <img
+      src={fondoInicial}
+      alt=""
+      aria-hidden="true"
+      class="foto-fondo-principal foto-fondo-anterior"
+      draggable="false"
+    />
+    <img
       id="img-fondo-activo"
       src={fondoInicial}
       alt="Paisaje del Parque Nacional Waraira Repano"
-      class="foto-fondo-principal"
+      class="foto-fondo-principal foto-fondo-actual"
       draggable="false"
     />
   </div>
@@ -125,11 +132,20 @@ const configTema = {
   }
 
   .foto-fondo-principal {
+    position: absolute;
+    inset: 0;
     width: 1400px;
     height: 650px;
     object-fit: cover;
     display: block;
-    transition: opacity 0.28s ease;
+  }
+
+  .foto-fondo-anterior {
+    z-index: 1;
+  }
+
+  .foto-fondo-actual {
+    z-index: 2;
   }
 
   /* Capa 2: Degradado blanco a la izquierda + baño de color de sección */

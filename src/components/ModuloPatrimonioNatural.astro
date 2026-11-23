@@ -975,6 +975,16 @@ const cumbresGeologia = [
     if ((contenedor as HTMLElement).dataset.inicializado === "1") return;
     (contenedor as HTMLElement).dataset.inicializado = "1";
 
+    const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const animarEntradaSuave = (el: Element | null, dur = 280, fromOpacity = 0.2) => {
+      if (!el || reduceMotion()) return;
+      el.getAnimations().forEach((a) => a.cancel());
+      el.animate(
+        [{ opacity: fromOpacity }, { opacity: 1 }],
+        { duration: dur, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+      );
+    };
+
     const cacheFotos = new Map<string, HTMLImageElement>();
     const precargarFoto = (url: string): HTMLImageElement => {
       let cached = cacheFotos.get(url);
@@ -987,11 +997,28 @@ const cumbresGeologia = [
     };
 
     Object.values(CATALOGO_FLORA).forEach((lista) =>
-      lista.forEach((item) => precargarFoto(item.foto))
+      lista.forEach((item) => {
+        precargarFoto(item.foto);
+        precargarFoto(item.recorte);
+      })
     );
     Object.values(CATALOGO_FAUNA).forEach((lista) =>
-      lista.forEach((item) => precargarFoto(item.foto))
+      lista.forEach((item) => {
+        precargarFoto(item.foto);
+        precargarFoto(item.recorte);
+      })
     );
+    contenedor.querySelectorAll("[data-bg]").forEach((el) => {
+      const bg = el.getAttribute("data-bg");
+      if (bg) precargarFoto(bg);
+    });
+    contenedor.querySelectorAll("[data-cumbre-foto], [data-cumbre-svg]").forEach((el) => {
+      const cf = el.getAttribute("data-cumbre-foto");
+      const cs = el.getAttribute("data-cumbre-svg");
+      if (cf) precargarFoto(cf);
+      if (cs) precargarFoto(cs);
+    });
+    [1, 2, 3, 4].forEach((n) => precargarFoto(`/elementos/svg/contenedor-fauna-flora-${n}.svg`));
 
     let reqFlora = 0;
     let reqFauna = 0;
@@ -1005,16 +1032,24 @@ const cumbresGeologia = [
       getToken: () => number
     ) => {
       if (!imgEl) return;
+      if (imgEl.getAttribute("src") === foto) {
+        imgEl.style.objectPosition = posicion;
+        imgEl.alt = alt;
+        imgEl.style.opacity = "";
+        return;
+      }
+
       const cached = precargarFoto(foto);
       if (cached.complete && cached.naturalWidth > 0) {
         imgEl.style.objectPosition = posicion;
         imgEl.src = foto;
         imgEl.alt = alt;
-        imgEl.style.visibility = "visible";
+        imgEl.style.opacity = "";
+        animarEntradaSuave(imgEl, 280, 0.22);
         return;
       }
 
-      imgEl.style.visibility = "hidden";
+      imgEl.style.opacity = "0";
       const onLoad = () => {
         cached.removeEventListener("load", onLoad);
         cached.removeEventListener("error", onError);
@@ -1022,7 +1057,8 @@ const cumbresGeologia = [
         imgEl.style.objectPosition = posicion;
         imgEl.src = foto;
         imgEl.alt = alt;
-        imgEl.style.visibility = "visible";
+        imgEl.style.opacity = "";
+        animarEntradaSuave(imgEl, 280, 0.15);
       };
       const onError = () => {
         cached.removeEventListener("load", onLoad);
@@ -1031,16 +1067,46 @@ const cumbresGeologia = [
         imgEl.style.objectPosition = posicion;
         imgEl.src = foto;
         imgEl.alt = alt;
-        imgEl.style.visibility = "visible";
+        imgEl.style.opacity = "";
       };
       cached.addEventListener("load", onLoad);
       cached.addEventListener("error", onError);
     };
 
-    const imgFondo = contenedor.querySelector("#img-fondo-activo") as HTMLImageElement | null;
+    const imgFondoActual = contenedor.querySelector(".foto-fondo-actual") as HTMLImageElement | null;
+    const imgFondoAnterior = contenedor.querySelector(".foto-fondo-anterior") as HTMLImageElement | null;
+    let tokenFondo = 0;
     const cambiarFondo = (src: string) => {
-      if (imgFondo && imgFondo.getAttribute("src") !== src) {
-        imgFondo.src = src;
+      if (!imgFondoActual || imgFondoActual.getAttribute("src") === src) return;
+      const tokenActual = ++tokenFondo;
+      const anteriorSrc = imgFondoActual.getAttribute("src") || src;
+      if (imgFondoAnterior) {
+        imgFondoAnterior.src = anteriorSrc;
+      }
+
+      const cached = precargarFoto(src);
+      const aplicarFade = () => {
+        if (tokenActual !== tokenFondo) return;
+        imgFondoActual.getAnimations().forEach((a) => a.cancel());
+        imgFondoActual.src = src;
+        if (!reduceMotion()) {
+          imgFondoActual.animate(
+            [{ opacity: 0 }, { opacity: 1 }],
+            { duration: 420, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+          );
+        }
+      };
+
+      if (cached.complete && cached.naturalWidth > 0) {
+        aplicarFade();
+      } else {
+        const onDone = () => {
+          cached.removeEventListener("load", onDone);
+          cached.removeEventListener("error", onDone);
+          aplicarFade();
+        };
+        cached.addEventListener("load", onDone);
+        cached.addEventListener("error", onDone);
       }
     };
 
@@ -1098,17 +1164,30 @@ const cumbresGeologia = [
 
     btnsCumbres.forEach((btn) => {
       btn.addEventListener("click", () => {
+        if (btn.classList.contains("activo")) return;
         btnsCumbres.forEach((b) => b.classList.remove("activo"));
         btn.classList.add("activo");
         const foto = btn.getAttribute("data-cumbre-foto");
         const desc = btn.getAttribute("data-cumbre-desc");
         const altura = btn.getAttribute("data-cumbre-altura");
-        if (imgCumbre && foto) imgCumbre.src = foto;
-        if (descCumbre && desc !== null) descCumbre.textContent = desc;
-        if (alturaCumbre && altura !== null) alturaCumbre.textContent = altura;
+        if (imgCumbre && foto && imgCumbre.getAttribute("src") !== foto) {
+          imgCumbre.src = foto;
+          animarEntradaSuave(imgCumbre, 280, 0.22);
+        }
+        if (descCumbre && desc !== null) {
+          descCumbre.textContent = desc;
+          animarEntradaSuave(descCumbre, 240, 0.25);
+        }
+        if (alturaCumbre && altura !== null) {
+          alturaCumbre.textContent = altura;
+          animarEntradaSuave(alturaCumbre, 240, 0.25);
+        }
         const svgCumbreFondo = contenedor.querySelector('#img-svg-cumbre-fondo') as HTMLImageElement | null;
         const svg = btn.getAttribute('data-cumbre-svg');
-        if (svgCumbreFondo && svg) svgCumbreFondo.src = svg;
+        if (svgCumbreFondo && svg && svgCumbreFondo.getAttribute('src') !== svg) {
+          svgCumbreFondo.src = svg;
+          animarEntradaSuave(svgCumbreFondo, 220, 0.55);
+        }
       });
     });
 
@@ -1200,7 +1279,11 @@ const cumbresGeologia = [
       );
       if (nomFloraComun) nomFloraComun.textContent = item.comun;
       if (nomFloraCient) nomFloraCient.textContent = item.cientifico;
-      if (recorteFlora) recorteFlora.src = item.recorte;
+      animarEntradaSuave(contenedor.querySelector(".subpagina-flora .pie-especie-nombre"), 220, 0.25);
+      if (recorteFlora && recorteFlora.getAttribute("src") !== item.recorte) {
+        recorteFlora.src = item.recorte;
+        animarEntradaSuave(recorteFlora, 300, 0.2);
+      }
 
       const mapaSvgFlora: Record<string, string> = {
         emblematicas: "/elementos/svg/contenedor-fauna-flora-1.svg",
@@ -1209,8 +1292,9 @@ const cumbresGeologia = [
         endemicas: "/elementos/svg/contenedor-fauna-flora-4.svg",
       };
       const svgFloraCat = contenedor.querySelector("#svg-fondo-flora-catalogo") as HTMLImageElement | null;
-      if (svgFloraCat && mapaSvgFlora[catFloraActual]) {
+      if (svgFloraCat && mapaSvgFlora[catFloraActual] && svgFloraCat.getAttribute("src") !== mapaSvgFlora[catFloraActual]) {
         svgFloraCat.src = mapaSvgFlora[catFloraActual];
+        animarEntradaSuave(svgFloraCat, 240, 0.55);
       }
 
       btnsFloraCat.forEach((b) =>
@@ -1285,7 +1369,11 @@ const cumbresGeologia = [
       );
       if (nomFaunaComun) nomFaunaComun.textContent = item.comun;
       if (nomFaunaCient) nomFaunaCient.textContent = item.cientifico;
-      if (recorteFauna) recorteFauna.src = item.recorte;
+      animarEntradaSuave(contenedor.querySelector(".subpagina-fauna .pie-especie-nombre"), 220, 0.25);
+      if (recorteFauna && recorteFauna.getAttribute("src") !== item.recorte) {
+        recorteFauna.src = item.recorte;
+        animarEntradaSuave(recorteFauna, 300, 0.2);
+      }
 
       const mapaSvgFauna: Record<string, string> = {
         mamiferos: "/elementos/svg/contenedor-fauna-flora-1.svg",
@@ -1294,8 +1382,9 @@ const cumbresGeologia = [
         anfibios: "/elementos/svg/contenedor-fauna-flora-4.svg",
       };
       const svgFaunaCat = contenedor.querySelector("#svg-fondo-fauna-catalogo") as HTMLImageElement | null;
-      if (svgFaunaCat && mapaSvgFauna[catFaunaActual]) {
+      if (svgFaunaCat && mapaSvgFauna[catFaunaActual] && svgFaunaCat.getAttribute("src") !== mapaSvgFauna[catFaunaActual]) {
         svgFaunaCat.src = mapaSvgFauna[catFaunaActual];
+        animarEntradaSuave(svgFaunaCat, 240, 0.55);
       }
 
       btnsFaunaCat.forEach((b) =>
@@ -1392,30 +1481,65 @@ const cumbresGeologia = [
     position: relative;
   }
 
-  .pantalla-vista,
+  .pantalla-vista {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 20;
+    transition:
+      opacity var(--dur-pantalla, 0.36s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear var(--dur-pantalla, 0.36s);
+  }
+
+  .pantalla-vista:not(.activa) * {
+    pointer-events: none !important;
+  }
+
+  .pantalla-vista.activa {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 21;
+    transition:
+      opacity var(--dur-pantalla, 0.36s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
+  }
+
   .subpagina-geologia,
   .bloque-ff,
   .subpagina-flora,
   .subpagina-fauna {
-    display: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1;
+    transition:
+      opacity var(--dur-subvista, 0.32s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear var(--dur-subvista, 0.32s);
   }
 
-  .pantalla-vista.activa,
+  .subpagina-geologia:not(.activa) *,
+  .bloque-ff:not(.activo) *,
+  .subpagina-flora:not(.activa) *,
+  .subpagina-fauna:not(.activa) * {
+    pointer-events: none !important;
+  }
+
   .subpagina-geologia.activa,
   .bloque-ff.activo,
   .subpagina-flora.activa,
   .subpagina-fauna.activa {
-    display: block;
-    animation: fadeSuave 0.24s ease;
-  }
-
-  @keyframes fadeSuave {
-    from {
-      opacity: 0.45;
-    }
-    to {
-      opacity: 1;
-    }
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 2;
+    transition:
+      opacity var(--dur-subvista, 0.32s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
   }
 
   /* Pestañas superiores (x=330..630, y=122..177) */
@@ -1707,10 +1831,12 @@ const cumbresGeologia = [
     height: 100%;
     pointer-events: none;
     z-index: 1;
+    opacity: 1;
+    transition: opacity 0.22s ease;
   }
 
   .btn-categoria-ff.activo .badge-inactivo {
-    display: none;
+    opacity: 0;
   }
 
   .btn-categoria-ff .btn-ff-texto {

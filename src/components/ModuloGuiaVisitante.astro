@@ -621,6 +621,7 @@ const RUTAS_PARQUE: RutaParque[] = [
       // Estado Lista (Vista 1)
       const dotsPagina = root.querySelectorAll(".btn-dot-guia[data-pag-rutas]");
       const svgsLista = root.querySelectorAll(".svg-rutas-lista[data-svg-lista-idx]");
+      const contenedorBotonesLista = root.querySelector(".lista-botones-rutas");
       const botonesLista = root.querySelectorAll(".btn-ruta-item[data-lista-pos]");
       const imgPreviewLista = root.querySelector(".foto-ruta-preview");
       const btnVerRuta = root.querySelector(".btn-ver-ruta");
@@ -654,6 +655,17 @@ const RUTAS_PARQUE: RutaParque[] = [
       let rutaActivaIdx = 0; // 0..7 global
       let tabDetalleActual = "acceso";
       let galeriaIdxActual = 0;
+      let timerLimpiarIframe = null;
+
+      const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      function animarEntradaSuave(el, dur = 260, fromOpacity = 0.22) {
+        if (!el || reduceMotion()) return;
+        el.getAnimations().forEach((a) => a.cancel());
+        el.animate(
+          [{ opacity: fromOpacity }, { opacity: 1 }],
+          { duration: dur, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+        );
+      }
 
       // Precarga limpia de fotos para transición instantánea sin flashes
       const cacheFotos = new Map();
@@ -672,6 +684,7 @@ const RUTAS_PARQUE: RutaParque[] = [
         if (!imgEl || !src) return;
         if (imgEl.getAttribute("src") !== src) {
           imgEl.src = src;
+          animarEntradaSuave(imgEl, 280, 0.22);
         }
         imgEl.alt = altTexto;
       }
@@ -709,7 +722,7 @@ const RUTAS_PARQUE: RutaParque[] = [
         aplicarFotoSegura(imgPreviewLista, rutaSel.fotoLista, `Vista previa de ${rutaSel.nombreLista}`);
       }
 
-      function renderDetalleBullets() {
+      function renderDetalleBullets(animar = false) {
         const ruta = rutasData[rutaActivaIdx];
         const items = ruta[tabDetalleActual] || [];
         if (!listaBullets) return;
@@ -719,9 +732,12 @@ const RUTAS_PARQUE: RutaParque[] = [
             return `<li><span class="bullet-punto" aria-hidden="true">•</span><span class="bullet-contenido">${pref}${escaparHtml(item.texto)}</span></li>`;
           })
           .join("");
+        if (animar) {
+          animarEntradaSuave(listaBullets, 240, 0.15);
+        }
       }
 
-      function renderDetalleTabs() {
+      function renderDetalleTabs(animar = false) {
         svgsDetalleTab.forEach((svg) => {
           svg.classList.toggle("activa", svg.getAttribute("data-svg-tab") === tabDetalleActual);
         });
@@ -730,7 +746,7 @@ const RUTAS_PARQUE: RutaParque[] = [
           btn.classList.toggle("activo", esAct);
           btn.setAttribute("aria-selected", esAct ? "true" : "false");
         });
-        renderDetalleBullets();
+        renderDetalleBullets(animar);
       }
 
       function renderGaleriaDetalle() {
@@ -776,13 +792,22 @@ const RUTAS_PARQUE: RutaParque[] = [
       function cerrarModalMapa() {
         if (!modalOverlay) return;
         modalOverlay.classList.remove("abierto");
+        if (timerLimpiarIframe) clearTimeout(timerLimpiarIframe);
         if (modalIframe && modalIframe.getAttribute("src")) {
-          modalIframe.removeAttribute("src");
+          timerLimpiarIframe = window.setTimeout(() => {
+            if (!modalOverlay.classList.contains("abierto") && modalIframe.getAttribute("src")) {
+              modalIframe.removeAttribute("src");
+            }
+          }, 280);
         }
       }
 
       function abrirModalMapa() {
         if (!modalOverlay) return;
+        if (timerLimpiarIframe) {
+          clearTimeout(timerLimpiarIframe);
+          timerLimpiarIframe = null;
+        }
         const ruta = rutasData[rutaActivaIdx];
         if (modalTitulo) modalTitulo.textContent = `Mapa: ${ruta.nombreDetalle}`;
         if (modalSubtitulo) modalSubtitulo.textContent = ruta.mapaAccesoCorto;
@@ -824,9 +849,12 @@ const RUTAS_PARQUE: RutaParque[] = [
 
       dotsPagina.forEach((btn) => {
         btn.addEventListener("click", () => {
-          pagActual = Number(btn.getAttribute("data-pag-rutas") || "0");
+          const nuevaPag = Number(btn.getAttribute("data-pag-rutas") || "0");
+          const cambioPag = nuevaPag !== pagActual;
+          pagActual = nuevaPag;
           posListaActual = 0;
           renderLista();
+          if (cambioPag) animarEntradaSuave(contenedorBotonesLista, 240, 0.25);
         });
       });
 
@@ -849,8 +877,10 @@ const RUTAS_PARQUE: RutaParque[] = [
 
       botonesDetalleTab.forEach((btn) => {
         btn.addEventListener("click", () => {
-          tabDetalleActual = btn.getAttribute("data-tab-target") || "acceso";
-          renderDetalleTabs();
+          const siguienteTab = btn.getAttribute("data-tab-target") || "acceso";
+          if (siguienteTab === tabDetalleActual) return;
+          tabDetalleActual = siguienteTab;
+          renderDetalleTabs(true);
         });
       });
 
@@ -931,18 +961,33 @@ const RUTAS_PARQUE: RutaParque[] = [
   }
 
   .vista-panel {
-    display: none;
     position: absolute;
     inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 20;
+    transition:
+      opacity var(--dur-pantalla, 0.36s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear var(--dur-pantalla, 0.36s);
+  }
+
+  .vista-panel:not(.activa) * {
+    pointer-events: none !important;
   }
 
   .vista-panel.activa {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 21;
+    transition:
+      opacity var(--dur-pantalla, 0.36s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
   }
 
   /* Rama decorativa esquina inferior derecha (intro y lista) */
   .rama-guia-derecha {
-    display: none;
     position: absolute;
     left: 1106px;
     top: 249px;
@@ -952,10 +997,19 @@ const RUTAS_PARQUE: RutaParque[] = [
     z-index: 30;
     pointer-events: none;
     user-select: none;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--dur-pantalla, 0.36s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear var(--dur-pantalla, 0.36s);
   }
 
   .rama-guia-derecha.activa {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity var(--dur-pantalla, 0.36s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
   }
 
   /* ========================================================== */
@@ -1057,21 +1111,29 @@ const RUTAS_PARQUE: RutaParque[] = [
   }
 
   .btn-dot-guia img {
+    position: absolute;
+    inset: 0;
     width: 12px;
     height: 12px;
     display: block;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
   }
 
   .btn-dot-guia .dot-img-activo {
-    display: none;
+    opacity: 0;
+  }
+
+  .btn-dot-guia .dot-img-inactivo {
+    opacity: 1;
   }
 
   .btn-dot-guia.activo .dot-img-activo {
-    display: block;
+    opacity: 1;
   }
 
   .btn-dot-guia.activo .dot-img-inactivo {
-    display: none;
+    opacity: 0;
   }
 
   .lead-rutas-parque {
@@ -1089,7 +1151,6 @@ const RUTAS_PARQUE: RutaParque[] = [
   }
 
   .svg-rutas-lista {
-    display: none;
     position: absolute;
     left: 365px;
     top: 308px;
@@ -1098,10 +1159,19 @@ const RUTAS_PARQUE: RutaParque[] = [
     z-index: 24;
     pointer-events: none;
     user-select: none;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--dur-elemento, 0.26s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear var(--dur-elemento, 0.26s);
   }
 
   .svg-rutas-lista.activa {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity var(--dur-elemento, 0.26s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
   }
 
   .lista-botones-rutas {
@@ -1244,14 +1314,23 @@ const RUTAS_PARQUE: RutaParque[] = [
   }
 
   .icono-dificultad {
-    display: none;
     left: 1078px;
     width: 52px;
     height: 35px;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity var(--dur-elemento, 0.26s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear var(--dur-elemento, 0.26s);
   }
 
   .icono-dificultad.activa {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity var(--dur-elemento, 0.26s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
   }
 
   .label-metrica {
@@ -1314,7 +1393,6 @@ const RUTAS_PARQUE: RutaParque[] = [
   }
 
   .svg-detalle-tab {
-    display: none;
     position: absolute;
     left: 373px;
     top: 410px;
@@ -1323,10 +1401,19 @@ const RUTAS_PARQUE: RutaParque[] = [
     z-index: 25;
     pointer-events: none;
     user-select: none;
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity var(--dur-elemento, 0.26s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear var(--dur-elemento, 0.26s);
   }
 
   .svg-detalle-tab.activa {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity var(--dur-elemento, 0.26s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
   }
 
   .botones-detalle-tabs {
@@ -1458,28 +1545,36 @@ const RUTAS_PARQUE: RutaParque[] = [
   }
 
   .btn-dot-galeria img {
+    position: absolute;
+    inset: 0;
     width: 14px;
     height: 14px;
     display: block;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
   }
 
   .btn-dot-galeria .dot-img-activo {
-    display: none;
+    opacity: 0;
+  }
+
+  .btn-dot-galeria .dot-img-inactivo {
+    opacity: 1;
   }
 
   .btn-dot-galeria.activo .dot-img-activo {
-    display: block;
+    opacity: 1;
   }
 
   .btn-dot-galeria.activo .dot-img-inactivo {
-    display: none;
+    opacity: 0;
   }
 
   /* ========================================================== */
   /* MODAL INTERACTIVO DE MAPA                                  */
   /* ========================================================== */
   .modal-mapa-overlay {
-    display: none;
+    display: flex;
     position: absolute;
     inset: 0;
     z-index: 90;
@@ -1487,10 +1582,25 @@ const RUTAS_PARQUE: RutaParque[] = [
     backdrop-filter: blur(3px);
     align-items: center;
     justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity 0.28s var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0.28s;
+  }
+
+  .modal-mapa-overlay:not(.abierto) * {
+    pointer-events: none !important;
   }
 
   .modal-mapa-overlay.abierto {
-    display: flex;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+      opacity 0.28s var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
   }
 
   .modal-mapa-card {
@@ -1503,6 +1613,12 @@ const RUTAS_PARQUE: RutaParque[] = [
     display: flex;
     flex-direction: column;
     font-family: var(--fuente-principal);
+    transform: translateY(10px) scale(0.97);
+    transition: transform 0.30s var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1));
+  }
+
+  .modal-mapa-overlay.abierto .modal-mapa-card {
+    transform: translateY(0) scale(1);
   }
 
   .modal-mapa-header {

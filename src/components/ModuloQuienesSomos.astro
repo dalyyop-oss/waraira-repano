@@ -340,12 +340,66 @@ const itemsLetrero = [
 
 <script>
   function inicializarQuienesSomos() {
-    const contenedor = document.querySelector(".modulo-quienes-somos");
+    const contenedor = document.querySelector(".modulo-quienes-somos") as HTMLElement | null;
     if (!contenedor) return;
+    if (contenedor.dataset.inicializado === "1") return;
+    contenedor.dataset.inicializado = "1";
 
-    const imgFondo = contenedor.querySelector("#img-fondo-activo") as HTMLImageElement | null;
+    const imgFondoActual = contenedor.querySelector(".foto-fondo-actual") as HTMLImageElement | null;
+    const imgFondoAnterior = contenedor.querySelector(".foto-fondo-anterior") as HTMLImageElement | null;
     const botonesVista = contenedor.querySelectorAll("[data-vista-target]");
     const pantallas = contenedor.querySelectorAll(".pantalla-vista");
+
+    const reduceMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const cacheFondos = new Map<string, HTMLImageElement>();
+    const precargarFondo = (url: string): HTMLImageElement => {
+      let cached = cacheFondos.get(url);
+      if (!cached) {
+        cached = new Image();
+        cached.src = url;
+        cacheFondos.set(url, cached);
+      }
+      return cached;
+    };
+    pantallas.forEach((p) => {
+      const bg = p.getAttribute("data-bg");
+      if (bg) precargarFondo(bg);
+    });
+
+    let tokenFondo = 0;
+    const cambiarFondoSuave = (nuevoBg: string) => {
+      if (!imgFondoActual || imgFondoActual.getAttribute("src") === nuevoBg) return;
+      const tokenActual = ++tokenFondo;
+      const anteriorSrc = imgFondoActual.getAttribute("src") || nuevoBg;
+      if (imgFondoAnterior) {
+        imgFondoAnterior.src = anteriorSrc;
+      }
+
+      const cached = precargarFondo(nuevoBg);
+      const aplicarFade = () => {
+        if (tokenActual !== tokenFondo) return;
+        imgFondoActual.getAnimations().forEach((a) => a.cancel());
+        imgFondoActual.src = nuevoBg;
+        if (!reduceMotion()) {
+          imgFondoActual.animate(
+            [{ opacity: 0 }, { opacity: 1 }],
+            { duration: 420, easing: "cubic-bezier(0.22, 1, 0.36, 1)" }
+          );
+        }
+      };
+
+      if (cached.complete && cached.naturalWidth > 0) {
+        aplicarFade();
+      } else {
+        const onDone = () => {
+          cached.removeEventListener("load", onDone);
+          cached.removeEventListener("error", onDone);
+          aplicarFade();
+        };
+        cached.addEventListener("load", onDone);
+        cached.addEventListener("error", onDone);
+      }
+    };
 
     botonesVista.forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -358,11 +412,9 @@ const itemsLetrero = [
         pantallas.forEach((p) => {
           const esTarget = p.getAttribute("data-vista") === target;
           p.classList.toggle("activa", esTarget);
-          if (esTarget && imgFondo) {
+          if (esTarget) {
             const nuevoBg = p.getAttribute("data-bg");
-            if (nuevoBg && imgFondo.getAttribute("src") !== nuevoBg) {
-              imgFondo.src = nuevoBg;
-            }
+            if (nuevoBg) cambiarFondoSuave(nuevoBg);
           }
         });
       });
@@ -405,32 +457,55 @@ const itemsLetrero = [
   }
 
   .pantalla-vista {
-    display: none;
     position: absolute;
     inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 20;
+    transition:
+      opacity var(--dur-pantalla, 0.36s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear var(--dur-pantalla, 0.36s);
+  }
+
+  .pantalla-vista:not(.activa) * {
+    pointer-events: none !important;
   }
 
   .pantalla-vista.activa {
-    display: block;
-    animation: fadeSuave 0.25s ease;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 21;
+    transition:
+      opacity var(--dur-pantalla, 0.36s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
   }
 
   .subvista-tab {
-    display: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 20;
+    transition:
+      opacity var(--dur-subvista, 0.32s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear var(--dur-subvista, 0.32s);
+  }
+
+  .subvista-tab:not(.activa) * {
+    pointer-events: none !important;
   }
 
   .subvista-tab.activa {
-    display: block;
-    animation: fadeSuave 0.22s ease;
-  }
-
-  @keyframes fadeSuave {
-    from {
-      opacity: 0.4;
-    }
-    to {
-      opacity: 1;
-    }
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 21;
+    transition:
+      opacity var(--dur-subvista, 0.32s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
   }
 
   /* ============================================================

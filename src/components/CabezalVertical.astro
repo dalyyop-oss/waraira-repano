@@ -164,15 +164,20 @@ const { tema = "naranja", items = [], itemActivo = "intro" } = Astro.props;
     image-rendering: auto; /* No interpolar: crisp */
   }
 
-  /* Alternancia limpia: en reposo muestra inactivo (oscurecido), en activo muestra activo */
+  /* Alternancia suave: en reposo muestra inactivo (oscurecido), en activo muestra activo */
   .tabla-madera-btn .img-activa {
-    display: none !important;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.26s ease, filter 0.22s ease;
+    z-index: 1;
   }
 
   .tabla-madera-btn .img-reposo {
-    display: block !important;
+    opacity: 1;
+    pointer-events: none;
     filter: brightness(0.54) contrast(1.28) saturate(1.10);
-    transition: filter 0.18s ease;
+    transition: opacity 0.26s ease, filter 0.22s ease;
+    z-index: 0;
   }
 
   .tabla-madera-btn.con-texto .img-reposo {
@@ -185,7 +190,6 @@ const { tema = "naranja", items = [], itemActivo = "intro" } = Astro.props;
 
   .tabla-madera-btn.con-texto:not(.activo) .texto-tabla {
     color: #a6a59d;
-    transition: color 0.18s ease;
   }
 
   .tabla-madera-btn.con-texto:not(.activo):hover .texto-tabla {
@@ -197,11 +201,11 @@ const { tema = "naranja", items = [], itemActivo = "intro" } = Astro.props;
   }
 
   .tabla-madera-btn.activo .img-reposo {
-    display: none !important;
+    opacity: 0;
   }
 
   .tabla-madera-btn.activo .img-activa {
-    display: block !important;
+    opacity: 1;
   }
 
   /* Respaldo textual por si falta imagen activa o la madera usa tipografía HTML Nunito */
@@ -232,6 +236,7 @@ const { tema = "naranja", items = [], itemActivo = "intro" } = Astro.props;
     letter-spacing: 0.01em;
     text-align: left;
     z-index: 2;
+    transition: color 0.26s ease;
   }
 
   .tabla-madera-btn.dos-lineas {

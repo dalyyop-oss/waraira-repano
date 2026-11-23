@@ -1198,21 +1198,55 @@ const INCENDIO_PAGINAS: PaginaIncendio[] = [
   }
 
   .vista-panel {
-    display: none;
     position: absolute;
     inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 20;
+    transition:
+      opacity var(--dur-pantalla, 0.36s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear var(--dur-pantalla, 0.36s);
+  }
+
+  .vista-panel:not(.activa) * {
+    pointer-events: none !important;
   }
 
   .vista-panel.activa {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 21;
+    transition:
+      opacity var(--dur-pantalla, 0.36s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
   }
 
   .subpagina-grupo {
-    display: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 24;
+    transition:
+      opacity var(--dur-subvista, 0.30s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear var(--dur-subvista, 0.30s);
+  }
+
+  .subpagina-grupo:not(.activa) * {
+    pointer-events: none !important;
   }
 
   .subpagina-grupo.activa {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 25;
+    transition:
+      opacity var(--dur-subvista, 0.30s) var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
   }
 
   /* Contenedor Intro */
@@ -1336,21 +1370,29 @@ const INCENDIO_PAGINAS: PaginaIncendio[] = [
   }
 
   .btn-dot-emergencias img {
+    position: absolute;
+    inset: 0;
     width: 12px;
     height: 12px;
     display: block;
+    pointer-events: none;
+    transition: opacity 0.22s ease;
   }
 
   .btn-dot-emergencias .dot-img-activo {
-    display: none;
+    opacity: 0;
+  }
+
+  .btn-dot-emergencias .dot-img-inactivo {
+    opacity: 1;
   }
 
   .btn-dot-emergencias.activo .dot-img-activo {
-    display: block;
+    opacity: 1;
   }
 
   .btn-dot-emergencias.activo .dot-img-inactivo {
-    display: none;
+    opacity: 0;
   }
 
   /* Lead texto junto al icono 57x57 */
@@ -1543,13 +1585,29 @@ const INCENDIO_PAGINAS: PaginaIncendio[] = [
   }
 
   .pane-contacto {
-    display: none;
     position: absolute;
     inset: 0;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    z-index: 1;
+    transition:
+      opacity 0.28s var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0.28s;
+  }
+
+  .pane-contacto:not(.activa) * {
+    pointer-events: none !important;
   }
 
   .pane-contacto.activa {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    z-index: 2;
+    transition:
+      opacity 0.28s var(--ease-suave, cubic-bezier(0.22, 1, 0.36, 1)),
+      visibility 0s linear 0s;
   }
 
   .svg-numeros-fondo {
