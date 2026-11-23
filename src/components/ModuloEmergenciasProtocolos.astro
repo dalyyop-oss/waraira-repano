@@ -759,13 +759,6 @@ const INCENDIO_PAGINAS: PaginaIncendio[] = [
       />
       <h2 class="titulo-pestana-superior">Protocolo ante extravío</h2>
 
-      <!-- Punto único decorativo igual al diseño del PDF -->
-      <div class="paginador-pill pag-1" aria-hidden="true">
-        <span class="btn-dot-emergencias activo solo-indicador">
-          <img class="dot-img-activo" src="/elementos/svg/dot-emergencias-activo.svg" alt="" draggable="false" />
-        </span>
-      </div>
-
       <p class="lead-superior" style="left: 456.83px; top: 213.43px; white-space: nowrap;">
         El parque tiene muchos senderos y es fácil desorientarse.
       </p>
@@ -920,12 +913,6 @@ const INCENDIO_PAGINAS: PaginaIncendio[] = [
     <div class="vista-panel" data-vista="niebla-densa">
       <img src="/elementos/svg/contenedor-niebla-densa.svg" alt="" class="svg-superior-709" draggable="false" />
       <h2 class="titulo-pestana-superior">Niebla densa</h2>
-
-      <div class="paginador-pill pag-1" aria-hidden="true">
-        <span class="btn-dot-emergencias activo solo-indicador">
-          <img class="dot-img-activo" src="/elementos/svg/dot-emergencias-activo.svg" alt="" draggable="false" />
-        </span>
-      </div>
 
       <p class="lead-superior" style="left: 456.83px; top: 208.43px; width: 520px; white-space: nowrap;">
         En las zonas altas del parque, la neblina puede cubrir la<br />
@@ -1328,18 +1315,12 @@ const INCENDIO_PAGINAS: PaginaIncendio[] = [
   }
 
   .paginador-pill.pag-3 {
-    left: 647.8px;
+    left: 633.3px;
     top: 159px;
-    width: auto;
+    width: 100px;
     height: auto;
-    gap: 16.4px;
-  }
-
-  .paginador-pill.pag-1 {
-    left: 647.8px;
-    top: 159px;
-    width: auto;
-    height: auto;
+    justify-content: center;
+    gap: 7px;
   }
 
   .btn-dot-emergencias {
@@ -1352,10 +1333,6 @@ const INCENDIO_PAGINAS: PaginaIncendio[] = [
     cursor: pointer;
     display: block;
     flex-shrink: 0;
-  }
-
-  .btn-dot-emergencias.solo-indicador {
-    cursor: default;
   }
 
   .btn-dot-emergencias img {
