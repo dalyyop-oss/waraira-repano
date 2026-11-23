@@ -146,7 +146,7 @@ const { tema = "naranja", items = [], itemActivo = "intro" } = Astro.props;
   }
 
   .tabla-madera-btn:not(.activo):hover .img-reposo {
-    filter: brightness(0.86) contrast(1.04);
+    filter: brightness(0.74) contrast(1.14) saturate(1.08);
   }
 
   .tabla-madera-btn.activo:hover .img-activa {
@@ -171,25 +171,25 @@ const { tema = "naranja", items = [], itemActivo = "intro" } = Astro.props;
 
   .tabla-madera-btn .img-reposo {
     display: block !important;
-    filter: brightness(0.74) contrast(1.22) saturate(1.15);
+    filter: brightness(0.54) contrast(1.28) saturate(1.10);
     transition: filter 0.18s ease;
   }
 
   .tabla-madera-btn.con-texto .img-reposo {
-    filter: brightness(0.60) contrast(1.24) saturate(1.18);
+    filter: brightness(0.42) contrast(1.30) saturate(1.12);
   }
 
   .tabla-madera-btn.con-texto:not(.activo):hover .img-reposo {
-    filter: brightness(0.76) contrast(1.14) saturate(1.12);
+    filter: brightness(0.64) contrast(1.16) saturate(1.10);
   }
 
   .tabla-madera-btn.con-texto:not(.activo) .texto-tabla {
-    color: #c8c7bf;
+    color: #a6a59d;
     transition: color 0.18s ease;
   }
 
   .tabla-madera-btn.con-texto:not(.activo):hover .texto-tabla {
-    color: #eae9e4;
+    color: #e4e3dc;
   }
 
   .tabla-madera-btn.con-texto.activo .texto-tabla {
