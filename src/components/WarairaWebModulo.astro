@@ -1,11 +1,12 @@
 ---
 import ModuloQuienesSomos from "./ModuloQuienesSomos.astro";
 import ModuloPatrimonioNatural from "./ModuloPatrimonioNatural.astro";
+import ModuloGuiaVisitante from "./ModuloGuiaVisitante.astro";
 import ModuloEmergenciasProtocolos from "./ModuloEmergenciasProtocolos.astro";
 import ModuloConoceNormativa from "./ModuloConoceNormativa.astro";
 
 export interface Props {
-  seccionInicial?: "quienes-somos" | "patrimonio-natural" | "emergencias" | "normativa";
+  seccionInicial?: "quienes-somos" | "patrimonio-natural" | "guia-visitante" | "emergencias" | "normativa";
 }
 
 const { seccionInicial = "quienes-somos" } = Astro.props;
@@ -24,6 +25,13 @@ const { seccionInicial = "quienes-somos" } = Astro.props;
     data-spa-seccion="patrimonio-natural"
   >
     <ModuloPatrimonioNatural />
+  </div>
+
+  <div
+    class:list={["contenedor-seccion-spa", { activa: seccionInicial === "guia-visitante" }]}
+    data-spa-seccion="guia-visitante"
+  >
+    <ModuloGuiaVisitante />
   </div>
 
   <div
@@ -54,6 +62,7 @@ const { seccionInicial = "quienes-somos" } = Astro.props;
           if (
             target === "quienes-somos" ||
             target === "patrimonio-natural" ||
+            target === "guia-visitante" ||
             target === "emergencias" ||
             target === "normativa"
           ) {

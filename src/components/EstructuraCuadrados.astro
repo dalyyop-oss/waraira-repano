@@ -21,10 +21,10 @@ const configTema = {
     esquinaClass: "esquina-hojas",
   },
   verde: {
-    lomita: "/elementos/svg/lomita-patrimonio-natural.svg",
-    lomitaClass: "lomita-amarillo",
-    esquina: "/elementos/hojas-esquina-izquierda.webp",
-    esquinaClass: "esquina-hojas",
+    lomita: "/elementos/svg/lomita-guia-visitante.svg",
+    lomitaClass: "lomita-verde",
+    esquina: "/elementos/flores-esquina-guia.webp",
+    esquinaClass: "esquina-guia",
   },
   turquesa: {
     lomita: "/elementos/svg/lomita-emergencias.svg",
@@ -240,6 +240,25 @@ const configTema = {
     bottom: auto;
     width: 242px;
     height: 249px;
+    object-fit: contain;
+    object-position: left bottom;
+  }
+
+  .lomita-verde {
+    height: 164.13px;
+  }
+
+  .lomita-verde .lomita-onda-svg {
+    height: 164.13px;
+  }
+
+  /* Flores rojas sobre rocas con musgo en Guía del visitante: x=-0.5..248, y=510.9..653.3 */
+  .esquina-guia {
+    left: -1px;
+    top: 511px;
+    bottom: auto;
+    width: 249px;
+    height: 142px;
     object-fit: contain;
     object-position: left bottom;
   }

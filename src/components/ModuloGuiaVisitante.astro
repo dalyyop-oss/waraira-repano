@@ -1,0 +1,1607 @@
+---
+import EstructuraCuadrados from "./EstructuraCuadrados.astro";
+import Techo from "./Techo.astro";
+import CabezalVertical, { type ItemLetrero } from "./CabezalVertical.astro";
+
+const itemsMenuGuia: ItemLetrero[] = [
+  {
+    id: "rutas-parque",
+    etiqueta: "Rutas del parque",
+    inactivo: "/elementos/botones/madera-inactiva-rutas-parque.svg",
+    activo: "/elementos/botones/madera-activa-rutas-parque.svg",
+    mostrarTexto: true,
+  },
+];
+
+interface BulletItem {
+  prefix?: string;
+  texto: string;
+}
+
+interface RutaParque {
+  slug: string;
+  nombreLista: string;
+  nombreDetalle: string;
+  distancia: string;
+  distanciaNota?: string;
+  tiempo: string;
+  dificultad: "Media" | "Alta";
+  descripcionLineas: string[];
+  acceso: BulletItem[];
+  caracteristicas: BulletItem[];
+  advertencias: BulletItem[];
+  fotoLista: string;
+  fotosDetalle: [string, string, string];
+  mapaCoords: string;
+  mapaAccesoCorto: string;
+}
+
+const RUTAS_PARQUE: RutaParque[] = [
+  {
+    slug: "galipan-via-cotiza",
+    nombreLista: "Galipán Vía Cotiza",
+    nombreDetalle: "Galipán vía Cotiza",
+    distancia: "17,55 km",
+    tiempo: "2 a 3 horas",
+    dificultad: "Media",
+    descripcionLineas: [
+      "Ruta que asciende al poblado de Galipán, famoso por sus cultivos de",
+      "flores y fresas. Pasa por el área recreativa Los Venados y conecta con el",
+      "Hotel Humboldt y la estación del Teleférico.",
+    ],
+    acceso: [
+      { texto: "Cotiza, Av. Peñalver (entre San Bernardino y Cotiza)." },
+      { texto: "Se puede acceder en vehículo 4x4 o a pie." },
+    ],
+    caracteristicas: [
+      { prefix: "Puesto de guardaparques:", texto: "Cotiza / Los Venados." },
+      { prefix: "Punto de hidratación:", texto: "Los Venados / Galipán." },
+    ],
+    advertencias: [
+      { texto: "Clima con abundante niebla." },
+      { texto: "Vía vehicular estrecha y sinuosa." },
+    ],
+    fotoLista: "/fotos/rutas/galipan-lista.webp",
+    fotosDetalle: [
+      "/fotos/rutas/galipan-detalle-1.webp",
+      "/fotos/rutas/galipan-detalle-2.webp",
+      "/fotos/rutas/galipan-detalle-3.webp",
+    ],
+    mapaCoords: "10.5625,-66.8980",
+    mapaAccesoCorto: "Cotiza, Av. Peñalver → Los Venados → Galipán",
+  },
+  {
+    slug: "camino-de-los-espanoles",
+    nombreLista: "Camino de los Españoles",
+    nombreDetalle: "Camino de los Españoles",
+    distancia: "8 km",
+    tiempo: "3 a 4 horas",
+    dificultad: "Media",
+    descripcionLineas: [
+      "Ruta histórica colonial construida en el siglo XVIII para conectar Caracas",
+      "con el puerto de La Guaira.",
+      "Es un camino empedrado original que pasa por las ruinas de los fortines",
+      "Castillo Negro y Castillo Blanco, patrimonio histórico de Venezuela.",
+    ],
+    acceso: [{ texto: "Puerta Caracas, sector La Pastora." }],
+    caracteristicas: [
+      { prefix: "Puesto de guardaparques:", texto: "Puerta de Caracas / Quenepe." },
+      { prefix: "Punto de hidratación:", texto: "La Posada." },
+    ],
+    advertencias: [
+      { texto: "Exposición solar alta en primer tramo." },
+      { texto: "Tramos empedrados irregulares debido a los restos coloniales." },
+    ],
+    fotoLista: "/fotos/rutas/camino-espanoles-lista.webp",
+    fotosDetalle: [
+      "/fotos/rutas/camino-espanoles-detalle-1.webp",
+      "/fotos/rutas/camino-espanoles-detalle-2.webp",
+      "/fotos/rutas/camino-espanoles-detalle-3.webp",
+    ],
+    mapaCoords: "10.5256,-66.9325",
+    mapaAccesoCorto: "Puerta Caracas (La Pastora) → Fortines → La Guaira",
+  },
+  {
+    slug: "pico-el-avila",
+    nombreLista: "Pico El Ávila",
+    nombreDetalle: "Pico El Ávila",
+    distancia: "6.84 km",
+    tiempo: "4 horas",
+    dificultad: "Media",
+    descripcionLineas: [
+      "El Pico El Ávila se identifica con facilidad desde Caracas gracias al icónico",
+      "Hotel Humboldt. Durante el ascenso, se aprecian vistas panorámicas de la",
+      "ciudad y se observan los cambios de vegetación, que van desde la sabana",
+      "hasta el subpáramo, reflejando los distintos pisos altitudinales.",
+    ],
+    acceso: [
+      { texto: "Entrada por Sendero San Bernardino - Humboldt, detrás del Hotel Ávila (Cota Mil)." },
+      { prefix: "Teleférico:", texto: "acceso en Maripérez." },
+    ],
+    caracteristicas: [
+      { prefix: "Puesto de guardaparques:", texto: "Papelón / Incluye punto de hidratación." },
+    ],
+    advertencias: [
+      { texto: "Descenso en teleférico sujeto a horarios y clima." },
+      { texto: "Primer tramo asfaltado con fuerte pendiente." },
+    ],
+    fotoLista: "/fotos/rutas/pico-avila-lista.webp",
+    fotosDetalle: [
+      "/fotos/rutas/pico-avila-detalle-1.webp",
+      "/fotos/rutas/pico-avila-detalle-2.webp",
+      "/fotos/geologia/pico-el-avila.webp",
+    ],
+    mapaCoords: "10.5432,-66.8856",
+    mapaAccesoCorto: "San Bernardino (Cota Mil) → Papelón → Hotel Humboldt",
+  },
+  {
+    slug: "sabas-nieves",
+    nombreLista: "Sabas Nieves",
+    nombreDetalle: "Sabas Nieves",
+    distancia: "3.5 km",
+    tiempo: "1 a 2 horas",
+    dificultad: "Media",
+    descripcionLineas: [
+      "La ruta más popular y transitada del parque. Un ascenso constante por",
+      "escalones y caminos de tierra que lleva hasta el puesto de guardaparques",
+      "Sabas Nieves, con vistas panorámicas de Caracas.",
+    ],
+    acceso: [{ texto: "Altamira, 10ma Transversal (entre 2da y 3ra Avenida)." }],
+    caracteristicas: [
+      { prefix: "Puesto de guardaparques:", texto: "Sabas Nieves I y II / incluyen punto de hidratación." },
+      { texto: "Incluye la escalera de 72 peldaños." },
+    ],
+    advertencias: [
+      { texto: "Alta concurrencia los fines de semana." },
+      { texto: "Resbaladizo en época de lluvias." },
+      { texto: "Pendiente pronunciada continua." },
+    ],
+    fotoLista: "/fotos/rutas/sabas-nieves-lista.webp",
+    fotosDetalle: [
+      "/fotos/rutas/sabas-nieves-detalle-1.webp",
+      "/fotos/rutas/sabas-nieves-detalle-2.webp",
+      "/fotos/rutas/sabas-nieves-detalle-3.webp",
+    ],
+    mapaCoords: "10.5280,-66.8505",
+    mapaAccesoCorto: "Altamira 10ma Transversal → Sabas Nieves I y II",
+  },
+  {
+    slug: "quebrada-quintero",
+    nombreLista: "Quebrada Quintero",
+    nombreDetalle: "Quebrada Quintero",
+    distancia: "7 km",
+    tiempo: "4 a 5 horas",
+    dificultad: "Alta",
+    descripcionLineas: [
+      "Ruta que sigue el curso de la quebrada Quintero a través de densa",
+      "vegetación. Ideal para excursionistas experimentados que buscan una",
+      "experiencia silvestre y fresca.",
+    ],
+    acceso: [{ texto: "Sector Quintero / Sebucán, este de Caracas." }],
+    caracteristicas: [
+      { prefix: "Puesto de guardaparques:", texto: "Cachimbo." },
+      { prefix: "Punto de hidratación:", texto: "Cascada Quintero / Qda. Quintero." },
+    ],
+    advertencias: [
+      { texto: "Sendero poco señalizado en tramos." },
+      { texto: "Riesgo de crecida en lluvias debido a abundantes cruces de agua, cascadas y pozas naturales." },
+    ],
+    fotoLista: "/fotos/rutas/quebrada-quintero-lista.webp",
+    fotosDetalle: [
+      "/fotos/rutas/quebrada-quintero-detalle-1.webp",
+      "/fotos/rutas/quebrada-quintero-detalle-2.webp",
+      "/fotos/rutas/quebrada-quintero-detalle-3.webp",
+    ],
+    mapaCoords: "10.5255,-66.8350",
+    mapaAccesoCorto: "Sebucán (Sector Quintero) → Cachimbo → Cascada Quintero",
+  },
+  {
+    slug: "piedra-el-indio",
+    nombreLista: "Piedra El Indio",
+    nombreDetalle: "Piedra El Indio",
+    distancia: "3.19 km",
+    tiempo: "3.5 horas",
+    dificultad: "Media",
+    descripcionLineas: [
+      "Gran parte del trayecto discurre bajo la sombra fresca de frondosos",
+      "árboles. La ruta culmina en la imponente mole rocosa de Piedra El Indio",
+      "a 1.600 msnm, mirador natural privilegiado sobre la ciudad.",
+    ],
+    acceso: [{ texto: "Av. Boyacá (Cota Mil) a la altura de Sebucán / entrada en PGP Cachimbo." }],
+    caracteristicas: [
+      { prefix: "Puesto de guardaparques:", texto: "Cachimbo / incluye punto de hidratación." },
+    ],
+    advertencias: [
+      { texto: "Borde rocoso de Piedra El Indio." },
+      { texto: "Poca señalización tras la bifurcación." },
+    ],
+    fotoLista: "/fotos/rutas/piedra-indio-lista.webp",
+    fotosDetalle: [
+      "/fotos/rutas/piedra-indio-detalle-1.webp",
+      "/fotos/rutas/piedra-indio-detalle-2.webp",
+      "/fotos/rutas/piedra-indio-detalle-3.webp",
+    ],
+    mapaCoords: "10.5295,-66.8315",
+    mapaAccesoCorto: "Cota Mil (Sebucán) → PGP Cachimbo → Piedra El Indio",
+  },
+  {
+    slug: "silla-de-caracas",
+    nombreLista: "Silla de Caracas",
+    nombreDetalle: "Silla de Caracas",
+    distancia: "10 km",
+    distanciaNota: "(ida y vuelta)",
+    tiempo: "6 a 8 horas",
+    dificultad: "Alta",
+    descripcionLineas: [
+      "Una de las rutas más emblemáticas de Caracas. La formación montañosa",
+      "conocida como «La Silla» incluye el Pico Occidental (2.480 m) y el Pico",
+      "Oriental (2.640 m).",
+    ],
+    acceso: [
+      { texto: "El ascenso pasa por el refugio «No te apures» a 1.800 msnm, punto de bifurcación hacia ambos picos." },
+    ],
+    caracteristicas: [
+      { prefix: "Puesto de guardaparques:", texto: "Sabas Nieves I y II / incluyen punto de hidratación." },
+    ],
+    advertencias: [
+      { texto: "Ruta de alta exigencia." },
+      { texto: "Últimos tramos muy empinados." },
+      { texto: "Clima impredecible en cumbres." },
+    ],
+    fotoLista: "/fotos/rutas/silla-caracas-lista.webp",
+    fotosDetalle: [
+      "/fotos/rutas/silla-caracas-detalle-1.webp",
+      "/fotos/rutas/silla-caracas-detalle-2.webp",
+      "/fotos/geologia/silla-de-caracas.webp",
+    ],
+    mapaCoords: "10.5469,-66.8364",
+    mapaAccesoCorto: "Sabas Nieves → Refugio No te apures → Silla de Caracas",
+  },
+  {
+    slug: "pico-naiguata",
+    nombreLista: "Pico Naiguatá",
+    nombreDetalle: "Pico Naiguatá",
+    distancia: "22 km",
+    distanciaNota: "(ida y vuelta)",
+    tiempo: "10 a 14 horas",
+    dificultad: "Alta",
+    descripcionLineas: [
+      "La ruta más exigente del parque, se caracteriza por sus formaciones",
+      "rocosas gigantescas y vistas simultáneas al valle de Caracas y al Mar",
+      "Caribe separadas por la Fila Maestra. Zonas de acampada: Rancho",
+      "Grande, El Urquijo, Lagunazo y Anfiteatro.",
+    ],
+    acceso: [{ texto: "La Julia, sector El Marqués (final Av. Sanz)." }],
+    caracteristicas: [
+      { prefix: "Puesto de guardaparques:", texto: "La Julia." },
+      { prefix: "Punto de hidratación:", texto: "Sabas Nieves / Lagunazo." },
+    ],
+    advertencias: [
+      { texto: "Ruta de alta dificultad." },
+      { texto: "Avisar a INPARQUES sobre la pernocta." },
+      { texto: "Zonas sin señal móvil." },
+    ],
+    fotoLista: "/fotos/rutas/pico-naiguata-lista.webp",
+    fotosDetalle: [
+      "/fotos/rutas/pico-naiguata-detalle-1.webp",
+      "/fotos/rutas/pico-naiguata-detalle-2.webp",
+      "/fotos/geologia/pico-naiguata.webp",
+    ],
+    mapaCoords: "10.5429,-66.7830",
+    mapaAccesoCorto: "La Julia (El Marqués) → Rancho Grande → Pico Naiguatá",
+  },
+];
+---
+
+<section class="modulo-guia-visitante" data-vista-actual="intro">
+  <EstructuraCuadrados tema="verde" fondoInicial="/fondos/bg-guia-visitante.webp">
+    <Techo seccionActiva="guia-visitante" />
+    <CabezalVertical tema="verde" items={itemsMenuGuia} itemActivo="intro" />
+
+    <!-- Elemento decorativo derecho: rama con hojas verdes (visible en Intro y Rutas del Parque) -->
+    <img
+      src="/elementos/rama-guia-derecha.webp"
+      alt=""
+      aria-hidden="true"
+      class="rama-guia-derecha activa"
+      draggable="false"
+    />
+
+    <!-- ========================================================== -->
+    <!-- VISTA 0: PORTADA INTRO (PDF semana 5 pág. 41)               -->
+    <!-- ========================================================== -->
+    <div class="vista-panel activa" data-vista="intro">
+      <img
+        src="/elementos/svg/contenedor-guia-intro.svg"
+        alt=""
+        aria-hidden="true"
+        class="svg-intro-guia"
+        draggable="false"
+      />
+      <h1 class="titulo-intro-guia">Guía del visitante</h1>
+      <div class="texto-intro-guia">
+        <p class="intro-p1">
+          El Parque Nacional Waraira Repano te espera con caminos<br />
+          llenos de historia, vegetación única y paisajes inolvidables. La<br />
+          Guía al Visitante es tu herramienta definitiva para explorar cada<br />
+          rincón de forma segura, planificada y emocionante.
+        </p>
+        <p class="intro-p2">
+          Estas rutas han sido trazadas pensando exclusivamente en los<br />
+          amantes del senderismo.
+        </p>
+      </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- VISTA 1: RUTAS DEL PARQUE (PDF semana 5 págs. 42–49)       -->
+    <!-- ========================================================== -->
+    <div class="vista-panel" data-vista="rutas-parque">
+      <img
+        src="/elementos/svg/contenedor-rutas-superior.svg"
+        alt=""
+        aria-hidden="true"
+        class="svg-rutas-superior"
+        draggable="false"
+      />
+      <h1 class="titulo-pestana-rutas">Rutas del Parque</h1>
+
+      <div class="paginador-rutas" role="tablist" aria-label="Páginas de rutas del parque">
+        {[0, 1].map((pag) => (
+          <button
+            type="button"
+            class:list={["btn-dot-guia", { activo: pag === 0 }]}
+            data-pag-rutas={String(pag)}
+            aria-label={`Rutas página ${pag + 1}`}
+            aria-selected={pag === 0 ? "true" : "false"}
+          >
+            <img class="dot-img-activo" src="/elementos/svg/dot-guia-activo.svg" alt="" draggable="false" />
+            <img class="dot-img-inactivo" src="/elementos/svg/dot-guia-inactivo.svg" alt="" draggable="false" />
+          </button>
+        ))}
+      </div>
+
+      <p class="lead-rutas-parque">
+        Descubre las rutas de nuestro parque y conéctate con la naturaleza.
+      </p>
+
+      <!-- Contenedores SVG dinámicos según la fila seleccionada (0..3) -->
+      {[1, 2, 3, 4].map((num, idx) => (
+        <img
+          src={`/elementos/svg/contenedor-rutas-lista-${num}.svg`}
+          alt=""
+          aria-hidden="true"
+          class:list={["svg-rutas-lista", { activa: idx === 0 }]}
+          data-svg-lista-idx={String(idx)}
+          draggable="false"
+        />
+      ))}
+
+      <!-- 4 botones interactivos de rutas visibles en la página actual -->
+      <div class="lista-botones-rutas" role="listbox" aria-label="Listado de rutas">
+        {RUTAS_PARQUE.slice(0, 4).map((r, idx) => (
+          <button
+            type="button"
+            class:list={["btn-ruta-item", { activo: idx === 0 }]}
+            data-lista-pos={String(idx)}
+            role="option"
+            aria-selected={idx === 0 ? "true" : "false"}
+          >
+            {r.nombreLista}
+          </button>
+        ))}
+      </div>
+
+      <!-- Visor derecho con UNA sola imagen dinámica precargada (cero parpadeos) -->
+      <div class="marco-foto-lista">
+        <img
+          src={RUTAS_PARQUE[0].fotoLista}
+          alt={`Vista previa de la ruta ${RUTAS_PARQUE[0].nombreLista}`}
+          class="foto-ruta-preview"
+          draggable="false"
+        />
+      </div>
+
+      <button type="button" class="btn-ver-ruta">
+        Ver ruta
+      </button>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- VISTA 2: DETALLE DE RUTA (PDF rutas-de-guia págs. 4–27)    -->
+    <!-- ========================================================== -->
+    <div class="vista-panel" data-vista="detalle-ruta">
+      <img
+        src="/elementos/svg/contenedor-ruta-detalle-base.svg"
+        alt=""
+        aria-hidden="true"
+        class="svg-detalle-base"
+        draggable="false"
+      />
+
+      <h1 class="titulo-detalle-ruta">{RUTAS_PARQUE[0].nombreDetalle}</h1>
+
+      <!-- Métricas superiores -->
+      <img
+        src="/elementos/svg/icono-ruta-distancia.svg"
+        alt=""
+        aria-hidden="true"
+        class="icono-metrica icono-distancia"
+        draggable="false"
+      />
+      <span class="label-metrica label-distancia">Distancia</span>
+      <span class="valor-metrica valor-distancia">
+        <span class="valor-distancia-num">{RUTAS_PARQUE[0].distancia}</span>
+        <span class="distancia-nota" style="display: none;"></span>
+      </span>
+
+      <img
+        src="/elementos/svg/icono-ruta-tiempo.svg"
+        alt=""
+        aria-hidden="true"
+        class="icono-metrica icono-tiempo"
+        draggable="false"
+      />
+      <span class="label-metrica label-tiempo">Tiempo de recorrido</span>
+      <span class="valor-metrica valor-tiempo">{RUTAS_PARQUE[0].tiempo}</span>
+
+      <img
+        src="/elementos/svg/icono-ruta-dificultad-media.svg"
+        alt=""
+        aria-hidden="true"
+        class="icono-metrica icono-dificultad activa"
+        data-icono-dif="Media"
+        draggable="false"
+      />
+      <img
+        src="/elementos/svg/icono-ruta-dificultad-alta.svg"
+        alt=""
+        aria-hidden="true"
+        class="icono-metrica icono-dificultad"
+        data-icono-dif="Alta"
+        draggable="false"
+      />
+      <span class="label-metrica label-dificultad">Dificultad</span>
+      <span class="valor-metrica valor-dificultad">{RUTAS_PARQUE[0].dificultad}</span>
+
+      <!-- Descripción principal de la ruta -->
+      <p class="descripcion-detalle-ruta">
+        {RUTAS_PARQUE[0].descripcionLineas.map((linea, i) => (
+          <>
+            {linea}
+            {i < RUTAS_PARQUE[0].descripcionLineas.length - 1 && <br />}
+          </>
+        ))}
+      </p>
+
+      <!-- Pestañas inferiores conectadas (Acceso, Características, Advertencias, Ver mapa) -->
+      <img
+        src="/elementos/svg/contenedor-ruta-tab-acceso.svg"
+        alt=""
+        aria-hidden="true"
+        class="svg-detalle-tab activa"
+        data-svg-tab="acceso"
+        draggable="false"
+      />
+      <img
+        src="/elementos/svg/contenedor-ruta-tab-caracteristicas.svg"
+        alt=""
+        aria-hidden="true"
+        class="svg-detalle-tab"
+        data-svg-tab="caracteristicas"
+        draggable="false"
+      />
+      <img
+        src="/elementos/svg/contenedor-ruta-tab-advertencias.svg"
+        alt=""
+        aria-hidden="true"
+        class="svg-detalle-tab"
+        data-svg-tab="advertencias"
+        draggable="false"
+      />
+
+      <div class="botones-detalle-tabs" role="tablist" aria-label="Información de la ruta">
+        <button
+          type="button"
+          class="btn-detalle-tab tab-acceso activo"
+          data-tab-target="acceso"
+          role="tab"
+          aria-selected="true"
+        >
+          Acceso
+        </button>
+        <button
+          type="button"
+          class="btn-detalle-tab tab-caracteristicas"
+          data-tab-target="caracteristicas"
+          role="tab"
+          aria-selected="false"
+        >
+          Características
+        </button>
+        <button
+          type="button"
+          class="btn-detalle-tab tab-advertencias"
+          data-tab-target="advertencias"
+          role="tab"
+          aria-selected="false"
+        >
+          Advertencias
+        </button>
+        <button type="button" class="btn-ver-mapa">
+          Ver mapa
+        </button>
+      </div>
+
+      <!-- Contenido de la burbuja verde (viñetas alineadas a la izquierda) -->
+      <ul class="lista-bullets-detalle">
+        {RUTAS_PARQUE[0].acceso.map((b) => (
+          <li>
+            <span class="bullet-punto" aria-hidden="true">•</span>
+            <span class="bullet-contenido">
+              {b.prefix && <strong>{b.prefix} </strong>}
+              {b.texto}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <!-- Marco de foto vertical derecho + puntos de galería -->
+      <div class="marco-foto-detalle">
+        <img
+          src={RUTAS_PARQUE[0].fotosDetalle[0]}
+          alt={`Fotografía de la ruta ${RUTAS_PARQUE[0].nombreDetalle}`}
+          class="foto-ruta-detalle"
+          draggable="false"
+        />
+      </div>
+
+      <div class="paginador-galeria" role="tablist" aria-label="Fotografías de la ruta">
+        {[0, 1, 2].map((gIdx) => (
+          <button
+            type="button"
+            class:list={["btn-dot-galeria", { activo: gIdx === 0 }]}
+            data-galeria-idx={String(gIdx)}
+            aria-label={`Foto ${gIdx + 1} de 3`}
+            aria-selected={gIdx === 0 ? "true" : "false"}
+          >
+            <img class="dot-img-activo" src="/elementos/svg/dot-galeria-activo.svg" alt="" draggable="false" />
+            <img class="dot-img-inactivo" src="/elementos/svg/dot-galeria-inactivo.svg" alt="" draggable="false" />
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Modal interactivo "Ver mapa" -->
+    <div class="modal-mapa-overlay" role="dialog" aria-modal="true" aria-labelledby="titulo-modal-mapa">
+      <div class="modal-mapa-card">
+        <header class="modal-mapa-header">
+          <div class="modal-mapa-titulos">
+            <h2 id="titulo-modal-mapa" class="modal-mapa-titulo">Mapa de la ruta</h2>
+            <p class="modal-mapa-subtitulo"></p>
+          </div>
+          <button type="button" class="btn-cerrar-mapa" aria-label="Cerrar mapa">×</button>
+        </header>
+        <div class="modal-mapa-cuerpo">
+          <iframe
+            class="iframe-mapa-ruta"
+            title="Ubicación de la ruta en el Parque Nacional Waraira Repano"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+        <footer class="modal-mapa-footer">
+          <span class="modal-mapa-coords"></span>
+          <a
+            href="https://maps.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn-abrir-gmaps"
+          >
+            Abrir en Google Maps
+          </a>
+        </footer>
+      </div>
+    </div>
+  </EstructuraCuadrados>
+</section>
+
+<script define:vars={{ rutasData: RUTAS_PARQUE }}>
+  function inicializarModuloGuia() {
+    const modulos = document.querySelectorAll(".modulo-guia-visitante");
+
+    modulos.forEach((root) => {
+      if (root.dataset.inicializado === "1") return;
+      root.dataset.inicializado = "1";
+
+      const botonesLetrero = root.querySelectorAll("[data-vista-target]");
+      const vistas = root.querySelectorAll(".vista-panel[data-vista]");
+      const ramaDerecha = root.querySelector(".rama-guia-derecha");
+
+      // Estado Lista (Vista 1)
+      const dotsPagina = root.querySelectorAll(".btn-dot-guia[data-pag-rutas]");
+      const svgsLista = root.querySelectorAll(".svg-rutas-lista[data-svg-lista-idx]");
+      const botonesLista = root.querySelectorAll(".btn-ruta-item[data-lista-pos]");
+      const imgPreviewLista = root.querySelector(".foto-ruta-preview");
+      const btnVerRuta = root.querySelector(".btn-ver-ruta");
+
+      // Estado Detalle (Vista 2)
+      const elTituloDetalle = root.querySelector(".titulo-detalle-ruta");
+      const elDistNum = root.querySelector(".valor-distancia-num");
+      const elDistNota = root.querySelector(".distancia-nota");
+      const elTiempo = root.querySelector(".valor-tiempo");
+      const elDif = root.querySelector(".valor-dificultad");
+      const iconosDif = root.querySelectorAll(".icono-dificultad[data-icono-dif]");
+      const elDescripcion = root.querySelector(".descripcion-detalle-ruta");
+      const svgsDetalleTab = root.querySelectorAll(".svg-detalle-tab[data-svg-tab]");
+      const botonesDetalleTab = root.querySelectorAll(".btn-detalle-tab[data-tab-target]");
+      const listaBullets = root.querySelector(".lista-bullets-detalle");
+      const imgFotoDetalle = root.querySelector(".foto-ruta-detalle");
+      const dotsGaleria = root.querySelectorAll(".btn-dot-galeria[data-galeria-idx]");
+      const btnVerMapa = root.querySelector(".btn-ver-mapa");
+
+      // Modal Mapa
+      const modalOverlay = root.querySelector(".modal-mapa-overlay");
+      const modalTitulo = root.querySelector(".modal-mapa-titulo");
+      const modalSubtitulo = root.querySelector(".modal-mapa-subtitulo");
+      const modalIframe = root.querySelector(".iframe-mapa-ruta");
+      const modalCoordsTxt = root.querySelector(".modal-mapa-coords");
+      const modalLinkGmaps = root.querySelector(".btn-abrir-gmaps");
+      const btnCerrarMapa = root.querySelector(".btn-cerrar-mapa");
+
+      let pagActual = 0; // 0 (rutas 0..3) o 1 (rutas 4..7)
+      let posListaActual = 0; // 0..3 dentro de pagActual
+      let rutaActivaIdx = 0; // 0..7 global
+      let tabDetalleActual = "acceso";
+      let galeriaIdxActual = 0;
+
+      // Precarga limpia de fotos para transición instantánea sin flashes
+      const cacheFotos = new Map();
+      function precargarFoto(src) {
+        if (!src || cacheFotos.has(src)) return;
+        const img = new Image();
+        img.src = src;
+        cacheFotos.set(src, img);
+      }
+      rutasData.forEach((r) => {
+        precargarFoto(r.fotoLista);
+        r.fotosDetalle.forEach((f) => precargarFoto(f));
+      });
+
+      function aplicarFotoSegura(imgEl, src, altTexto) {
+        if (!imgEl || !src) return;
+        if (imgEl.getAttribute("src") !== src) {
+          imgEl.src = src;
+        }
+        imgEl.alt = altTexto;
+      }
+
+      function escaparHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;");
+      }
+
+      function renderLista() {
+        dotsPagina.forEach((btn) => {
+          const esAct = btn.getAttribute("data-pag-rutas") === String(pagActual);
+          btn.classList.toggle("activo", esAct);
+          btn.setAttribute("aria-selected", esAct ? "true" : "false");
+        });
+
+        svgsLista.forEach((svg) => {
+          svg.classList.toggle("activa", svg.getAttribute("data-svg-lista-idx") === String(posListaActual));
+        });
+
+        const base = pagActual * 4;
+        botonesLista.forEach((btn, i) => {
+          const r = rutasData[base + i];
+          const esAct = i === posListaActual;
+          btn.textContent = r.nombreLista;
+          btn.classList.toggle("activo", esAct);
+          btn.setAttribute("aria-selected", esAct ? "true" : "false");
+        });
+
+        rutaActivaIdx = base + posListaActual;
+        const rutaSel = rutasData[rutaActivaIdx];
+        aplicarFotoSegura(imgPreviewLista, rutaSel.fotoLista, `Vista previa de ${rutaSel.nombreLista}`);
+      }
+
+      function renderDetalleBullets() {
+        const ruta = rutasData[rutaActivaIdx];
+        const items = ruta[tabDetalleActual] || [];
+        if (!listaBullets) return;
+        listaBullets.innerHTML = items
+          .map((item) => {
+            const pref = item.prefix ? `<strong>${escaparHtml(item.prefix)}</strong> ` : "";
+            return `<li><span class="bullet-punto" aria-hidden="true">•</span><span class="bullet-contenido">${pref}${escaparHtml(item.texto)}</span></li>`;
+          })
+          .join("");
+      }
+
+      function renderDetalleTabs() {
+        svgsDetalleTab.forEach((svg) => {
+          svg.classList.toggle("activa", svg.getAttribute("data-svg-tab") === tabDetalleActual);
+        });
+        botonesDetalleTab.forEach((btn) => {
+          const esAct = btn.getAttribute("data-tab-target") === tabDetalleActual;
+          btn.classList.toggle("activo", esAct);
+          btn.setAttribute("aria-selected", esAct ? "true" : "false");
+        });
+        renderDetalleBullets();
+      }
+
+      function renderGaleriaDetalle() {
+        const ruta = rutasData[rutaActivaIdx];
+        dotsGaleria.forEach((btn) => {
+          const esAct = btn.getAttribute("data-galeria-idx") === String(galeriaIdxActual);
+          btn.classList.toggle("activo", esAct);
+          btn.setAttribute("aria-selected", esAct ? "true" : "false");
+        });
+        const src = ruta.fotosDetalle[galeriaIdxActual] || ruta.fotosDetalle[0];
+        aplicarFotoSegura(
+          imgFotoDetalle,
+          src,
+          `Fotografía ${galeriaIdxActual + 1} de la ruta ${ruta.nombreDetalle}`
+        );
+      }
+
+      function renderDetalle() {
+        const ruta = rutasData[rutaActivaIdx];
+        if (elTituloDetalle) elTituloDetalle.textContent = ruta.nombreDetalle;
+        if (elDistNum) elDistNum.textContent = ruta.distancia;
+        if (elDistNota) {
+          if (ruta.distanciaNota) {
+            elDistNota.textContent = ruta.distanciaNota;
+            elDistNota.style.display = "inline";
+          } else {
+            elDistNota.textContent = "";
+            elDistNota.style.display = "none";
+          }
+        }
+        if (elTiempo) elTiempo.textContent = ruta.tiempo;
+        if (elDif) elDif.textContent = ruta.dificultad;
+        iconosDif.forEach((ic) => {
+          ic.classList.toggle("activa", ic.getAttribute("data-icono-dif") === ruta.dificultad);
+        });
+        if (elDescripcion) {
+          elDescripcion.innerHTML = ruta.descripcionLineas.map(escaparHtml).join("<br />");
+        }
+        renderDetalleTabs();
+        renderGaleriaDetalle();
+      }
+
+      function cerrarModalMapa() {
+        if (!modalOverlay) return;
+        modalOverlay.classList.remove("abierto");
+        if (modalIframe && modalIframe.getAttribute("src")) {
+          modalIframe.removeAttribute("src");
+        }
+      }
+
+      function abrirModalMapa() {
+        if (!modalOverlay) return;
+        const ruta = rutasData[rutaActivaIdx];
+        if (modalTitulo) modalTitulo.textContent = `Mapa: ${ruta.nombreDetalle}`;
+        if (modalSubtitulo) modalSubtitulo.textContent = ruta.mapaAccesoCorto;
+        if (modalCoordsTxt) modalCoordsTxt.textContent = `Coordenadas: ${ruta.mapaCoords}`;
+        const urlEmbed = `https://maps.google.com/maps?q=${encodeURIComponent(ruta.mapaCoords)}&z=14&output=embed`;
+        const urlExterno = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(ruta.mapaCoords)}`;
+        if (modalIframe) modalIframe.src = urlEmbed;
+        if (modalLinkGmaps) modalLinkGmaps.href = urlExterno;
+        modalOverlay.classList.add("abierto");
+      }
+
+      function activarVista(vistaId) {
+        cerrarModalMapa();
+        root.setAttribute("data-vista-actual", vistaId);
+        vistas.forEach((v) => v.classList.toggle("activa", v.getAttribute("data-vista") === vistaId));
+
+        // Letrero de madera: "Rutas del parque" está activo tanto en Vista 1 como dentro de Vista 2 (detalle)
+        const enRutas = vistaId === "rutas-parque" || vistaId === "detalle-ruta";
+        botonesLetrero.forEach((btn) => {
+          const t = btn.getAttribute("data-vista-target");
+          btn.classList.toggle("activo", enRutas && t === "rutas-parque");
+        });
+
+        // Rama decorativa derecha: visible en Intro y Rutas del Parque, oculta en Detalle
+        if (ramaDerecha) {
+          ramaDerecha.classList.toggle("activa", vistaId !== "detalle-ruta");
+        }
+      }
+
+      botonesLetrero.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const destino = btn.getAttribute("data-vista-target") || "intro";
+          if (destino === "rutas-parque") {
+            renderLista();
+          }
+          activarVista(destino);
+        });
+      });
+
+      dotsPagina.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          pagActual = Number(btn.getAttribute("data-pag-rutas") || "0");
+          posListaActual = 0;
+          renderLista();
+        });
+      });
+
+      botonesLista.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          posListaActual = Number(btn.getAttribute("data-lista-pos") || "0");
+          renderLista();
+        });
+      });
+
+      if (btnVerRuta) {
+        btnVerRuta.addEventListener("click", () => {
+          rutaActivaIdx = pagActual * 4 + posListaActual;
+          tabDetalleActual = "acceso";
+          galeriaIdxActual = 0;
+          renderDetalle();
+          activarVista("detalle-ruta");
+        });
+      }
+
+      botonesDetalleTab.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          tabDetalleActual = btn.getAttribute("data-tab-target") || "acceso";
+          renderDetalleTabs();
+        });
+      });
+
+      dotsGaleria.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          galeriaIdxActual = Number(btn.getAttribute("data-galeria-idx") || "0");
+          renderGaleriaDetalle();
+        });
+      });
+
+      if (btnVerMapa) {
+        btnVerMapa.addEventListener("click", abrirModalMapa);
+      }
+
+      if (btnCerrarMapa) {
+        btnCerrarMapa.addEventListener("click", cerrarModalMapa);
+      }
+
+      if (modalOverlay) {
+        modalOverlay.addEventListener("click", (e) => {
+          if (e.target === modalOverlay) cerrarModalMapa();
+        });
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modalOverlay && modalOverlay.classList.contains("abierto")) {
+          cerrarModalMapa();
+        }
+      });
+
+      // Soporte de parámetros URL en página independiente para enlaces directos / verificación
+      const enSpa = Boolean(root.closest(".waraira-modulo-embebible"));
+      if (!enSpa && window.location.search) {
+        const params = new URLSearchParams(window.location.search);
+        const vistaP = params.get("vista");
+        const pagP = params.get("pag");
+        const itemP = params.get("item");
+        const rutaP = params.get("ruta");
+        const tabP = params.get("tab");
+
+        if (pagP === "0" || pagP === "1") pagActual = Number(pagP);
+        if (itemP && ["0", "1", "2", "3"].includes(itemP)) posListaActual = Number(itemP);
+
+        if (rutaP) {
+          const found = rutasData.findIndex((r) => r.slug === rutaP);
+          if (found >= 0) {
+            rutaActivaIdx = found;
+            pagActual = Math.floor(found / 4);
+            posListaActual = found % 4;
+          }
+        }
+
+        if (vistaP === "rutas-parque") {
+          renderLista();
+          activarVista("rutas-parque");
+        } else if (vistaP === "detalle") {
+          if (tabP === "acceso" || tabP === "caracteristicas" || tabP === "advertencias") {
+            tabDetalleActual = tabP;
+          }
+          renderLista();
+          renderDetalle();
+          activarVista("detalle-ruta");
+        }
+      }
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", inicializarModuloGuia);
+  inicializarModuloGuia();
+</script>
+
+<style>
+  .modulo-guia-visitante {
+    position: relative;
+    width: 1400px;
+    height: 650px;
+    overflow: hidden;
+  }
+
+  .vista-panel {
+    display: none;
+    position: absolute;
+    inset: 0;
+  }
+
+  .vista-panel.activa {
+    display: block;
+  }
+
+  /* Rama decorativa esquina inferior derecha (intro y lista) */
+  .rama-guia-derecha {
+    display: none;
+    position: absolute;
+    left: 1106px;
+    top: 249px;
+    width: 302px;
+    height: 405px;
+    object-fit: contain;
+    z-index: 30;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .rama-guia-derecha.activa {
+    display: block;
+  }
+
+  /* ========================================================== */
+  /* VISTA 0: INTRO                                             */
+  /* ========================================================== */
+  .svg-intro-guia {
+    position: absolute;
+    left: 333.5px;
+    top: 120.9px;
+    width: 642px;
+    height: 351.7px;
+    z-index: 23;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .titulo-intro-guia {
+    position: absolute;
+    left: 363px;
+    top: 136px;
+    margin: 0;
+    font-family: var(--fuente-principal);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    color: #4caf50;
+    z-index: 26;
+  }
+
+  .texto-intro-guia {
+    position: absolute;
+    left: 382px;
+    top: 221px;
+    width: 552px;
+    font-family: var(--fuente-principal);
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #ffffff;
+    z-index: 26;
+    white-space: nowrap;
+  }
+
+  .texto-intro-guia p {
+    margin: 0;
+  }
+
+  .texto-intro-guia .intro-p2 {
+    margin-top: 23px;
+  }
+
+  /* ========================================================== */
+  /* VISTA 1: RUTAS DEL PARQUE                                  */
+  /* ========================================================== */
+  .svg-rutas-superior {
+    position: absolute;
+    left: 332.9px;
+    top: 120.5px;
+    width: 709.3px;
+    height: 236.97px;
+    z-index: 23;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .titulo-pestana-rutas {
+    position: absolute;
+    left: 382px;
+    top: 134px;
+    margin: 0;
+    font-family: var(--fuente-principal);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    color: #ffffff;
+    z-index: 26;
+  }
+
+  .paginador-rutas {
+    position: absolute;
+    left: 576px;
+    top: 158px;
+    display: flex;
+    align-items: center;
+    gap: 15.6px;
+    z-index: 28;
+  }
+
+  .btn-dot-guia {
+    position: relative;
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .btn-dot-guia img {
+    width: 12px;
+    height: 12px;
+    display: block;
+  }
+
+  .btn-dot-guia .dot-img-activo {
+    display: none;
+  }
+
+  .btn-dot-guia.activo .dot-img-activo {
+    display: block;
+  }
+
+  .btn-dot-guia.activo .dot-img-inactivo {
+    display: none;
+  }
+
+  .lead-rutas-parque {
+    position: absolute;
+    left: 380.6px;
+    top: 210px;
+    margin: 0;
+    font-family: var(--fuente-principal);
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 23px;
+    color: #254226;
+    z-index: 26;
+    white-space: nowrap;
+  }
+
+  .svg-rutas-lista {
+    display: none;
+    position: absolute;
+    left: 365px;
+    top: 308px;
+    width: 645px;
+    height: 228px;
+    z-index: 24;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .svg-rutas-lista.activa {
+    display: block;
+  }
+
+  .lista-botones-rutas {
+    position: absolute;
+    left: 367px;
+    top: 311px;
+    width: 254px;
+    height: 221px;
+    z-index: 27;
+  }
+
+  .btn-ruta-item {
+    position: absolute;
+    left: 0;
+    width: 254px;
+    height: 44.3px;
+    padding: 0 12px 0 19px;
+    border: none;
+    background: transparent;
+    text-align: left;
+    font-family: var(--fuente-principal);
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 24px;
+    color: #4caf50;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.15s ease;
+  }
+
+  .btn-ruta-item[data-lista-pos="0"] {
+    top: 0;
+  }
+  .btn-ruta-item[data-lista-pos="1"] {
+    top: 58.4px;
+  }
+  .btn-ruta-item[data-lista-pos="2"] {
+    top: 116.8px;
+  }
+  .btn-ruta-item[data-lista-pos="3"] {
+    top: 175.2px;
+  }
+
+  .btn-ruta-item.activo {
+    font-weight: 600;
+  }
+
+  .btn-ruta-item:not(.activo):hover {
+    opacity: 0.78;
+  }
+
+  .marco-foto-lista {
+    position: absolute;
+    left: 679px;
+    top: 322px;
+    width: 310.6px;
+    height: 166.8px;
+    border-radius: 18px;
+    overflow: hidden;
+    z-index: 26;
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  .foto-ruta-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .btn-ver-ruta {
+    position: absolute;
+    left: 679px;
+    top: 501.5px;
+    width: 85.5px;
+    height: 27.6px;
+    padding: 0;
+    border: none;
+    border-radius: 10px 10px 0 0;
+    background-color: #4bae50;
+    color: #ffffff;
+    font-family: var(--fuente-principal);
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 20px;
+    cursor: pointer;
+    z-index: 28;
+    transition: filter 0.16s ease, transform 0.16s ease;
+  }
+
+  .btn-ver-ruta:hover {
+    filter: brightness(1.07);
+  }
+
+  /* ========================================================== */
+  /* VISTA 2: DETALLE DE RUTA                                   */
+  /* ========================================================== */
+  .svg-detalle-base {
+    position: absolute;
+    left: 329px;
+    top: 119.4px;
+    width: 942px;
+    height: 442.57px;
+    z-index: 23;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .titulo-detalle-ruta {
+    position: absolute;
+    left: 384px;
+    top: 135px;
+    margin: 0;
+    font-family: var(--fuente-principal);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 24px;
+    color: #ffffff;
+    z-index: 26;
+  }
+
+  .icono-metrica {
+    position: absolute;
+    top: 183px;
+    z-index: 26;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .icono-distancia {
+    left: 407px;
+    width: 86px;
+    height: 34px;
+  }
+
+  .icono-tiempo {
+    left: 742px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .icono-dificultad {
+    display: none;
+    left: 1078px;
+    width: 52px;
+    height: 35px;
+  }
+
+  .icono-dificultad.activa {
+    display: block;
+  }
+
+  .label-metrica {
+    position: absolute;
+    top: 186px;
+    font-family: var(--fuente-principal);
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 18px;
+    color: #4caf50;
+    z-index: 26;
+    white-space: nowrap;
+  }
+
+  .valor-metrica {
+    position: absolute;
+    top: 207px;
+    font-family: var(--fuente-principal);
+    font-size: 16.1px;
+    font-weight: 400;
+    line-height: 21px;
+    color: #254226;
+    z-index: 26;
+    white-space: nowrap;
+  }
+
+  .label-distancia,
+  .valor-distancia {
+    left: 515.5px;
+  }
+
+  .distancia-nota {
+    font-size: 11px;
+    color: #254226;
+    margin-left: 3px;
+  }
+
+  .label-tiempo,
+  .valor-tiempo {
+    left: 795.5px;
+  }
+
+  .label-dificultad,
+  .valor-dificultad {
+    left: 1151.7px;
+  }
+
+  .descripcion-detalle-ruta {
+    position: absolute;
+    left: 403px;
+    top: 284px;
+    width: 530px;
+    margin: 0;
+    font-family: var(--fuente-principal);
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #254226;
+    z-index: 26;
+  }
+
+  .svg-detalle-tab {
+    display: none;
+    position: absolute;
+    left: 373px;
+    top: 410px;
+    width: 562px;
+    height: 152px;
+    z-index: 25;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .svg-detalle-tab.activa {
+    display: block;
+  }
+
+  .botones-detalle-tabs {
+    position: absolute;
+    left: 373px;
+    top: 410px;
+    width: 141px;
+    height: 152px;
+    z-index: 28;
+  }
+
+  .btn-detalle-tab,
+  .btn-ver-mapa {
+    position: absolute;
+    left: 0;
+    width: 141px;
+    height: 31px;
+    padding: 0 8px 0 29px;
+    border: none;
+    background: transparent;
+    text-align: left;
+    font-family: var(--fuente-principal);
+    font-size: 14.1px;
+    font-weight: 500;
+    line-height: 20px;
+    color: #ffffff;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .tab-acceso {
+    top: 0;
+  }
+  .tab-caracteristicas {
+    top: 39.7px;
+  }
+  .tab-advertencias {
+    top: 79.3px;
+  }
+  .btn-ver-mapa {
+    top: 121px;
+  }
+
+  .btn-detalle-tab.activo {
+    font-weight: 600;
+  }
+
+  .btn-detalle-tab:not(.activo):hover,
+  .btn-ver-mapa:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .lista-bullets-detalle {
+    position: absolute;
+    left: 575px;
+    top: 422px;
+    width: 344px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 27;
+    font-family: var(--fuente-principal);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 21px;
+    color: #ffffff;
+  }
+
+  :global(.modulo-guia-visitante .lista-bullets-detalle li) {
+    position: relative;
+    padding-left: 18px;
+  }
+
+  :global(.modulo-guia-visitante .lista-bullets-detalle .bullet-punto) {
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-size: 15px;
+    line-height: 21px;
+  }
+
+  :global(.modulo-guia-visitante .lista-bullets-detalle .bullet-contenido) {
+    display: block;
+  }
+
+  .marco-foto-detalle {
+    position: absolute;
+    left: 980.5px;
+    top: 272px;
+    width: 234px;
+    height: 275px;
+    border-radius: 22px;
+    overflow: hidden;
+    z-index: 26;
+    background: rgba(255, 255, 255, 0.35);
+  }
+
+  .foto-ruta-detalle {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .paginador-galeria {
+    position: absolute;
+    left: 1239px;
+    top: 444.5px;
+    display: flex;
+    flex-direction: column;
+    gap: 15.7px;
+    z-index: 28;
+  }
+
+  .btn-dot-galeria {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .btn-dot-galeria img {
+    width: 14px;
+    height: 14px;
+    display: block;
+  }
+
+  .btn-dot-galeria .dot-img-activo {
+    display: none;
+  }
+
+  .btn-dot-galeria.activo .dot-img-activo {
+    display: block;
+  }
+
+  .btn-dot-galeria.activo .dot-img-inactivo {
+    display: none;
+  }
+
+  /* ========================================================== */
+  /* MODAL INTERACTIVO DE MAPA                                  */
+  /* ========================================================== */
+  .modal-mapa-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    z-index: 90;
+    background: rgba(18, 40, 20, 0.56);
+    backdrop-filter: blur(3px);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal-mapa-overlay.abierto {
+    display: flex;
+  }
+
+  .modal-mapa-card {
+    width: 820px;
+    height: 470px;
+    border-radius: 24px;
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 22px 54px rgba(0, 0, 0, 0.32);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--fuente-principal);
+  }
+
+  .modal-mapa-header {
+    height: 58px;
+    padding: 0 22px;
+    background: #4bae50;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .modal-mapa-titulos {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    min-width: 0;
+  }
+
+  .modal-mapa-titulo {
+    margin: 0;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 24px;
+    white-space: nowrap;
+  }
+
+  .modal-mapa-subtitulo {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    opacity: 0.92;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .btn-cerrar-mapa {
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.22);
+    color: #ffffff;
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .btn-cerrar-mapa:hover {
+    background: rgba(255, 255, 255, 0.36);
+  }
+
+  .modal-mapa-cuerpo {
+    flex: 1;
+    background: #e9f2ea;
+    position: relative;
+  }
+
+  .iframe-mapa-ruta {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+
+  .modal-mapa-footer {
+    height: 48px;
+    padding: 0 22px;
+    background: #f5f8f5;
+    border-top: 1px solid rgba(75, 174, 80, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+
+  .modal-mapa-coords {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #254226;
+  }
+
+  .btn-abrir-gmaps {
+    padding: 6px 16px;
+    border-radius: 10px;
+    background: #4bae50;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .btn-abrir-gmaps:hover {
+    filter: brightness(1.06);
+  }
+</style>
