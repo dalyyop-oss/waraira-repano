@@ -528,7 +528,7 @@ const RUTAS_PARQUE: RutaParque[] = [
         >
           Advertencias
         </button>
-        <button type="button" class="btn-ver-mapa">
+        <button type="button" class="btn-ver-mapa" disabled aria-disabled="true">
           Ver mapa
         </button>
       </div>
@@ -557,18 +557,23 @@ const RUTAS_PARQUE: RutaParque[] = [
       </div>
 
       <div class="paginador-galeria" role="tablist" aria-label="Fotografías de la ruta">
-        {[0, 1, 2].map((gIdx) => (
-          <button
-            type="button"
-            class:list={["btn-dot-galeria", { activo: gIdx === 0 }]}
-            data-galeria-idx={String(gIdx)}
-            aria-label={`Foto ${gIdx + 1} de 3`}
-            aria-selected={gIdx === 0 ? "true" : "false"}
-          >
-            <img class="dot-img-activo" src="/elementos/svg/dot-galeria-activo.svg" alt="" draggable="false" />
-            <img class="dot-img-inactivo" src="/elementos/svg/dot-galeria-inactivo.svg" alt="" draggable="false" />
-          </button>
-        ))}
+        {[0, 1, 2].map((gIdx) => {
+          const inactivoTemporal = gIdx > 0;
+          return (
+            <button
+              type="button"
+              class:list={["btn-dot-galeria", { activo: gIdx === 0 }]}
+              data-galeria-idx={String(gIdx)}
+              aria-label={`Foto ${gIdx + 1} de 3`}
+              aria-selected={gIdx === 0 ? "true" : "false"}
+              disabled={inactivoTemporal}
+              aria-disabled={inactivoTemporal ? "true" : undefined}
+            >
+              <img class="dot-img-activo" src="/elementos/svg/dot-galeria-activo.svg" alt="" draggable="false" />
+              <img class="dot-img-inactivo" src="/elementos/svg/dot-galeria-inactivo.svg" alt="" draggable="false" />
+            </button>
+          );
+        })}
       </div>
     </div>
 
@@ -886,13 +891,19 @@ const RUTAS_PARQUE: RutaParque[] = [
 
       dotsGaleria.forEach((btn) => {
         btn.addEventListener("click", () => {
-          galeriaIdxActual = Number(btn.getAttribute("data-galeria-idx") || "0");
+          if (btn.disabled) return;
+          const idx = Number(btn.getAttribute("data-galeria-idx") || "0");
+          if (idx > 0) return;
+          galeriaIdxActual = idx;
           renderGaleriaDetalle();
         });
       });
 
       if (btnVerMapa) {
-        btnVerMapa.addEventListener("click", abrirModalMapa);
+        btnVerMapa.addEventListener("click", () => {
+          if (btnVerMapa.disabled) return;
+          abrirModalMapa();
+        });
       }
 
       if (btnCerrarMapa) {
@@ -1434,6 +1445,9 @@ const RUTAS_PARQUE: RutaParque[] = [
     padding: 0 8px 0 29px;
     border: none;
     background: transparent;
+    display: flex;
+    align-items: center;
+    overflow: visible;
     text-align: left;
     font-family: var(--fuente-principal);
     font-size: 14.1px;
@@ -1442,6 +1456,7 @@ const RUTAS_PARQUE: RutaParque[] = [
     color: #ffffff;
     cursor: pointer;
     white-space: nowrap;
+    transition: font-size 0.2s ease, opacity 0.2s ease;
   }
 
   .tab-acceso {
@@ -1458,11 +1473,23 @@ const RUTAS_PARQUE: RutaParque[] = [
   }
 
   .btn-detalle-tab.activo {
-    font-weight: 600;
+    font-size: 15.5px;
+    font-weight: 700;
+    opacity: 1;
+  }
+
+  .btn-detalle-tab:not(.activo) {
+    opacity: 0.9;
+  }
+
+  .btn-ver-mapa:disabled {
+    cursor: default;
+    opacity: 0.58;
+    pointer-events: none;
   }
 
   .btn-detalle-tab:not(.activo):hover,
-  .btn-ver-mapa:hover {
+  .btn-ver-mapa:not(:disabled):hover {
     text-decoration: underline;
     text-underline-offset: 2px;
   }
@@ -1568,6 +1595,12 @@ const RUTAS_PARQUE: RutaParque[] = [
 
   .btn-dot-galeria.activo .dot-img-inactivo {
     opacity: 0;
+  }
+
+  .btn-dot-galeria:disabled {
+    cursor: default;
+    opacity: 0.48;
+    pointer-events: none;
   }
 
   /* ========================================================== */

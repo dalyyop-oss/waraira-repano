@@ -728,17 +728,23 @@ const te = tipografiaEditorial;
                 />
               </div>
               <div class="mv-dots-galeria-col" role="tablist" aria-label="Galería de la ruta">
-                {[0, 1, 2].map((g) => (
-                  <button
-                    type="button"
-                    class:list={["mv-dot-svg-btn mv-dot-galeria", { activo: g === 0 }]}
-                    data-mv-galeria-idx={String(g)}
-                    aria-label={`Foto ${g + 1} de 3`}
-                  >
-                    <img class="mv-dot-activo" src="/elementos/svg/dot-galeria-activo.svg" alt="" draggable="false" />
-                    <img class="mv-dot-inactivo" src="/elementos/svg/dot-galeria-inactivo.svg" alt="" draggable="false" />
-                  </button>
-                ))}
+                {[0, 1, 2].map((g) => {
+                  const inactivoTemporal = g > 0;
+                  return (
+                    <button
+                      type="button"
+                      class:list={["mv-dot-svg-btn mv-dot-galeria", { activo: g === 0 }]}
+                      data-mv-galeria-idx={String(g)}
+                      aria-label={`Foto ${g + 1} de 3`}
+                      aria-selected={g === 0 ? "true" : "false"}
+                      disabled={inactivoTemporal}
+                      aria-disabled={inactivoTemporal ? "true" : undefined}
+                    >
+                      <img class="mv-dot-activo" src="/elementos/svg/dot-galeria-activo.svg" alt="" draggable="false" />
+                      <img class="mv-dot-inactivo" src="/elementos/svg/dot-galeria-inactivo.svg" alt="" draggable="false" />
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -753,7 +759,7 @@ const te = tipografiaEditorial;
               <button type="button" class="mv-tab-verde" data-mv-detalle-tab="advertencias" aria-selected="false">
                 Advertencias
               </button>
-              <button type="button" class="mv-tab-verde mv-btn-mapa-verde" id="mv-btn-ver-mapa">
+              <button type="button" class="mv-tab-verde mv-btn-mapa-verde" id="mv-btn-ver-mapa" disabled aria-disabled="true">
                 Ver mapa
               </button>
             </div>
@@ -1781,7 +1787,10 @@ const te = tipografiaEditorial;
     });
     btnsGaleria.forEach((b) => {
       b.addEventListener("click", () => {
-        galeriaIdx = Number(b.dataset.mvGaleriaIdx || 0);
+        if (b.disabled) return;
+        const idx = Number(b.dataset.mvGaleriaIdx || 0);
+        if (idx > 0) return;
+        galeriaIdx = idx;
         renderGaleriaMovil();
       });
     });
@@ -1810,6 +1819,7 @@ const te = tipografiaEditorial;
 
     if (btnVerMapa && modal) {
       btnVerMapa.addEventListener("click", () => {
+        if ((btnVerMapa as HTMLButtonElement).disabled) return;
         if (timerIframe) {
           clearTimeout(timerIframe);
           timerIframe = null;
@@ -2885,6 +2895,12 @@ const te = tipografiaEditorial;
     height: 14px;
   }
 
+  .mv-dot-galeria:disabled {
+    cursor: default;
+    opacity: 0.48;
+    pointer-events: none;
+  }
+
   .mv-tabs-detalle-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -2901,13 +2917,26 @@ const te = tipografiaEditorial;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, font-size 0.2s ease, opacity 0.2s ease;
   }
 
-  .mv-tab-verde.activa,
+  .mv-tab-verde.activa {
+    background: #4bae50;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
   .mv-btn-mapa-verde {
     background: #4bae50;
     font-weight: 700;
+  }
+
+  .mv-btn-mapa-verde:disabled {
+    background: rgba(75, 174, 80, 0.45);
+    color: rgba(255, 255, 255, 0.72);
+    font-weight: 500;
+    cursor: default;
+    pointer-events: none;
   }
 
   .mv-caja-bullets-verde {
