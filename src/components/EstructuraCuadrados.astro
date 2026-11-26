@@ -9,30 +9,35 @@ const { tema = "naranja", fondoInicial } = Astro.props;
 const esNaranja = tema === "naranja";
 const configTema = {
   naranja: {
+    estructuraId: "estructura-quienes-somos",
     lomita: "/elementos/svg/lomita-quienes-somos.svg",
     lomitaClass: "lomita-naranja",
     esquina: "/elementos/rocas-esquina-izquierda.webp",
     esquinaClass: "esquina-rocas",
   },
   amarillo: {
+    estructuraId: "estructura-patrimonio-natural",
     lomita: "/elementos/svg/lomita-patrimonio-natural.svg",
     lomitaClass: "lomita-amarillo",
     esquina: "/elementos/hojas-esquina-izquierda.webp",
     esquinaClass: "esquina-hojas",
   },
   verde: {
+    estructuraId: "estructura-guia-visitante",
     lomita: "/elementos/svg/lomita-guia-visitante.svg",
     lomitaClass: "lomita-verde",
     esquina: "/elementos/flores-esquina-guia.webp",
     esquinaClass: "esquina-guia",
   },
   turquesa: {
+    estructuraId: "estructura-emergencias",
     lomita: "/elementos/svg/lomita-emergencias.svg",
     lomitaClass: "lomita-turquesa",
     esquina: "/elementos/hojas-izquierda-emergencias.webp",
     esquinaClass: "esquina-emergencias",
   },
   morado: {
+    estructuraId: "estructura-normativa",
     lomita: "/elementos/svg/lomita-normativa.svg",
     lomitaClass: "lomita-morado",
     esquina: "/elementos/hojas-izquierda-normativa.webp",
@@ -41,7 +46,10 @@ const configTema = {
 }[tema];
 ---
 
-<div class:list={["estructura-base-waraira", `tema-${tema}`]}>
+<div
+  id={configTema.estructuraId}
+  class:list={["estructura", "estructura-base-waraira", `tema-${tema}`]}
+>
   <!-- CAPA 1: Fotografía de fondo (1400 x 650) -->
   <div class="capa-foto-fondo">
     <img
@@ -120,8 +128,12 @@ const configTema = {
     position: relative;
     width: 1400px;
     height: 650px;
+    display: grid;
+    grid-template-columns: repeat(33, minmax(0, 1fr));
+    grid-template-rows: repeat(15, minmax(0, 1fr));
+    gap: 11px;
     overflow: hidden;
-    background-color: #ffffff;
+    background-color: #ebebf7;
   }
 
   /* Capa 1: Foto de fondo */

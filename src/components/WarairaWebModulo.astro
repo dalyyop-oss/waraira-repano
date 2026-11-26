@@ -12,8 +12,9 @@ export interface Props {
 const { seccionInicial = "quienes-somos" } = Astro.props;
 ---
 
-<div class="waraira-modulo-embebible" data-seccion-inicial={seccionInicial}>
+<div id="estructura-waraira" class="estructura waraira-modulo-embebible" data-seccion-inicial={seccionInicial}>
   <div
+    id="seccion-quienes-somos"
     class:list={["contenedor-seccion-spa", { activa: seccionInicial === "quienes-somos" }]}
     data-spa-seccion="quienes-somos"
   >
@@ -21,6 +22,7 @@ const { seccionInicial = "quienes-somos" } = Astro.props;
   </div>
 
   <div
+    id="seccion-patrimonio-natural"
     class:list={["contenedor-seccion-spa", { activa: seccionInicial === "patrimonio-natural" }]}
     data-spa-seccion="patrimonio-natural"
   >
@@ -28,6 +30,7 @@ const { seccionInicial = "quienes-somos" } = Astro.props;
   </div>
 
   <div
+    id="seccion-guia-visitante"
     class:list={["contenedor-seccion-spa", { activa: seccionInicial === "guia-visitante" }]}
     data-spa-seccion="guia-visitante"
   >
@@ -35,6 +38,7 @@ const { seccionInicial = "quienes-somos" } = Astro.props;
   </div>
 
   <div
+    id="seccion-emergencias"
     class:list={["contenedor-seccion-spa", { activa: seccionInicial === "emergencias" }]}
     data-spa-seccion="emergencias"
   >
@@ -42,6 +46,7 @@ const { seccionInicial = "quienes-somos" } = Astro.props;
   </div>
 
   <div
+    id="seccion-normativa"
     class:list={["contenedor-seccion-spa", { activa: seccionInicial === "normativa" }]}
     data-spa-seccion="normativa"
   >
@@ -100,6 +105,10 @@ const { seccionInicial = "quienes-somos" } = Astro.props;
     width: 1400px;
     height: 650px;
     position: relative;
+    display: grid;
+    grid-template-columns: repeat(33, minmax(0, 1fr));
+    grid-template-rows: repeat(15, minmax(0, 1fr));
+    gap: 11px;
     overflow: hidden;
   }
 
